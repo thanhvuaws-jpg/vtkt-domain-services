@@ -66,29 +66,23 @@
                 padding: 1rem 0.75rem;
             }
             
-            /* Tables */
-            .table {
+            /* Tables - Keep normal table structure but make scrollable */
+            .table-report {
                 font-size: 0.75rem;
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                min-width: 800px;
             }
             
-            .table thead,
-            .table tbody,
-            .table tr {
-                display: block;
+            .intro-y.overflow-auto {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
                 width: 100%;
             }
             
             .table td,
             .table th {
-                display: block;
-                width: 100%;
-                text-align: left;
-                padding: 0.5rem;
-                border-bottom: 1px solid #e5e7eb;
+                padding: 0.5rem !important;
+                font-size: 0.75rem;
+                white-space: nowrap;
             }
             
             .table th {
@@ -96,12 +90,28 @@
                 background-color: #f9fafb;
             }
             
-            /* Buttons */
+            /* Make action buttons smaller */
+            .table-report__action .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                width: auto;
+                margin: 0.25rem;
+            }
+            
+            .table-report__action .flex {
+                flex-wrap: nowrap;
+                gap: 0.25rem;
+            }
+            
+            /* Buttons - Keep inline for tables */
             .btn {
-                width: 100%;
-                margin-bottom: 0.5rem;
                 padding: 0.5rem 1rem;
                 font-size: 0.875rem;
+            }
+            
+            .intro-y .btn:not(.table-report__action .btn) {
+                width: 100%;
+                margin-bottom: 0.5rem;
             }
             
             .btn-group {

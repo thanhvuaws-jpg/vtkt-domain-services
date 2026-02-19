@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Jan 11, 2026 at 07:26 PM
+-- Generation Time: Jan 31, 2026 at 08:13 AM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.26
 
@@ -29,29 +29,33 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `caidatchung` (
   `id` int NOT NULL,
-  `tieude` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `theme` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `keywords` text COLLATE utf8mb4_unicode_ci,
-  `mota` text COLLATE utf8mb4_unicode_ci,
-  `imagebanner` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sodienthoai` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `banner` varchar(2555) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `logo` varchar(2555) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `webgach` varchar(2565) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `apikey` varchar(2555) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `callback` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `facebook_link` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `zalo_phone` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `telegram_bot_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Bot Token',
-  `telegram_admin_chat_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Admin Chat ID'
+  `tieude` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `theme` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `keywords` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `mota` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `imagebanner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sodienthoai` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `banner` varchar(2555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `logo` varchar(2555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `webgach` varchar(2565) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `apikey` varchar(2555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `callback` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cardvip_partner_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner ID',
+  `cardvip_partner_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner Key',
+  `cardvip_api_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP API URL',
+  `cardvip_callback` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Callback URL',
+  `facebook_link` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `zalo_phone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telegram_bot_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Bot Token',
+  `telegram_admin_chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Admin Chat ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `caidatchung`
 --
 
-INSERT INTO `caidatchung` (`id`, `tieude`, `theme`, `keywords`, `mota`, `imagebanner`, `sodienthoai`, `banner`, `logo`, `webgach`, `apikey`, `callback`, `facebook_link`, `zalo_phone`, `telegram_bot_token`, `telegram_admin_chat_id`) VALUES
-(1, 'THANHVU.NET V4 UY TÍN TIỆN LỢI', '2', 'WEB BÁN DOMAIN NỘI ĐỊA UY TÍN', 'DỊCH VỤ DOMAIN UY TÍN CHẤT LƯỢNG', '', '0856761038', '4b455JDIvR8', '', 'cardvip.vn', '15626594-8251-4D4A-90E4-16F55C855D90', '/Packages/Callback.php', 'https://www.facebook.com/thanh.vu.826734', '0856761038', '8546022568:AAHq8cNiXZRa34pODa2Cfigx_fqbu9Wtalk', '7358984141');
+INSERT INTO `caidatchung` (`id`, `tieude`, `theme`, `keywords`, `mota`, `imagebanner`, `sodienthoai`, `banner`, `logo`, `webgach`, `apikey`, `callback`, `cardvip_partner_id`, `cardvip_partner_key`, `cardvip_api_url`, `cardvip_callback`, `facebook_link`, `zalo_phone`, `telegram_bot_token`, `telegram_admin_chat_id`) VALUES
+(1, 'THANHVU.NET V4 UY TÍN TIỆN LỢI', '2', 'WEB BÁN DOMAIN NỘI ĐỊA UY TÍN', 'DỊCH VỤ DOMAIN UY TÍN CHẤT LƯỢNG', '', '0856761038', '4b455JDIvR8', '', 'cardvip.vn', '15626594-8251-4D4A-90E4-16F55C855D90', '/Packages/Callback.php', '32009175419', '422206536bdf5fce97e80c8e14d481eb', 'http://api.cardvip.vn/chargingws/v2', 'https://vtkt.online/callback', 'https://www.facebook.com/thanh.vu.826734', '0856761038', '8546022568:AAHq8cNiXZRa34pODa2Cfigx_fqbu9Wtalk', '7358984141');
 
 -- --------------------------------------------------------
 
@@ -62,15 +66,15 @@ INSERT INTO `caidatchung` (`id`, `tieude`, `theme`, `keywords`, `mota`, `imageba
 CREATE TABLE `cards` (
   `id` int NOT NULL,
   `uid` int DEFAULT NULL,
-  `pin` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `serial` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `amount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `requestid` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serial` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `requestid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int DEFAULT NULL,
-  `time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time3` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -82,14 +86,14 @@ CREATE TABLE `cards` (
 CREATE TABLE `feedback` (
   `id` int NOT NULL,
   `uid` int DEFAULT NULL COMMENT 'ID người dùng gửi phản hồi',
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Tên người dùng',
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Email người dùng',
-  `message` text COLLATE utf8mb4_unicode_ci COMMENT 'Nội dung phản hồi/lỗi',
-  `admin_reply` text COLLATE utf8mb4_unicode_ci COMMENT 'Phản hồi từ admin',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Tên người dùng',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Email người dùng',
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'Nội dung phản hồi/lỗi',
+  `admin_reply` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'Phản hồi từ admin',
   `status` int DEFAULT '0' COMMENT '0: Chờ xử lý, 1: Đã trả lời, 2: Đã đọc',
-  `telegram_chat_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Chat ID Telegram của user',
-  `time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Thời gian gửi',
-  `reply_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Thời gian admin trả lời'
+  `telegram_chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Chat ID Telegram của user',
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Thời gian gửi',
+  `reply_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Thời gian admin trả lời'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -101,7 +105,20 @@ INSERT INTO `feedback` (`id`, `uid`, `username`, `email`, `message`, `admin_repl
 (2, 11, 'admin', 'chumlongchinhgiua@gmail.com', 'con cak admin', 'cmm', 2, NULL, '29/11/2025 - 00:19:09', '29/11/2025 - 00:19:41'),
 (3, 11, 'admin', 'chumlongchinhgiua@gmail.com', 'hi', 'hi bạn', 2, NULL, '01/12/2025 - 22:37:52', '02/12/2025 - 00:41:49'),
 (4, 13, 'heo', 'hihihah@gmail.com', 'lô thg chó lỗi lắm vcl', 'sori bạn', 2, NULL, '02/01/2026 - 03:13:43', '02/01/2026 - 03:15:36'),
-(5, 13, 'heo', 'huhu@gmail.com', 'quá là mệt', 'e xin lỗi ạ', 2, NULL, '02/01/2026 - 03:14:28', '02/01/2026 - 03:15:13');
+(5, 13, 'heo', 'huhu@gmail.com', 'quá là mệt', 'e xin lỗi ạ', 2, NULL, '02/01/2026 - 03:14:28', '02/01/2026 - 03:15:13'),
+(6, 14, 'mun', 'hihihaha@gmail.com', 'LO AD XONG R', NULL, 0, NULL, '12/01/2026 - 02:34:35', NULL),
+(7, 16, 'thuhoang', 'hoang@gmail.com', 'Alo ahhaa alo bạn ơi', NULL, 0, NULL, '12/01/2026 - 17:42:52', NULL),
+(8, 12, 'vu1', 'thanhvuaws@gmail.com', '.aaaaaaaaaaaa', 'Cảm ơn bạn đã phản hồi. Chúng tôi đã xử lý vấn đề của bạn.', 2, NULL, '12/01/2026 - 19:04:26', '17/01/2026 - 21:23:44'),
+(9, 22, 'caonggiac123', 'caonggiac@gmail.com', 'ditconcumay', 'nội dung phản hồi', 1, NULL, '12/01/2026 - 22:14:12', '17/01/2026 - 21:21:39'),
+(10, 22, 'caonggiac123', 'caonggiac@gmail.com', 'web dải ló', 'Cảm ơn bạn đã phản hồi. Chúng tôi đã xử lý vấn đề của bạn.', 1, NULL, '12/01/2026 - 22:14:25', '17/01/2026 - 21:17:32'),
+(11, 24, 'Topaz', 'chaunhutkha47@gmail.com', 'Chưa biết lỗi gì', NULL, 1, NULL, '13/01/2026 - 16:29:54', '17/01/2026 - 21:16:50'),
+(12, 12, 'vu123', 'thanhvuaws@gmail.com', 'alo alo nghe ko', NULL, 1, NULL, '17/01/2026 - 20:04:40', '17/01/2026 - 20:04:55'),
+(13, 12, 'vu123', 'thanhvuaws@gmail.com', 'hihihhihihihhihihih', NULL, 1, NULL, '17/01/2026 - 20:28:07', '17/01/2026 - 20:28:16'),
+(14, 12, 'vu123', 'thanhvuaws@gmail.com', 'thg ad dep trai', 'Cảm ơn thg lol nha', 2, NULL, '17/01/2026 - 23:52:14', '17/01/2026 - 23:53:00'),
+(15, 12, 'vu123', 'thanhvuaws@gmail.com', 'thgad deptrai vl', 'camon thg lol', 2, NULL, '20/01/2026 - 10:42:32', '20/01/2026 - 10:43:57'),
+(16, 12, 'vu123', 'thanhvuaws@gmail.com', 'allo côde ngon nha', NULL, 1, NULL, '24/01/2026 - 10:40:33', '24/01/2026 - 10:40:41'),
+(17, 12, 'vu123', 'thanhvuaws@gmail.com', 'hayyy qta  quá ta', 'Cảm ơn bạn đã phản nhắn cút đi', 2, NULL, '24/01/2026 - 10:41:40', '24/01/2026 - 10:42:10'),
+(18, 26, 'anhky206', 'wkzum2006@gmail.com', 'hello tester here', 'CAMON BẠN NHE', 2, NULL, '26/01/2026 - 14:02:55', '26/01/2026 - 14:03:25');
 
 -- --------------------------------------------------------
 
@@ -112,14 +129,14 @@ INSERT INTO `feedback` (`id`, `uid`, `username`, `email`, `message`, `admin_repl
 CREATE TABLE `history` (
   `id` int NOT NULL,
   `uid` int DEFAULT NULL,
-  `domain` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ns1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ns2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `domain` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ns1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ns2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hsd` int DEFAULT NULL,
   `status` int DEFAULT NULL,
-  `mgd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `timedns` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mgd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `timedns` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ahihi` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -143,7 +160,12 @@ INSERT INTO `history` (`id`, `uid`, `domain`, `ns1`, `ns2`, `hsd`, `status`, `mg
 (25, 13, 'bvc.com', 'QQQQQQQQQQQQo', 'WWWWWWWWWWW', 1, 1, '17672981885201', '2026-01-02 03:09:48', '02/01/2026', 0),
 (26, 12, 'sourceappnote.com', 'EEEEEEEEEE', 'RRRRRRRRRR', 1, 0, '17673290209962', '2026-01-02 11:43:40', '0', NULL),
 (27, 12, 'trong.com', 'TTTTTTTTTT', 'RRR', 1, 0, '17673293771292', '2026-01-02 11:49:37', '0', NULL),
-(28, 12, 'qw.com', 'E', 'R', 1, 0, '17673296325598', '2026-01-02 11:53:52', '0', NULL);
+(28, 12, 'qw.com', 'E', 'R', 1, 0, '17673296325598', '2026-01-02 11:53:52', '0', NULL),
+(29, 12, 'cho123nm.com', 'Uuuu', 'Qqqq', 1, 0, '17682161389556', '2026-01-12 18:08:58', '0', NULL),
+(30, 12, 'abc.com', 'abc.info.com', 'abc.net.com', 1, 4, '17682178557852', '2026-01-12 18:37:35', '17/01/2026', 0),
+(31, 24, 'vtktonline.net', 'wtf', 'wth', 1, 1, '17682967031568', '2026-01-13 16:31:43', '0', NULL),
+(32, 12, 'manhmanh.tech', '123', '321', 1, 1, '17690114716176', '2026-01-21 23:04:31', '21/01/2026', 0),
+(33, 26, 'vlua.info', 'vlua1', 'vlua2', 1, 1, '17694108876808', '2026-01-26 14:01:27', '0', NULL);
 
 -- --------------------------------------------------------
 
@@ -155,11 +177,20 @@ CREATE TABLE `hostinghistory` (
   `id` int NOT NULL,
   `uid` int NOT NULL,
   `hosting_id` int NOT NULL,
-  `period` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mgd` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `period` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `hostinghistory`
+--
+
+INSERT INTO `hostinghistory` (`id`, `uid`, `hosting_id`, `period`, `mgd`, `time`, `status`) VALUES
+(1, 12, 8, 'month', '17682160987055', '2026-01-12 18:08:18', 1),
+(2, 12, 9, 'month', '17682193058763', '2026-01-12 19:01:45', 1),
+(3, 8, 9, 'year', '17684008088007', '2026-01-14 21:26:48', 1);
 
 -- --------------------------------------------------------
 
@@ -169,9 +200,9 @@ CREATE TABLE `hostinghistory` (
 
 CREATE TABLE `listdomain` (
   `id` int NOT NULL,
-  `image` varchar(2655) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `price` varchar(2555) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `duoi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `image` varchar(2655) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` varchar(2555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `duoi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -183,7 +214,12 @@ INSERT INTO `listdomain` (`id`, `image`, `price`, `duoi`) VALUES
 (2, '/domain/images/net-d3afe36203d3.svg', '55000', '.net'),
 (3, '/domain/images/info-3a404a27668b.svg', '55000', '.info'),
 (4, '/domain/images/org-292f994350a0.svg', '70000', '.org'),
-(5, '/domain/images/tech-9e40579214ad.svg', '99000', '.tech');
+(5, '/domain/images/tech-9e40579214ad.svg', '99000', '.tech'),
+(12, 'images/ai.png', '1200000', '.ai'),
+(13, 'images/io.png', '320000', '.io'),
+(14, 'images/vaa.edu.vn.png', '10000000', '.vaa.edu.vn'),
+(15, 'images/xyz.png', '230000', '.xyz'),
+(16, 'images/online-39e2ea191774.svg', '300000', '.online');
 
 -- --------------------------------------------------------
 
@@ -193,13 +229,13 @@ INSERT INTO `listdomain` (`id`, `image`, `price`, `duoi`) VALUES
 
 CREATE TABLE `listhosting` (
   `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `price_month` int NOT NULL,
   `price_year` int NOT NULL,
-  `specs` text COLLATE utf8mb4_unicode_ci,
-  `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `specs` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -225,14 +261,14 @@ INSERT INTO `listhosting` (`id`, `name`, `description`, `price_month`, `price_ye
 
 CREATE TABLE `listsourcecode` (
   `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `price` int NOT NULL,
-  `file_path` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `download_link` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `category` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `file_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `download_link` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -240,7 +276,15 @@ CREATE TABLE `listsourcecode` (
 --
 
 INSERT INTO `listsourcecode` (`id`, `name`, `description`, `price`, `file_path`, `download_link`, `image`, `category`, `time`) VALUES
-(6, 'source app note', '', 1200, '/domain/uploads/source-code/1766945504_glfw-3.4.bin.WIN64.zip', '', '/domain/images/thanhvu.jpg', 'php', '29/12/2025 - 01:11:44');
+(7, 'Source Code Game Bắn Súng FPS 3D - Đồ Họa Cực Đỉnh (Unity/Unreal)', 'Source code FPS 3D đồ họa chất lượng cao, được tối ưu mượt mà cho thương mại hoặc đồ án. Tích hợp kho vũ khí đa dạng, AI thông minh biết ẩn nấp/phục kích, cùng 2 chế độ chơi (Campaign & Survival). Giao diện hiện đại, cấu trúc code sạch dễ dàng Reskin.', 2500000, NULL, NULL, 'images/sourcecode/bansung.png', 'Ngôn ngữ: C# (Unity)', '24/01/2026 - 10:00:31'),
+(8, 'Source Code Game Nấu Ăn Nhà Hàng - Cooking Master Chef 3D (Full Unity Project)', 'Đây là bộ Source Code Game Nấu Ăn (Cooking Simulation) độc quyền, giúp người chơi trải nghiệm cảm giác trở thành một đầu bếp thực thụ. Game được thiết kế với đồ họa bắt mắt, âm thanh vui nhộn, phù hợp cho mọi lứa tuổi.', 580000, NULL, NULL, 'images/sourcecode/codenauan.png', 'Unity, C#, Casual Game, Cooking, Simulation', '24/01/2026 - 10:07:17'),
+(9, 'Roblox Racing Creator Toolkit - Bộ Công Cụ Làm Game Đua Xe Độc Quyền (Full Lua Script)', 'Sở hữu ngay bộ Toolkit độc quyền giúp bạn tự tay xây dựng game đua xe đỉnh cao trên nền tảng Roblox. Bộ công cụ cung cấp đầy đủ tài nguyên để bạn tạo ra một thế giới tốc độ mà không cần viết code từ đầu.', 5400000, NULL, NULL, 'images/sourcecode/duuaxee.png', 'Roblox, Lua, Racing Game, Game Kit, Script, 3D, Vehicle', '24/01/2026 - 10:09:18'),
+(10, 'Facebook Security Toolkit - Bộ Công Cụ Bảo Mật & Quản Lý Tài Khoản (Full Source C#)', 'Giải pháp toàn diện cho việc quản lý và bảo vệ tài khoản Facebook số lượng lớn. Tool được thiết kế tối ưu cho các nhà quảng cáo (Ads thủ) và người làm dịch vụ Facebook, giúp tự động hóa quy trình bảo mật.', 7500000, NULL, NULL, 'images/sourcecode/fb.png', 'C#, .NET, Security Tool, Facebook API, Automation', '24/01/2026 - 10:12:45'),
+(11, 'Source Code Game Sinh Tồn Thế Giới Mở Voxel - Minecraft Style (Đa Ngôn Ngữ)', 'Mã nguồn game Sandbox thế giới mở phong cách Voxel 3D huyền thoại. Cho phép người chơi tự do khám phá, khai thác tài nguyên và xây dựng các công trình vĩ đại từ những khối vuông kỳ diệu.', 3600000, NULL, NULL, 'images/sourcecode/minecraf.png', 'Voxel, Sandbox, Survival, Java, Multiplayer', '24/01/2026 - 10:14:25'),
+(12, 'Roblox Creator Toolkit - Bộ Công Cụ Làm Game & Thiết Kế Map Độc Quyền (Lua Script)', 'Bạn muốn tự làm game Roblox nhưng chưa biết bắt đầu từ đâu? Bộ Toolkit độc quyền này cung cấp mọi công cụ cần thiết để bạn hiện thực hóa ý tưởng, từ thiết kế map parkour đến lập trình mini-game phức tạp.', 6300000, NULL, NULL, 'images/sourcecode/roblox.png', 'Roblox, Lua, Game Kit, Parkour, 3D, Script, Roblox Studio', '24/01/2026 - 10:16:01'),
+(13, 'Source Code Game Sinh Tồn Trên Biển - Ocean Raft Survival Simulator (Full Unity Project)', 'Trải nghiệm cuộc chiến sinh tồn khắc nghiệt giữa đại dương bao la. Người chơi sẽ bắt đầu với một chiếc bè nhỏ và phải làm mọi cách để sống sót trước những mối nguy hiểm rình rập từ biển cả.', 7800000, NULL, NULL, 'images/sourcecode/sinhttontrenbien.png', 'Unity, Survival, Adventure, Ocean, Simulation, Raft, 3D', '24/01/2026 - 10:17:31'),
+(14, 'Network Stress & Load Tester - Công Cụ Kiểm Thử Chịu Tải Web (Educational Purpose)', 'Bộ công cụ hỗ trợ lập trình viên và quản trị viên mạng mô phỏng lưu lượng truy cập lớn để kiểm tra độ ổn định của máy chủ (Server/VPS). Sản phẩm phục vụ mục đích nghiên cứu, học tập về giao thức mạng và tối ưu hóa hệ thống.', 8000000, NULL, NULL, 'images/sourcecode/toolddoss.png', 'C#, Network Tool, Stress Test, Load Balancing, TCP/IP', '24/01/2026 - 10:19:51'),
+(15, 'Zombie Survival Shooter - Source Code Game Bắn Súng Sinh Tồn (Đa Ngôn Ngữ Support)', 'Dấn thân vào thế giới hậu tận thế đầy rẫy nguy hiểm. Đây là bộ mã nguồn game bắn súng góc nhìn thứ nhất (FPS) hoàn chỉnh, nơi người chơi phải chiến đấu chống lại làn sóng Zombie hung hãn để sinh tồn.', 4300000, NULL, NULL, 'images/sourcecode/zombies.png', 'C#, Python, C++, FPS, Zombie, Survival, Horror, 3D', '24/01/2026 - 10:23:01');
 
 -- --------------------------------------------------------
 
@@ -250,13 +294,13 @@ INSERT INTO `listsourcecode` (`id`, `name`, `description`, `price`, `file_path`,
 
 CREATE TABLE `listvps` (
   `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `price_month` int NOT NULL,
   `price_year` int NOT NULL,
-  `specs` text COLLATE utf8mb4_unicode_ci,
-  `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `specs` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `time` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -282,7 +326,7 @@ INSERT INTO `listvps` (`id`, `name`, `description`, `price_month`, `price_year`,
 
 CREATE TABLE `migrations` (
   `id` int UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -291,7 +335,8 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2019_12_14_000001_create_personal_access_tokens_table', 1);
+(1, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(2, '2026_01_28_000001_add_cardvip_fields_to_caidatchung_table', 2);
 
 -- --------------------------------------------------------
 
@@ -300,10 +345,17 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('h.ttieen06@gmail.com', '$2y$12$Zqf30gBIs9FIA8QkOFwJpumjvWnzEOY0QjPqXdf.wWrrvrmooGKhu', '2026-01-21 15:24:06');
 
 -- --------------------------------------------------------
 
@@ -313,11 +365,11 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -334,8 +386,8 @@ CREATE TABLE `sourcecodehistory` (
   `id` int NOT NULL,
   `uid` int NOT NULL,
   `source_code_id` int NOT NULL,
-  `mgd` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -344,15 +396,12 @@ CREATE TABLE `sourcecodehistory` (
 --
 
 INSERT INTO `sourcecodehistory` (`id`, `uid`, `source_code_id`, `mgd`, `time`, `status`) VALUES
-(3, 12, 6, '17672764972360', '2026-01-01 21:08:17', 1),
-(4, 12, 6, '17672772327725', '2026-01-01 21:20:32', 1),
-(5, 12, 6, '17672774851381', '2026-01-01 21:24:45', 1),
-(6, 12, 6, '17672777071785', '2026-01-01 21:28:28', 1),
-(7, 12, 6, '17672783576820', '2026-01-01 21:39:18', 1),
-(8, 12, 6, '17672789715043', '2026-01-01 21:49:31', 1),
-(9, 13, 6, '17672982367926', '2026-01-02 03:10:36', 1),
-(10, 12, 6, '17673290465272', '2026-01-02 11:44:06', 1),
-(11, 12, 6, '17673294061268', '2026-01-02 11:50:06', 1);
+(14, 12, 14, '17692258993570', '2026-01-24 10:38:19', 1),
+(15, 12, 15, '17694104158712', '2026-01-26 13:53:35', 1),
+(16, 26, 15, '17694112034384', '2026-01-26 14:06:43', 1),
+(17, 12, 14, '17694706818103', '2026-01-27 06:38:01', 1),
+(18, 12, 13, '17695610172846', '2026-01-28 07:43:37', 1),
+(19, 12, 11, '17695612197981', '2026-01-28 07:46:59', 1);
 
 -- --------------------------------------------------------
 
@@ -362,12 +411,12 @@ INSERT INTO `sourcecodehistory` (`id`, `uid`, `source_code_id`, `mgd`, `time`, `
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `taikhoan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `matkhau` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `taikhoan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `matkhau` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tien` int DEFAULT '0',
   `chucvu` int DEFAULT '0',
-  `time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -376,12 +425,25 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `taikhoan`, `matkhau`, `email`, `tien`, `chucvu`, `time`) VALUES
 (7, 'cuto', '1bbd886460827015e5d605ed44252251', 'chuml@gmail.com', 99999, 0, '09/10/2025 - 18:12:05'),
-(8, 'thanhvu1', 'c9279a3f6c684f5c7d5d7060fc4ac3b7', 'cuto123@gmail.com', 899867999, 0, '09/10/2025 - 23:20:31'),
+(8, 'thanhvu1', 'a3229bee41455f57b53a1e305d0b0037', 'cuto123@gmail.com', 888767999, 0, '09/10/2025 - 23:20:31'),
 (9, 'cho123nm123', '069951877d52417a5e5375deca971622', 'chumli@gmail.com', 999933999, 0, '15/10/2025 - 18:05:32'),
 (10, 'thanhvu2', '24e460f92c036c0a7928905bb84eba0a', 'toiiulaptrinh@gmail.com', 0, 0, '15/10/2025 - 23:44:12'),
 (11, 'adminvu', 'c9279a3f6c684f5c7d5d7060fc4ac3b7', 'adc@gmail.com', 2146986247, 0, '16/10/2025 - 01:26:11'),
-(12, 'vu123', '24e460f92c036c0a7928905bb84eba0a', 'thanhvuaws@gmail.com', 87242400, 1, '01/01/2026 - 20:52:15'),
-(13, 'heo', 'fdd7a8526ca90079c6a6c446dcbbcfda', 'qưeqwaw@gmail.com', 32800, 0, '02/01/2026 - 02:57:15');
+(12, 'vu123', '6e88c25d3c7c5fb51d3005deb663611c', 'thanhvuaws@gmail.com', 55120200, 1, '01/01/2026 - 20:52:15'),
+(13, 'heo', 'fdd7a8526ca90079c6a6c446dcbbcfda', 'qưeqwaw@gmail.com', 32800, 0, '02/01/2026 - 02:57:15'),
+(14, 'mun', '24e460f92c036c0a7928905bb84eba0a', 'hihihaha@gmail.com', 0, 0, '12/01/2026 - 02:34:03'),
+(15, 'Bucu', '6828763a6c565d5fd15ea5ddbc04ec31', 'bubu@gmail.com', 500000, 0, '12/01/2026 - 03:09:42'),
+(16, 'thuhoang', 'd23aeaa4304428811f3b38c03449bddb', 'hoang@gmail.com', 0, 0, '12/01/2026 - 17:41:57'),
+(17, 'nammo123', 'f1859c5f746061d33730444b97a7a8e3', 'ahiham@gmail.com', 0, 0, '12/01/2026 - 18:20:20'),
+(18, 'Vaa123', 'f1859c5f746061d33730444b97a7a8e3', '2431540219@vaa.edu.vn', 0, 0, '12/01/2026 - 18:22:58'),
+(19, 'Nghialead123', 'd6b0ab7f1c8ab8f514db9a6d85de160a', 'nl473278@gmail.com', 0, 0, '12/01/2026 - 18:31:18'),
+(20, 'HAHA', 'a2f41da47310013db5f6ae22c3288c3d', 'truongngoctien28082006@gmail.com', 0, 0, '12/01/2026 - 18:55:02'),
+(21, 'thuytien', 'fd723056939a8c81ed44a84c82abdd19', 'h.ttieen06@gmail.com', 0, 0, '12/01/2026 - 21:49:01'),
+(22, 'caonggiac123', '8afa4d901b1e02364cc60ea49a87636b', 'caonggiac@gmail.com', 0, 0, '12/01/2026 - 22:08:27'),
+(23, 'ngua1', 'ac2647b79608c1ac868ad801045a01d9', 'ngua3@gmail.com', 0, 0, '12/01/2026 - 22:46:38'),
+(24, 'Topaz', 'b5cac38130366f0e9b24cfe8f8385ef0', 'chaunhutkha47@gmail.com', 299943800, 0, '13/01/2026 - 16:27:47'),
+(25, 'tien123', '047265ca4444f031cdf8ab851ba36cf5', 'thuytien@gmail.com', 0, 0, '26/01/2026 - 13:57:47'),
+(26, 'anhky206', 'a4d213fc44651c6a610c180107e5ab23', 'wkzum2006@gmail.com', 5645000, 0, '26/01/2026 - 13:58:56');
 
 -- --------------------------------------------------------
 
@@ -393,9 +455,9 @@ CREATE TABLE `vpshistory` (
   `id` int NOT NULL,
   `uid` int NOT NULL,
   `vps_id` int NOT NULL,
-  `period` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mgd` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `period` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -405,7 +467,8 @@ CREATE TABLE `vpshistory` (
 
 INSERT INTO `vpshistory` (`id`, `uid`, `vps_id`, `period`, `mgd`, `time`, `status`) VALUES
 (1, 12, 8, 'year', '17673673119500', '2026-01-02 22:21:52', 1),
-(2, 12, 5, 'month', '17673692775136', '2026-01-02 22:54:38', 1);
+(2, 12, 5, 'month', '17673692775136', '2026-01-02 22:54:38', 1),
+(3, 8, 8, 'month', '17684007342502', '2026-01-14 21:25:34', 1);
 
 --
 -- Indexes for dumped tables
@@ -546,25 +609,25 @@ ALTER TABLE `cards`
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `hostinghistory`
 --
 ALTER TABLE `hostinghistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `listdomain`
 --
 ALTER TABLE `listdomain`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `listhosting`
@@ -576,7 +639,7 @@ ALTER TABLE `listhosting`
 -- AUTO_INCREMENT for table `listsourcecode`
 --
 ALTER TABLE `listsourcecode`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `listvps`
@@ -588,7 +651,7 @@ ALTER TABLE `listvps`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -600,19 +663,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `sourcecodehistory`
 --
 ALTER TABLE `sourcecodehistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `vpshistory`
 --
 ALTER TABLE `vpshistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
