@@ -4,16 +4,16 @@
 
 @section('content')
 <div class="col-span-12 mt-6">
-    <div class="intro-y block sm:flex items-center h-10">
+    <div class="intro-y block sm:flex items-center">
         <h2 class="text-lg font-medium truncate mr-5">Danh Sách Sản Phẩm</h2>
-        <div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
-            <button class="btn box flex items-center text-slate-600 dark:text-slate-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text hidden sm:block w-4 h-4 mr-2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg> Export to Excel
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-3 w-full sm:w-auto sm:ml-auto">
+            <button class="btn box flex items-center justify-center text-slate-600 dark:text-slate-300 w-full sm:w-auto py-3 sm:py-2 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text w-4 h-4 mr-2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg> Export to Excel
             </button>
-            <button class="ml-3 btn box flex items-center text-slate-600 dark:text-slate-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text hidden sm:block w-4 h-4 mr-2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg> Export to PDF
+            <button class="btn box flex items-center justify-center text-slate-600 dark:text-slate-300 w-full sm:w-auto py-3 sm:py-2 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="file-text" data-lucide="file-text" class="lucide lucide-file-text w-4 h-4 mr-2"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg> Export to PDF
             </button>
-            <a href="{{ route('admin.domain.create') }}" class="ml-3 btn btn-primary">Thêm Sản Phẩm</a>
+            <a href="{{ route('admin.domain.create') }}" class="btn btn-primary w-full sm:w-auto py-3 sm:py-2 text-sm">Thêm Sản Phẩm</a>
         </div>
     </div>
     <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">

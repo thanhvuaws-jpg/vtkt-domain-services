@@ -14,32 +14,32 @@
             <div class="preview">
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="whitespace-nowrap">#</th>
-                                <th class="whitespace-nowrap">UID</th>
-                                <th class="whitespace-nowrap">Mã Thẻ</th>
-                                <th class="whitespace-nowrap">Serial</th>
-                                <th class="whitespace-nowrap">Mệnh Giá</th>
-                                <th class="whitespace-nowrap">Loại Thẻ</th>
-                                <th class="whitespace-nowrap">Status</th>
-                                <th class="whitespace-nowrap">Time</th>
+                        <thead style="background-color: #1e293b !important;">
+                            <tr style="background-color: #1e293b !important;">
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">#</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">UID</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Mã Thẻ</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Serial</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Mệnh Giá</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Loại Thẻ</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Status</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Time</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if($cards->isEmpty())
                                 <tr>
-                                    <td colspan="8" class="text-center">Chưa có thẻ cào nào</td>
+                                    <td colspan="8" class="text-center" style="color: #334155 !important;">Chưa có thẻ cào nào</td>
                                 </tr>
                             @else
                                 @foreach($cards as $index => $card)
                                 <tr>
-                                    <td>#{{ $index + 1 }}</td>
-                                    <td>{{ $card->uid }}</td>
-                                    <td>{{ $card->pin }}</td>
-                                    <td>{{ $card->serial }}</td>
-                                    <td>{{ number_format($card->amount) }}đ</td>
-                                    <td>{{ $card->type }}</td>
+                                    <td style="color: #334155 !important;">#{{ $index + 1 }}</td>
+                                    <td style="color: #334155 !important;">{{ $card->uid }}</td>
+                                    <td style="color: #334155 !important;">{{ $card->pin }}</td>
+                                    <td style="color: #334155 !important;">{{ $card->serial }}</td>
+                                    <td style="color: #334155 !important;">{{ number_format($card->amount) }}đ</td>
+                                    <td style="color: #334155 !important;">{{ $card->type }}</td>
                                     <td>
                                         @if($card->status == 0)
                                             <button class="btn btn-primary">Đang Duyệt</button>
@@ -51,7 +51,7 @@
                                             <button class="btn btn-warning">Sai Mệnh Giá</button>
                                         @endif
                                     </td>
-                                    <td class="whitespace-nowrap">{{ $card->time }}</td>
+                                    <td class="whitespace-nowrap" style="color: #334155 !important;">{{ $card->time }}</td>
                                 </tr>
                                 @endforeach
                             @endif

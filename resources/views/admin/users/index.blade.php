@@ -22,35 +22,37 @@
                 
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th class="whitespace-nowrap">#</th>
-                                <th class="whitespace-nowrap">UID</th>
-                                <th class="whitespace-nowrap">Tài Khoản</th>
-                                <th class="whitespace-nowrap">Mật Khẩu</th>
-                                <th class="whitespace-nowrap">Tiền</th>
-                                <th class="whitespace-nowrap">Time</th>
-                                <th class="whitespace-nowrap">Thao Tác</th>
+                        <thead style="background-color: #1e293b !important;">
+                            <tr style="background-color: #1e293b !important;">
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">#</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">UID</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Tài Khoản</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Mật Khẩu</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Tiền</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Time</th>
+                                <th class="whitespace-nowrap" style="background-color: #1e293b !important; color: #ffffff !important;">Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if($users->isEmpty())
                                 <tr>
-                                    <td colspan="7" class="text-center">Chưa có thành viên nào</td>
+                                    <td colspan="7" class="text-center" style="color: #334155 !important;">Chưa có thành viên nào</td>
                                 </tr>
                             @else
                                 @foreach($users as $index => $user)
                                 <tr>
-                                    <td>#{{ $index + 1 }}</td>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->taikhoan }}</td>
-                                    <td>{{ $user->matkhau }}</td>
-                                    <td>{{ number_format($user->tien) }}đ</td>
-                                    <td class="whitespace-nowrap">{{ $user->time }}</td>
+                                    <td style="color: #334155 !important;">#{{ $index + 1 }}</td>
+                                    <td style="color: #334155 !important;">{{ $user->id }}</td>
+                                    <td style="color: #334155 !important;">{{ $user->taikhoan }}</td>
+                                    <td style="color: #334155 !important;">{{ $user->matkhau }}</td>
+                                    <td style="color: #334155 !important;">{{ number_format($user->tien) }}đ</td>
+                                    <td class="whitespace-nowrap" style="color: #334155 !important;">{{ $user->time }}</td>
                                     <td>
-                                        <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary btn-sm mr-1">Xem</a>
-                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm mr-1">Sửa</a>
-                                        <button data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview-{{ $user->id }}" class="btn btn-success btn-sm">Số Dư</button>
+                                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                            <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary btn-sm w-full sm:w-auto">Xem</a>
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm w-full sm:w-auto">Sửa</a>
+                                            <button data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview-{{ $user->id }}" class="btn btn-success btn-sm w-full sm:w-auto">Số Dư</button>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
