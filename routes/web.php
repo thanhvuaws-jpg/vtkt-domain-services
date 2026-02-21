@@ -177,13 +177,15 @@ Route::prefix('admin')->name('admin.')->middleware([\App\Http\Middleware\AdminMi
     Route::post('feedback/{id}/reply', [\App\Http\Controllers\Admin\FeedbackController::class, 'reply'])->name('feedback.reply'); // Trả lời feedback
     Route::post('feedback/{id}/update-status', [\App\Http\Controllers\Admin\FeedbackController::class, 'updateStatus'])->name('feedback.update-status'); // Cập nhật trạng thái feedback
     
-    // Quản lý Thẻ cào
+    // Quản lý Thẻ cào (Đơn Gạch Thẻ)
     Route::get('cards', [\App\Http\Controllers\Admin\CardController::class, 'index'])->name('cards.index'); // Danh sách thẻ cào
     Route::get('cards/pending', [\App\Http\Controllers\Admin\CardController::class, 'pending'])->name('cards.pending'); // Danh sách thẻ chờ duyệt
-    Route::get('cards/add-balance', [\App\Http\Controllers\Admin\CardController::class, 'showAddBalance'])->name('cards.add-balance'); // Form cộng tiền thủ công
-    Route::post('cards/add-balance', [\App\Http\Controllers\Admin\CardController::class, 'addBalance']); // Xử lý cộng tiền thủ công
     Route::get('cards/{id}', [\App\Http\Controllers\Admin\CardController::class, 'show'])->name('cards.show'); // Chi tiết thẻ cào
     Route::post('cards/{id}/update-status', [\App\Http\Controllers\Admin\CardController::class, 'updateStatus'])->name('cards.update-status'); // Cập nhật trạng thái thẻ
+    
+    // Quản lý Nạp Ví (Đơn Nạp Ví - Cộng tiền thủ công)
+    Route::get('wallet', [\App\Http\Controllers\Admin\WalletController::class, 'index'])->name('wallet.index'); // Form cộng tiền thủ công
+    Route::post('wallet/add-balance', [\App\Http\Controllers\Admin\WalletController::class, 'addBalance'])->name('wallet.add-balance'); // Xử lý cộng tiền thủ công
     
     // Quản lý Cài đặt
     Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index'); // Trang cài đặt

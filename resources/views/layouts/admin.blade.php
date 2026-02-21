@@ -430,9 +430,9 @@
                 </li>
                 
                 <li>
-                    <a href="{{ route('admin.cards.index') }}" class="menu">
+                    <a href="{{ route('admin.wallet.index') }}" class="menu">
                         <div class="menu__icon">
-                            <i data-lucide="credit-card"></i>
+                            <i data-lucide="wallet"></i>
                         </div>
                         <div class="menu__title">
                             Đơn Nạp Ví 
@@ -642,9 +642,9 @@
                 </li>
                 
                 <li>
-                    <a href="{{ route('admin.cards.index') }}" class="side-menu">
+                    <a href="{{ route('admin.wallet.index') }}" class="side-menu">
                         <div class="side-menu__icon">
-                            <i data-lucide="credit-card"></i>
+                            <i data-lucide="wallet"></i>
                         </div>
                         <div class="side-menu__title">
                             Đơn Nạp Ví
