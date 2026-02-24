@@ -389,7 +389,12 @@
 @if(session('success'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        swal("Thành công", "{{ session('success') }}", "success");
+        Swal.fire({
+            title: "Thành công",
+            text: "{{ session('success') }}",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
     });
 </script>
 @endif
@@ -397,7 +402,12 @@
 @if(session('error'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        swal("Lỗi", "{!! session('error') !!}", "error");
+        Swal.fire({
+            title: "Lỗi",
+            html: "{!! session('error') !!}",
+            icon: "error",
+            confirmButtonText: "OK"
+        });
     });
 </script>
 @endif
