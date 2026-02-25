@@ -87,32 +87,43 @@ class CardController extends Controller
         // Lấy trạng thái mới từ request (ép kiểu về int)
         $newStatus = (int)$request->status;
 
+        // Nếu không có thay đổi trạng thái, return sớm
+        if ($oldStatus == $newStatus) {
+            return redirect()->route('admin.cards.show', $id)
+                ->with('info', 'Trạng thái không thay đổi');
+        }
+
+        // Kiểm tra user có tồn tại không
+        $user = User::find($card->uid);
+        if (!$user) {
+            return redirect()->route('admin.cards.show', $id)
+                ->with('error', 'Không tìm thấy user với ID: ' . $card->uid);
+        }
+
+        // Lưu số dư cũ để hiển thị trong message
+        $oldBalance = $user->tien;
+        $balanceChange = 0;
+
         // Nếu thay đổi từ trạng thái khác sang "Thẻ Đúng" (status = 1)
         // thì cộng tiền cho user
         if ($oldStatus != 1 && $newStatus == 1) {
-            // Tìm user theo ID trong thẻ cào
-            $user = User::find($card->uid);
-            if ($user) {
-                // Cộng số tiền bằng mệnh giá thẻ
-                $user->incrementBalance((int)$card->amount);
-            }
+            // Cộng số tiền bằng mệnh giá thẻ
+            $user->incrementBalance((int)$card->amount);
+            $balanceChange = (int)$card->amount;
         }
 
         // Nếu thay đổi từ "Thẻ Đúng" (status = 1) sang trạng thái khác
         // thì trừ tiền của user (hoàn tiền lại)
         if ($oldStatus == 1 && $newStatus != 1) {
-            // Tìm user theo ID trong thẻ cào
-            $user = User::find($card->uid);
-            if ($user) {
-                // Tính số dư mới = số dư hiện tại - mệnh giá thẻ
-                $newBalance = (int)$user->tien - (int)$card->amount;
-                // Đảm bảo số dư không âm
-                if ($newBalance < 0) {
-                    $newBalance = 0;
-                }
-                // Cập nhật số dư mới
-                $user->updateBalance($newBalance);
+            // Tính số dư mới = số dư hiện tại - mệnh giá thẻ
+            $newBalance = (int)$user->tien - (int)$card->amount;
+            // Đảm bảo số dư không âm
+            if ($newBalance < 0) {
+                $newBalance = 0;
             }
+            // Cập nhật số dư mới
+            $user->updateBalance($newBalance);
+            $balanceChange = -((int)$card->amount);
         }
 
         // Cập nhật trạng thái thẻ
@@ -126,9 +137,20 @@ class CardController extends Controller
             2 => 'Thẻ Sai' // 2 = Thẻ sai
         ];
 
+        // Tạo message chi tiết với thông tin thay đổi số dư
+        $message = sprintf(
+            'Đã cập nhật trạng thái từ "%s" sang "%s". Số dư user: %sđ → %sđ (%s%sđ)',
+            $statusText[$oldStatus],
+            $statusText[$newStatus],
+            number_format($oldBalance),
+            number_format($user->tien),
+            $balanceChange >= 0 ? '+' : '',
+            number_format(abs($balanceChange))
+        );
+
         // Redirect về chi tiết thẻ với thông báo thành công
         return redirect()->route('admin.cards.show', $id)
-            ->with('success', 'Đã cập nhật trạng thái thẻ thành: ' . $statusText[$newStatus]);
+            ->with('success', $message);
     }
 }
 

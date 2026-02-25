@@ -15,6 +15,10 @@ class Card extends Model
     // Tên bảng trong database
     protected $table = 'cards';
     
+    // Tắt tự động quản lý timestamps (created_at, updated_at)
+    // Vì bảng cards không có các cột này, chỉ có cột 'time', 'time2', 'time3'
+    public $timestamps = false;
+    
     // Các cột có thể được mass assignment (gán hàng loạt)
     protected $fillable = [
         'uid', // User ID - ID người dùng nạp thẻ

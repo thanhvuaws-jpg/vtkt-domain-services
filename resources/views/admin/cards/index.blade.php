@@ -33,7 +33,7 @@
                                 </tr>
                             @else
                                 @foreach($cards as $index => $card)
-                                <tr>
+                                <tr class="clickable-row" data-href="{{ route('admin.cards.show', $card->id) }}" style="cursor: pointer;">
                                     <td style="color: #334155 !important;">#{{ $index + 1 }}</td>
                                     <td style="color: #334155 !important;">{{ $card->uid }}</td>
                                     <td style="color: #334155 !important;">{{ $card->pin }}</td>
@@ -62,5 +62,27 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handler for clickable rows
+    document.querySelectorAll('.clickable-row').forEach(function(row) {
+        // Click event - navigate to detail page
+        row.addEventListener('click', function() {
+            window.location.href = this.dataset.href;
+        });
+        
+        // Hover effect - change background color on mouse enter
+        row.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#f1f5f9';
+        });
+        
+        // Hover effect - restore background color on mouse leave
+        row.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '';
+        });
+    });
+});
+</script>
 @endsection
 
