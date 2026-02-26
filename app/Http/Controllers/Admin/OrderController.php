@@ -225,8 +225,20 @@ class OrderController extends Controller
                     $order->save(); // Lưu vào database
                     
                     // Tính toán số tiền hoàn lại (giá domain)
-                    // Vì không lưu giá trong history, cần lấy từ đuôi domain
-                    // Hiện tại bỏ qua hoàn tiền tự động cho domain
+                    // Lấy đuôi domain từ tên domain (ví dụ: example.com → .com)
+                    if ($order->domain) {
+                        $domainParts = explode('.', $order->domain);
+                        if (count($domainParts) >= 2) {
+                            // Lấy đuôi domain (ví dụ: .com, .vn)
+                            $extension = '.' . end($domainParts);
+                            
+                            // Tìm giá domain từ bảng listdomain
+                            $domainType = \App\Models\Domain::where('duoi', $extension)->first();
+                            if ($domainType) {
+                                $refundAmount = (int)$domainType->price;
+                            }
+                        }
+                    }
                     break;
                     
                 case 'hosting':
