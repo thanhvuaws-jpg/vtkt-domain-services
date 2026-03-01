@@ -350,13 +350,41 @@ class DomainController extends Controller
         }
 
         // Kiểm tra thời gian cập nhật DNS (15 ngày)
-        $today = date('d/m/Y');
-        if ($domainHistory->timedns != '0' && $domainHistory->timedns == $today) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Bạn chỉ có thể thay đổi DNS sau 15 ngày kể từ lần cập nhật gần nhất!',
-                'html' => '<script>toastr.error("Bạn Chỉ Có Thể Thay Đổi DNS Sau 15 Ngày Kể Từ Lần Cập Nhật Gần Nhất!", "Thông Báo");</script>'
-            ]);
+        if ($domainHistory->timedns != '0') {
+            try {
+                // Parse timedns từ format d/m/Y bằng Carbon
+                $lastUpdateDate = \Carbon\Carbon::createFromFormat('d/m/Y', $domainHistory->timedns);
+                $today = \Carbon\Carbon::now();
+                
+                // Tính số ngày đã trôi qua
+                $daysDiff = $today->diffInDays($lastUpdateDate, false); // false = có thể âm nếu ngược chiều
+                
+                // Nếu daysDiff âm (ngày trong DB là tương lai) → dữ liệu lỗi
+                if ($daysDiff < 0) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Dữ liệu ngày cập nhật không hợp lệ. Vui lòng liên hệ admin!',
+                        'html' => '<script>toastr.error("Dữ Liệu Ngày Cập Nhật Không Hợp Lệ!", "Thông Báo");</script>'
+                    ]);
+                }
+                
+                // Nếu chưa đủ 15 ngày thì chặn
+                if ($daysDiff < 15) {
+                    $daysRemaining = 15 - $daysDiff;
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Bạn chỉ có thể thay đổi DNS sau 15 ngày kể từ lần cập nhật gần nhất! Còn {$daysRemaining} ngày nữa.",
+                        'html' => "<script>toastr.error('Bạn Chỉ Có Thể Thay Đổi DNS Sau 15 Ngày! Còn {$daysRemaining} Ngày Nữa.', 'Thông Báo');</script>"
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // Nếu parse date lỗi
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Lỗi xử lý ngày tháng. Vui lòng liên hệ admin!',
+                    'html' => '<script>toastr.error("Lỗi Xử Lý Ngày Tháng!", "Thông Báo");</script>'
+                ]);
+            }
         }
 
         $time = date('d/m/Y - H:i:s');

@@ -1004,19 +1004,16 @@ class AjaxController extends Controller
             ]);
         }
 
-        // Kiểm tra chu kỳ cập nhật DNS (timedns = '0' nghĩa là chưa cập nhật lần nào hoặc đã hết chu kỳ)
+        // Kiểm tra chu kỳ cập nhật DNS (timedns = '0' nghĩa là chưa cập nhật lần nào)
         if ($checkmgd->timedns == '0') {
-            // Tính toán chu kỳ tiếp theo (15 ngày sau ngày hiện tại)
-            $today = date('d/m/Y'); // Ngày hiện tại (ví dụ: "15/01/2024")
-            $ex = explode("/", $today); // Tách thành mảng ["15", "01", "2024"]
-            // Tính ngày sau 15 ngày (ví dụ: "30/01/2024")
-            $chuky = ($ex[0] + 15) . '/' . $ex[1] . '/' . $ex[2];
+            // Lưu ngày hiện tại làm mốc
+            $today = date('d/m/Y');
 
             // Cập nhật nameserver mới
-            $checkmgd->ns1 = $ns1; // Cập nhật NS1
-            $checkmgd->ns2 = $ns2; // Cập nhật NS2
-            $checkmgd->timedns = $chuky; // Lưu chu kỳ tiếp theo (15 ngày sau)
-            $checkmgd->save(); // Lưu vào database
+            $checkmgd->ns1 = $ns1;
+            $checkmgd->ns2 = $ns2;
+            $checkmgd->timedns = $today; // Lưu ngày cập nhật hiện tại
+            $checkmgd->save();
 
             // Trả về JSON response thành công
             return response()->json([
@@ -1025,12 +1022,52 @@ class AjaxController extends Controller
                 'html' => '<script>toastr.success("Thay Đổi DNS Thành Công, Vui Lòng Chờ 12h - 24h Để DNS Mới Hoạt Động", "Thông Báo");</script>'
             ]);
         } else {
-            // Nếu chưa hết chu kỳ 15 ngày, trả về lỗi
-            return response()->json([
-                'success' => false,
-                'message' => 'Bạn Không Thể Cập Nhật Thông Tin Ngay Bây Giờ Vui Lòng Đợi Chu Kỳ 15 Qua!',
-                'html' => '<script>toastr.error("Bạn Không Thể Cập Nhật Thông Tin Ngay Bây Giờ Vui Lòng Đợi Chu Kỳ 15 Qua!", "Thông Báo");</script>'
-            ]);
+            // Kiểm tra đã đủ 15 ngày chưa bằng Carbon
+            try {
+                $lastUpdateDate = \Carbon\Carbon::createFromFormat('d/m/Y', $checkmgd->timedns);
+                $today = \Carbon\Carbon::now();
+                
+                // Tính số ngày đã trôi qua
+                $daysDiff = $today->diffInDays($lastUpdateDate, false); // false = có thể âm
+                
+                // Nếu daysDiff âm (ngày trong DB là tương lai) → dữ liệu lỗi
+                if ($daysDiff < 0) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Dữ Liệu Ngày Cập Nhật Không Hợp Lệ. Vui Lòng Liên Hệ Admin!',
+                        'html' => '<script>toastr.error("Dữ Liệu Ngày Cập Nhật Không Hợp Lệ!", "Thông Báo");</script>'
+                    ]);
+                }
+                
+                // Nếu đã đủ 15 ngày, cho phép cập nhật
+                if ($daysDiff >= 15) {
+                    $checkmgd->ns1 = $ns1;
+                    $checkmgd->ns2 = $ns2;
+                    $checkmgd->timedns = date('d/m/Y'); // Cập nhật ngày mới
+                    $checkmgd->save();
+                    
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Thay Đổi DNS Thành Công, Vui Lòng Chờ 12h - 24h Để DNS Mới Hoạt Động',
+                        'html' => '<script>toastr.success("Thay Đổi DNS Thành Công, Vui Lòng Chờ 12h - 24h Để DNS Mới Hoạt Động", "Thông Báo");</script>'
+                    ]);
+                }
+                
+                // Chưa đủ 15 ngày
+                $daysRemaining = 15 - $daysDiff;
+                return response()->json([
+                    'success' => false,
+                    'message' => "Bạn Không Thể Cập Nhật DNS Ngay Bây Giờ! Vui Lòng Đợi Thêm {$daysRemaining} Ngày Nữa.",
+                    'html' => "<script>toastr.error('Bạn Không Thể Cập Nhật DNS Ngay Bây Giờ! Còn {$daysRemaining} Ngày Nữa.', 'Thông Báo');</script>"
+                ]);
+            } catch (\Exception $e) {
+                // Nếu parse date lỗi, trả về lỗi
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Lỗi Xử Lý Ngày Tháng, Vui Lòng Liên Hệ Admin!',
+                    'html' => '<script>toastr.error("Lỗi Xử Lý Ngày Tháng!", "Thông Báo");</script>'
+                ]);
+            }
         }
     }
 
