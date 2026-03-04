@@ -94,8 +94,6 @@ Route::get('/Pages/account_profile.php', function() {
 // Routes quản lý domain (prefix 'domain')
 Route::prefix('domain')->name('domain.')->group(function() {
     Route::get('/checkout', [DomainController::class, 'checkout'])->name('checkout'); // Trang checkout domain
-    Route::get('/manage', [DomainController::class, 'manage'])->name('manage'); // Trang quản lý domain
-    Route::get('/manage-dns', [DomainController::class, 'manageDns'])->name('manage-dns'); // Trang quản lý DNS
 });
 
 // Routes thanh toán (Nạp thẻ)
@@ -240,8 +238,7 @@ Route::get('/Pages/CheckoutSourceCode.php', function() {
     return redirect()->route('checkout.sourcecode', ['id' => $id]); // Redirect đến checkout source code
 });
 Route::get('/Pages/ManagesWhois.php', function() {
-    $domain = request()->get('domain', ''); // Lấy domain từ query string
-    return redirect()->route('domain.manage-dns', ['domain' => $domain]); // Redirect đến quản lý DNS
+    return redirect()->route('manager.index'); // Redirect đến trang quản lý dịch vụ
 });
 Route::get('/Pages/Recharge.php', function() {
     return redirect()->route('recharge'); // Redirect đến trang nạp thẻ

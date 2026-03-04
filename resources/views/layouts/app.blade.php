@@ -108,14 +108,16 @@
     </noscript>
     
     <!-- App -->
-    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+    <div class="d-flex flex-column flex-root app-root" id="kt_app_root" style="min-height: 100vh;">
         <!-- Page -->
-        <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+        <div class="app-page flex-column flex-column-fluid" id="kt_app_page" style="display: flex; flex-direction: column; min-height: 100vh;">
             <!-- Header -->
             @include('layouts.partials.header')
             
             <!-- Content -->
-            @yield('content')
+            <div style="flex: 1;">
+                @yield('content')
+            </div>
             
             <!-- Footer -->
             @include('layouts.partials.footer')

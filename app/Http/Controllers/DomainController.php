@@ -196,29 +196,7 @@ class DomainController extends Controller
         }
     }
 
-    /**
-     * Trang quản lý domain
-     */
-    public function manage(Request $request)
-    {
-        if (!Session::has('users')) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập');
-        }
 
-        $user = User::where('taikhoan', Session::get('users'))->first();
-        
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Không tìm thấy thông tin người dùng');
-        }
-
-        $domains = History::where('uid', $user->id)
-            ->orderBy('id', 'desc')
-            ->get();
-
-        return view('pages.manage-domains', [
-            'domains' => $domains
-        ]);
-    }
 
     /**
      * Show domain management page for a specific domain
@@ -256,38 +234,7 @@ class DomainController extends Controller
         ]);
     }
 
-    /**
-     * Trang quản lý DNS của một domain (legacy method)
-     */
-    public function manageDns(Request $request)
-    {
-        if (!Session::has('users')) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập');
-        }
 
-        $user = User::where('taikhoan', Session::get('users'))->first();
-        
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Không tìm thấy thông tin người dùng');
-        }
-
-        $mgd = $request->get('domain', '');
-        $domainHistory = History::where('uid', $user->id)
-            ->where('mgd', $mgd)
-            ->first();
-
-        if (!$domainHistory) {
-            return redirect()->route('domain.manage')->with('error', 'Bạn không có quyền quản lý miền này!');
-        }
-
-        if ($domainHistory->status == 4) {
-            return redirect()->route('domain.manage')->with('error', 'Tên miền này đã bị từ chối hỗ trợ!');
-        }
-
-        return view('pages.manage-dns', [
-            'domainHistory' => $domainHistory
-        ]);
-    }
 
     /**
      * Update DNS records for a domain

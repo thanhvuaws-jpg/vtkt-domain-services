@@ -6,8 +6,6 @@
         <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
             <div class="d-flex flex-column flex-column-fluid">
                 <div id="kt_app_content" class="app-content flex-column-fluid">
-                    <div class="card mb-5 mb-xl-10">
-                    </div>
 
                     <!-- Domain Orders -->
                     <div class="card card-flush h-md-100 mb-5">
@@ -221,6 +219,7 @@
                                             <th class="p-0 pb-3 min-w-100px text-start"> PRODUCT </th>
                                             <th class="p-0 pb-3 min-w-175px text-start"> STATUS </th>
                                             <th class="p-0 pb-3 min-w-175px text-start"> TIME </th>
+                                            <th class="p-0 pb-3 min-w-175px text-start"> DOWNLOAD </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -244,10 +243,32 @@
                                             <td>
                                                 {{ $order->time }}
                                             </td>
+                                            <td>
+                                                @if($order->status == 1)
+                                                    @if($order->sourceCode && (!empty($order->sourceCode->file_path) || !empty($order->sourceCode->download_link)))
+                                                        @if(!empty($order->sourceCode->file_path))
+                                                            <a href="{{ route('download.file', $order->id) }}" class="btn btn-sm btn-success">
+                                                                <i class="fas fa-download"></i> Download
+                                                            </a>
+                                                        @elseif(!empty($order->sourceCode->download_link))
+                                                            <a href="{{ $order->sourceCode->download_link }}" class="btn btn-sm btn-success" target="_blank">
+                                                                <i class="fas fa-external-link-alt"></i> Download
+                                                            </a>
+                                                        @endif
+                                                    @else
+                                                        <button class="btn btn-sm btn-secondary" disabled>
+                                                            Liên hệ Admin
+                                                        </button>
+                                                        <small class="text-muted d-block mt-1">MGD: #{{ $order->mgd }}</small>
+                                                    @endif
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
+                                            <td colspan="5" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -255,9 +276,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <br>
-                    <br>
                 </div>
             </div>
         </div>

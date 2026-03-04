@@ -34,7 +34,7 @@
                                         <div class="card-header pt-7">
                                             <h3 class="card-title align-items-start flex-column">
                                                 <span class="card-label fw-bold text-dark">Gửi Phản Hồi / Báo Lỗi</span>
-                                                <span class="text-gray-400 mt-1 fw-semibold fs-6">Gửi phản hồi qua Telegram hoặc Form</span>
+                                                <span class="text-gray-400 mt-1 fw-semibold fs-6">Gửi phản hồi hoặc thắc mắt qua Form</span>
                                             </h3>
                                         </div>
                                         <div class="card-body pt-6">
@@ -72,10 +72,8 @@
                                                             </svg>
                                                         </span>
                                                         <div class="d-flex flex-column">
-                                                            <h4 class="mb-1 text-dark">Gửi qua Telegram</h4>
-                                                            <span>Bạn cũng có thể gửi phản hồi trực tiếp qua Telegram Bot. Nhắn tin theo format:</span>
-                                                            <span class="mt-2"><strong>Email của bạn</strong></span>
-                                                            <span><strong>Nội dung phản hồi</strong></span>
+                                                            <h4 class="mb-1 text-dark">Note</h4>
+                                                            <span>Phản hồi của bạn sẽ được thông báo tới Admin sớm nhất qua cả Telegram và trang quản trị, nên hãy cung cấp lỗi hay thắc mắc của mình để Admin có thể giải quyết nhanh chóng. Xin cảm ơn!</span>
                                                         </div>
                                                     </div>
                                                 </div>
