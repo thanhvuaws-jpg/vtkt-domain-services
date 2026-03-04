@@ -693,6 +693,7 @@
     </style>
 </head>
 <body class="login-container">
+    @include('layouts.partials.admin-intro')
     <!-- Glowing Light Blobs -->
     <div class="glow-blob blob-1"></div>
     <div class="glow-blob blob-2"></div>
