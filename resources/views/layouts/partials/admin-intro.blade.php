@@ -1,18 +1,29 @@
 <!-- Admin Cyberpunk Intro Overlay -->
-<div id="admin-intro-overlay" class="fixed inset-0 z-[9999] overflow-hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: rgb(5, 5, 5); display: block; width: 100vw; max-width: 100%;">
+<div id="admin-intro-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: rgb(5, 5, 5); display: block; width: 100%; height: 100vh; overflow-x: hidden; overflow-y: hidden;">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         /* Cyberpunk Admin Intro Styles */
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+        }
+        
         body.admin-intro-active {
             overflow: hidden !important;
             height: 100vh !important;
-            width: 100vw !important;
-            max-width: 100% !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            position: fixed !important;
+        }
+        
+        #admin-intro-overlay {
+            overflow-x: hidden !important;
+            overflow-y: hidden !important;
         }
         
         #admin-intro-overlay * {
-            max-width: 100%;
+            max-width: 100vw;
             box-sizing: border-box;
         }
         
@@ -65,16 +76,16 @@
         }
     </style>
 
-    <div class="text-red-500 font-mono flex flex-col items-center justify-center min-h-screen overflow-hidden relative selection:bg-red-500 selection:text-white" style="width: 100%; max-width: 100vw; padding: 0 10px; box-sizing: border-box;">
-        <div class="absolute inset-0 scanline-admin z-50"></div>
-        <div id="matrix-rain-admin" class="absolute inset-0 z-10 overflow-hidden pointer-events-none"></div>
+    <div class="text-red-500 font-mono flex flex-col items-center justify-center relative selection:bg-red-500 selection:text-white" style="width: 100%; height: 100vh; max-width: 100vw; padding: 0 5px; box-sizing: border-box; overflow: hidden;">
+        <div class="absolute inset-0 scanline-admin z-50" style="pointer-events: none;"></div>
+        <div id="matrix-rain-admin" class="absolute inset-0 z-10 overflow-hidden pointer-events-none" style="max-width: 100vw;"></div>
         
-        <button id="init-btn-admin" class="relative z-50 px-6 py-3 md:px-8 md:py-4 bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-600 hover:text-white transition-all font-bold tracking-widest text-lg md:text-2xl shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_40px_rgba(239,68,68,0.8)]">
+        <button id="init-btn-admin" class="relative z-50 px-4 py-2 md:px-8 md:py-4 bg-transparent border-2 border-red-500 text-red-500 hover:bg-red-600 hover:text-white transition-all font-bold tracking-widest text-base md:text-2xl shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_40px_rgba(239,68,68,0.8)]" style="max-width: calc(100vw - 20px);">
             [ ADMIN_LOGIN.EXE ]
         </button>
         
-        <div id="terminal-admin" class="hidden relative z-40 w-full max-w-4xl p-4 sm:p-6 md:p-8 flex-col items-center justify-center h-full">
-            <div id="typewriter-admin" class="text-base sm:text-lg md:text-2xl leading-relaxed whitespace-pre-wrap drop-shadow-[0_0_5px_rgba(239,68,68,0.8)] w-full text-left"></div>
+        <div id="terminal-admin" class="hidden relative z-40 w-full p-3 sm:p-6 md:p-8 flex-col items-center justify-center h-full" style="max-width: calc(100vw - 20px); box-sizing: border-box;">
+            <div id="typewriter-admin" class="text-sm sm:text-lg md:text-2xl leading-relaxed whitespace-pre-wrap drop-shadow-[0_0_5px_rgba(239,68,68,0.8)] w-full text-left" style="max-width: 100%; overflow-wrap: break-word;"></div>
             
             <div id="cracking-phase-admin" class="hidden relative z-40 w-full flex-col items-center justify-center">
                 <img src="https://media.giphy.com/media/YQitE4YNQNahy/giphy.gif" 
