@@ -131,15 +131,15 @@
         </div>
         
         <!-- Thanh Công Cụ Dưới Cùng -->
-        <div class="absolute bottom-4 md:bottom-6 z-50 flex flex-col items-center gap-2 md:gap-3 w-full px-3">
+        <div class="fixed bottom-3 left-0 right-0 z-50 flex flex-col items-center gap-2 w-full px-2" style="max-width: 100vw; box-sizing: border-box;">
             <button id="skip-btn" class="hidden text-gray-500 hover:text-green-400 font-bold tracking-widest transition-colors text-xs md:text-base cursor-pointer">
-                [ BỎ QUA TIẾN TRÌNH >> ]
+                [ BỎ QUA >> ]
             </button>
             
-            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-3 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm max-w-[90%] md:max-w-none">
-                <input type="checkbox" id="dont-show-again" class="w-4 h-4 md:w-5 md:h-5 accent-green-500 cursor-pointer rounded flex-shrink-0">
-                <label for="dont-show-again" class="text-gray-400 text-[11px] md:text-sm cursor-pointer select-none leading-tight">
-                    Không hiển thị lại trong phiên làm việc này
+            <div class="flex items-center justify-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-2 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm w-auto" style="max-width: calc(100vw - 20px); box-sizing: border-box;">
+                <input type="checkbox" id="dont-show-again" class="w-4 h-4 accent-green-500 cursor-pointer rounded flex-shrink-0" style="min-width: 16px;">
+                <label for="dont-show-again" class="text-gray-400 text-[10px] sm:text-xs md:text-sm cursor-pointer select-none leading-tight whitespace-nowrap">
+                    Không hiển thị lại
                 </label>
             </div>
         </div>

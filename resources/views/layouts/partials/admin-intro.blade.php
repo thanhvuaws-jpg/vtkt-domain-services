@@ -127,15 +127,15 @@
             </div>
         </div>
         
-        <div class="absolute bottom-4 md:bottom-6 z-50 flex flex-col items-center gap-2 md:gap-3 w-full px-3 text-center" style="max-width: 100%; box-sizing: border-box;">
+        <div class="fixed bottom-3 left-0 right-0 z-50 flex flex-col items-center gap-2 w-full px-2" style="max-width: 100vw; box-sizing: border-box;">
             <button id="skip-btn-admin" class="hidden text-gray-500 hover:text-red-400 font-bold tracking-widest transition-colors text-xs md:text-base cursor-pointer">
-                [ BYPASS SECURITY >> ]
+                [ BYPASS >> ]
             </button>
             
-            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-3 py-2 rounded-lg border border-red-500/30 backdrop-blur-sm max-w-[90%] md:max-w-none" style="box-sizing: border-box;">
-                <input type="checkbox" id="dont-show-again-admin" class="w-4 h-4 md:w-5 md:h-5 accent-red-600 cursor-pointer rounded flex-shrink-0">
-                <label for="dont-show-again-admin" class="text-gray-400 text-[11px] md:text-sm cursor-pointer select-none leading-tight text-left">
-                    Bỏ qua quét an ninh ở các lần sau
+            <div class="flex items-center justify-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-2 py-2 rounded-lg border border-red-500/30 backdrop-blur-sm w-auto" style="max-width: calc(100vw - 20px); box-sizing: border-box;">
+                <input type="checkbox" id="dont-show-again-admin" class="w-4 h-4 accent-red-600 cursor-pointer rounded flex-shrink-0" style="min-width: 16px;">
+                <label for="dont-show-again-admin" class="text-gray-400 text-[10px] sm:text-xs md:text-sm cursor-pointer select-none leading-tight whitespace-nowrap">
+                    Bỏ qua lần sau
                 </label>
             </div>
         </div>
