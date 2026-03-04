@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Cyberpunk Intro (Chỉ trang chủ) -->
+@include('layouts.partials.intro')
 <!-- Modal Chào Mừng -->
 <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
