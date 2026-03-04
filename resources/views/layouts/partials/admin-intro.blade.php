@@ -85,7 +85,7 @@
         </button>
         
         <div id="terminal-admin" class="hidden relative z-40 w-full p-3 sm:p-6 md:p-8 flex-col items-center justify-center h-full" style="max-width: calc(100vw - 20px); box-sizing: border-box;">
-            <div id="typewriter-admin" class="text-sm sm:text-lg md:text-2xl leading-relaxed whitespace-pre-wrap drop-shadow-[0_0_5px_rgba(239,68,68,0.8)] w-full text-left" style="max-width: 100%; overflow-wrap: break-word;"></div>
+            <div id="typewriter-admin" class="text-sm sm:text-lg md:text-2xl leading-relaxed whitespace-pre-wrap drop-shadow-[0_0_5px_rgba(239,68,68,0.8)] w-full text-center" style="max-width: 100%; overflow-wrap: break-word;"></div>
             
             <div id="cracking-phase-admin" class="hidden relative z-40 w-full flex-col items-center justify-center">
                 <img src="https://media.giphy.com/media/YQitE4YNQNahy/giphy.gif" 
