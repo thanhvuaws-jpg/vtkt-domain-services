@@ -131,14 +131,14 @@
         </div>
         
         <!-- Thanh Công Cụ Dưới Cùng -->
-        <div class="absolute bottom-6 z-50 flex flex-col items-center gap-3 w-full">
-            <button id="skip-btn" class="hidden text-gray-500 hover:text-green-400 font-bold tracking-widest transition-colors text-sm md:text-base cursor-pointer">
+        <div class="absolute bottom-4 md:bottom-6 z-50 flex flex-col items-center gap-2 md:gap-3 w-full px-3">
+            <button id="skip-btn" class="hidden text-gray-500 hover:text-green-400 font-bold tracking-widest transition-colors text-xs md:text-base cursor-pointer">
                 [ BỎ QUA TIẾN TRÌNH >> ]
             </button>
             
-            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/60 px-4 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm">
-                <input type="checkbox" id="dont-show-again" class="w-4 h-4 md:w-5 md:h-5 accent-green-500 cursor-pointer rounded">
-                <label for="dont-show-again" class="text-gray-400 text-xs md:text-sm cursor-pointer select-none">
+            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-3 py-2 rounded-lg border border-green-500/30 backdrop-blur-sm max-w-[90%] md:max-w-none">
+                <input type="checkbox" id="dont-show-again" class="w-4 h-4 md:w-5 md:h-5 accent-green-500 cursor-pointer rounded flex-shrink-0">
+                <label for="dont-show-again" class="text-gray-400 text-[11px] md:text-sm cursor-pointer select-none leading-tight">
                     Không hiển thị lại trong phiên làm việc này
                 </label>
             </div>

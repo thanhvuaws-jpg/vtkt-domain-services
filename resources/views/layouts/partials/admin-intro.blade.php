@@ -1,5 +1,5 @@
 <!-- Admin Cyberpunk Intro Overlay -->
-<div id="admin-intro-overlay" class="fixed inset-0 z-[9999] overflow-hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: rgb(5, 5, 5); display: block;">
+<div id="admin-intro-overlay" class="fixed inset-0 z-[9999] overflow-hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: rgb(5, 5, 5); display: block; width: 100vw; max-width: 100%;">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -7,6 +7,13 @@
         body.admin-intro-active {
             overflow: hidden !important;
             height: 100vh !important;
+            width: 100vw !important;
+            max-width: 100% !important;
+        }
+        
+        #admin-intro-overlay * {
+            max-width: 100%;
+            box-sizing: border-box;
         }
         
         .glitch-text-admin {
@@ -58,7 +65,7 @@
         }
     </style>
 
-    <div class="text-red-500 font-mono flex flex-col items-center justify-center min-h-screen overflow-hidden relative selection:bg-red-500 selection:text-white">
+    <div class="text-red-500 font-mono flex flex-col items-center justify-center min-h-screen overflow-hidden relative selection:bg-red-500 selection:text-white" style="width: 100%; max-width: 100vw; padding: 0 10px; box-sizing: border-box;">
         <div class="absolute inset-0 scanline-admin z-50"></div>
         <div id="matrix-rain-admin" class="absolute inset-0 z-10 overflow-hidden pointer-events-none"></div>
         
@@ -120,14 +127,14 @@
             </div>
         </div>
         
-        <div class="absolute bottom-4 md:bottom-6 z-50 flex flex-col items-center gap-2 md:gap-3 w-full px-4 text-center">
+        <div class="absolute bottom-4 md:bottom-6 z-50 flex flex-col items-center gap-2 md:gap-3 w-full px-3 text-center" style="max-width: 100%; box-sizing: border-box;">
             <button id="skip-btn-admin" class="hidden text-gray-500 hover:text-red-400 font-bold tracking-widest transition-colors text-xs md:text-base cursor-pointer">
                 [ BYPASS SECURITY >> ]
             </button>
             
-            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-3 py-2 md:px-4 md:py-2 rounded-lg border border-red-500/30 backdrop-blur-sm max-w-full">
-                <input type="checkbox" id="dont-show-again-admin" class="w-4 h-4 md:w-5 md:h-5 accent-red-600 cursor-pointer rounded shrink-0">
-                <label for="dont-show-again-admin" class="text-gray-400 text-[10px] md:text-sm cursor-pointer select-none leading-tight text-left">
+            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity bg-black/80 px-3 py-2 rounded-lg border border-red-500/30 backdrop-blur-sm max-w-[90%] md:max-w-none" style="box-sizing: border-box;">
+                <input type="checkbox" id="dont-show-again-admin" class="w-4 h-4 md:w-5 md:h-5 accent-red-600 cursor-pointer rounded flex-shrink-0">
+                <label for="dont-show-again-admin" class="text-gray-400 text-[11px] md:text-sm cursor-pointer select-none leading-tight text-left">
                     Bỏ qua quét an ninh ở các lần sau
                 </label>
             </div>
