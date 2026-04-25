@@ -14,6 +14,7 @@ use App\Http\Controllers\DownloadController; // Controller xử lý download
 use App\Http\Controllers\Api\AjaxController; // Controller xử lý AJAX requests
 use App\Http\Controllers\TelegramWebhookController; // Controller xử lý Telegram webhook
 use App\Http\Controllers\ContactAdminController; // Controller hiển thị thông tin liên hệ admin
+use App\Http\Controllers\PromotionController; // Controller xử lý quà tặng/voucher
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +85,13 @@ Route::middleware(['web'])->group(function() {
     // Routes xử lý download
     Route::get('/download', [\App\Http\Controllers\DownloadController::class, 'index'])->name('download.index'); // Trang download
     Route::get('/download/{id}', [\App\Http\Controllers\DownloadController::class, 'download'])->name('download.file'); // Download file cụ thể
+
+    // Routes quà tặng thành viên mới
+    Route::get('/gift', [PromotionController::class, 'index'])->name('promotion.gift');
+    Route::post('/claim-gift', [PromotionController::class, 'claimGift'])->name('api.claim-gift');
+    Route::post('/claim-milestone', [App\Http\Controllers\PromotionController::class, 'claimMilestone'])->name('api.claim-milestone');
+    Route::post('/claim-top-reward', [App\Http\Controllers\PromotionController::class, 'claimTopReward'])->name('api.claim-top-reward');
+    Route::get('/api/distribute-top-rewards', [App\Http\Controllers\PromotionController::class, 'distributeTopRewards']);
 });
 
 // Legacy profile route - redirect đến Laravel
@@ -127,6 +135,7 @@ Route::prefix('ajax')->name('ajax.')->group(function() {
     Route::post('/buy-hosting', [AjaxController::class, 'buyHosting'])->name('buy-hosting'); // Mua hosting
     Route::post('/buy-source-code', [AjaxController::class, 'buySourceCode'])->name('buy-source-code'); // Mua source code
     Route::post('/buy-vps', [AjaxController::class, 'buyVPS'])->name('buy-vps'); // Mua VPS
+    Route::post('/apply-voucher', [AjaxController::class, 'applyVoucher'])->name('apply-voucher');
 });
 
 // Routes xác thực admin (trước middleware, để admin có thể đăng nhập)
@@ -191,6 +200,10 @@ Route::prefix('admin')->name('admin.')->middleware([\App\Http\Middleware\AdminMi
     Route::post('settings/telegram', [\App\Http\Controllers\Admin\SettingsController::class, 'updateTelegram'])->name('settings.telegram'); // Cập nhật cài đặt Telegram
     Route::post('settings/contact', [\App\Http\Controllers\Admin\SettingsController::class, 'updateContact'])->name('settings.contact'); // Cập nhật thông tin liên hệ
     Route::post('settings/card', [\App\Http\Controllers\Admin\SettingsController::class, 'updateCard'])->name('settings.card'); // Cập nhật cài đặt cổng nạp thẻ
+
+    // Quản lý Ưu Đãi (Voucher & Loyalty)
+    Route::resource('vouchers', \App\Http\Controllers\Admin\VoucherController::class);
+    Route::get('loyalty', [\App\Http\Controllers\Admin\LoyaltyController::class, 'index'])->name('loyalty.index');
 });
 
 // Routes frontend (trang công khai)

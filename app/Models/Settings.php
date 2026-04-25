@@ -39,7 +39,11 @@ class Settings extends Model
         'facebook_link', // Link Facebook
         'zalo_phone', // Số điện thoại Zalo
         'telegram_bot_token', // Telegram bot token
-        'telegram_admin_chat_id' // Telegram admin chat ID
+        'telegram_admin_chat_id', // Telegram admin chat ID
+        'thongbao', // Nội dung thông báo toàn trang
+        'maintenance_mode', // Chế độ bảo trì (0/1)
+        'n8n_chatbot_url', // Link n8n Chatbot Webhook
+        'n8n_security_url' // Link n8n Security Webhook
     ];
 
     /**

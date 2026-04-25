@@ -1,58 +1,58 @@
 <?php
-// Khai báo namespace cho Controller này - thuộc App\Http\Controllers\Admin
+
 namespace App\Http\Controllers\Admin;
 
-// Import Controller base class
 use App\Http\Controllers\Controller;
-// Import các Model cần thiết
-use App\Models\Card; // Model quản lý thẻ cào
-use App\Models\History; // Model lưu lịch sử mua domain
-use App\Models\User; // Model quản lý người dùng
-use Illuminate\Http\Request; // Class xử lý HTTP request
+use App\Models\Card;
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\Request;
 
-/**
- * Class DashboardController
- * Controller xử lý trang dashboard của admin
- * Hiển thị thống kê doanh thu, đơn hàng, thành viên
- */
 class DashboardController extends Controller
 {
-    /**
-     * Hiển thị dashboard admin
-     * Lấy thống kê doanh thu, đơn hàng, thành viên và hiển thị trên trang dashboard
-     * 
-     * @return \Illuminate\View\View - View dashboard với dữ liệu thống kê
-     */
     public function index()
     {
-        // Tạo các chuỗi thời gian để thống kê
-        $time2 = date('d/m/Y'); // Hôm nay (định dạng: ngày/tháng/năm)
-        $time3 = date('m/Y'); // Tháng/năm hiện tại (định dạng: tháng/năm)
-        $homqua = date('d/m/Y', strtotime('-1 day')); // Hôm qua (ngày hôm qua)
+        $time2   = date('d/m/Y');
+        $time3   = date('m/Y');
+        $homqua  = date('d/m/Y', strtotime('-1 day'));
 
-        // Tính doanh thu từ thẻ cào đã thành công (status = 1)
-        $doanhthuhomnay = Card::sumAmountByStatusAndTime2(1, $time2); // Doanh thu hôm nay
-        $doanhthuthang = Card::sumAmountByStatusAndTime3(1, $time3); // Doanh thu tháng này
-        $doanhthuhqua = Card::sumAmountByStatusAndTime2(1, $homqua); // Doanh thu hôm qua
-        $tongdoanhthu = Card::sumAmountByStatus(1); // Tổng doanh thu (tất cả thời gian)
+        // Doanh thu từ thẻ cào
+        $doanhthuhomnay = Card::sumAmountByStatusAndTime2(1, $time2);
+        $doanhthuthang  = Card::sumAmountByStatusAndTime3(1, $time3);
+        $doanhthuhqua   = Card::sumAmountByStatusAndTime2(1, $homqua);
+        $tongdoanhthu   = Card::sumAmountByStatus(1);
 
-        // Thống kê khác
-        $donhang = History::countByStatus(0); // Số đơn hàng đang chờ xử lý (status = 0)
-        $donhoanthanh = History::countByStatus(1); // Số đơn hàng đã hoàn thành (status = 1)
-        $thanhvien = User::count(); // Tổng số thành viên
-        $update = History::countAhihiOne(); // Số đơn hàng có ahihi = 1 (có thể là đơn hàng cần cập nhật)
+        // Đơn hàng chờ xử lý (status=0) tổng cộng
+        $donhang = Order::where('status', 0)->count();
 
-        // Trả về view dashboard với tất cả dữ liệu thống kê
+        // Đơn hàng hoàn tất/duyệt (status=1) tổng cộng
+        $donhoanthanh = Order::where('status', 1)->count();
+
+        $thanhvien = User::count();
+
+        // Domain yêu cầu cập nhật DNS (ahihi = 1)
+        $update = Order::where('product_type', 'domain')
+                       ->where('options->ahihi', 1)->count();
+
+        // Phân bổ đơn hàng theo loại sản phẩm (dùng cho biểu đồ)
+        $orderByType = [
+            'Domain'      => Order::where('product_type', 'domain')->count(),
+            'Hosting'     => Order::where('product_type', 'hosting')->count(),
+            'VPS'         => Order::where('product_type', 'vps')->count(),
+            'Source Code' => Order::where('product_type', 'sourcecode')->count(),
+        ];
+
+        // Đơn hàng theo trạng thái
+        $orderByStatus = [
+            'Chờ Xử Lý' => Order::where('status', 0)->count(),
+            'Đã Duyệt'   => Order::where('status', 1)->count(),
+            'Từ Chối'    => Order::where('status', 2)->count(),
+        ];
+
         return view('admin.dashboard', compact(
-            'doanhthuhomnay', // Doanh thu hôm nay
-            'doanhthuthang', // Doanh thu tháng này
-            'doanhthuhqua', // Doanh thu hôm qua
-            'tongdoanhthu', // Tổng doanh thu
-            'donhang', // Số đơn hàng chờ xử lý
-            'donhoanthanh', // Số đơn hàng đã hoàn thành
-            'thanhvien', // Tổng số thành viên
-            'update' // Số đơn hàng cần cập nhật
+            'doanhthuhomnay', 'doanhthuthang', 'doanhthuhqua', 'tongdoanhthu',
+            'donhang', 'donhoanthanh', 'thanhvien', 'update',
+            'orderByType', 'orderByStatus'
         ));
     }
 }
-

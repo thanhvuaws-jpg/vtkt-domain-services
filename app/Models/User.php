@@ -27,7 +27,11 @@ class User extends Model
         'email', // Email
         'tien', // Số dư tài khoản
         'chucvu', // Chức vụ: 0 = User, 1 = Admin
-        'time' // Thời gian đăng ký
+        'time', // Thời gian đăng ký
+        'lucky_draw_played',
+        'registration_ip',
+        'device_fingerprint',
+        'referrer_id'
     ];
 
     // Các cột sẽ bị ẩn khi convert model sang array hoặc JSON
@@ -111,55 +115,14 @@ class User extends Model
     }
 
     /**
-     * Relationship với Domain Orders (History)
-     * Một user có thể có nhiều đơn hàng domain
+     * Relationship với Orders
+     * Một user có thể có nhiều đơn hàng (tất cả các loại)
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function domainOrders()
+    public function orders()
     {
-        // hasMany: một user có nhiều History (đơn hàng domain)
-        // 'uid' là foreign key trong bảng History trỏ đến 'id' trong bảng users
-        return $this->hasMany(History::class, 'uid');
-    }
-
-    /**
-     * Relationship với Hosting Orders
-     * Một user có thể có nhiều đơn hàng hosting
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function hostingOrders()
-    {
-        // hasMany: một user có nhiều HostingHistory (đơn hàng hosting)
-        // 'uid' là foreign key trong bảng HostingHistory trỏ đến 'id' trong bảng users
-        return $this->hasMany(HostingHistory::class, 'uid');
-    }
-
-    /**
-     * Relationship với VPS Orders
-     * Một user có thể có nhiều đơn hàng VPS
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function vpsOrders()
-    {
-        // hasMany: một user có nhiều VPSHistory (đơn hàng VPS)
-        // 'uid' là foreign key trong bảng VPSHistory trỏ đến 'id' trong bảng users
-        return $this->hasMany(VPSHistory::class, 'uid');
-    }
-
-    /**
-     * Relationship với Source Code Orders
-     * Một user có thể có nhiều đơn hàng source code
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function sourceCodeOrders()
-    {
-        // hasMany: một user có nhiều SourceCodeHistory (đơn hàng source code)
-        // 'uid' là foreign key trong bảng SourceCodeHistory trỏ đến 'id' trong bảng users
-        return $this->hasMany(SourceCodeHistory::class, 'uid');
+        return $this->hasMany(Order::class, 'user_id');
     }
 }
 

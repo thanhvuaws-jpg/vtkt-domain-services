@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 // Import Controller base class
 use App\Http\Controllers\Controller;
 // Import các Model cần thiết
-use App\Models\History; // Model lưu lịch sử mua domain
+use App\Models\Order; // Model bảng orders thống nhất
 use Illuminate\Http\Request; // Class xử lý HTTP request
 
 /**
@@ -24,7 +24,8 @@ class DnsController extends Controller
     {
         // Lấy tất cả domain có ahihi = 1 (đang chờ duyệt cập nhật DNS)
         // Eager load relationship user để tránh N+1 query
-        $domains = History::where('ahihi', '1')
+        $domains = \App\Models\Order::where('product_type', 'domain')
+            ->where('options->ahihi', '1')
             ->with('user') // Load thông tin user
             ->orderBy('id', 'desc') // Sắp xếp theo ID giảm dần (mới nhất trước)
             ->get();
@@ -51,7 +52,7 @@ class DnsController extends Controller
         ]);
 
         // Tìm domain theo ID, nếu không tìm thấy thì throw 404
-        $domain = History::findOrFail($id);
+        $domain = \App\Models\Order::where('product_type', 'domain')->findOrFail($id);
 
         // Cập nhật DNS và reset ahihi về 0 (đã duyệt)
         $domain->ns1 = $request->ns1; // Cập nhật NS1
@@ -76,7 +77,7 @@ class DnsController extends Controller
     public function reject(Request $request, $id)
     {
         // Tìm domain theo ID, nếu không tìm thấy thì throw 404
-        $domain = History::findOrFail($id);
+        $domain = \App\Models\Order::where('product_type', 'domain')->findOrFail($id);
 
         // Reset ahihi về 0 và đặt trạng thái thành từ chối (4)
         $domain->ahihi = '0'; // Reset ahihi về 0 (đã xử lý)

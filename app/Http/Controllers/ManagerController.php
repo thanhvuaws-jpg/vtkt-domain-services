@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 // Import các Model cần thiết
-use App\Models\History; // Model lưu lịch sử mua domain
-use App\Models\HostingHistory; // Model lưu lịch sử mua hosting
-use App\Models\VPSHistory; // Model lưu lịch sử mua VPS
-use App\Models\SourceCodeHistory; // Model lưu lịch sử mua source code
+use App\Models\Order;
 use App\Models\User; // Model quản lý người dùng
 use Illuminate\Http\Request; // Class xử lý HTTP request
 
@@ -39,28 +36,30 @@ class ManagerController extends Controller
             return redirect()->route('login')->with('error', 'Không tìm thấy thông tin người dùng!');
         }
 
-        // Lấy đơn hàng domain từ bảng History
-        $domainOrders = History::where('uid', $user->id)
-            ->orderBy('id', 'desc') // Sắp xếp theo ID giảm dần (mới nhất trước)
-            ->get();
+        // Lấy đơn hàng domain
+        $domainOrders = Order::where('user_id', $user->id)->where('product_type', 'domain')
+            ->orderBy('id', 'desc')->get();
 
-        // Lấy đơn hàng hosting từ bảng HostingHistory (kèm thông tin gói hosting)
-        $hostingOrders = HostingHistory::where('uid', $user->id)
-            ->with('hosting') // Eager load relationship với Hosting để tránh N+1 query
-            ->orderBy('id', 'desc')
-            ->get();
+        // Lấy đơn hàng hosting (kèm thông tin gói hosting)
+        $hostingOrders = Order::where('user_id', $user->id)->where('product_type', 'hosting')
+            ->orderBy('id', 'desc')->get()->map(function($o) {
+                $o->hosting = $o->product();
+                return $o;
+            });
 
-        // Lấy đơn hàng VPS từ bảng VPSHistory (kèm thông tin gói VPS)
-        $vpsOrders = VPSHistory::where('uid', $user->id)
-            ->with('vps') // Eager load relationship với VPS để tránh N+1 query
-            ->orderBy('id', 'desc')
-            ->get();
+        // Lấy đơn hàng VPS (kèm thông tin VPS)
+        $vpsOrders = Order::where('user_id', $user->id)->where('product_type', 'vps')
+            ->orderBy('id', 'desc')->get()->map(function($o) {
+                $o->vps = $o->product();
+                return $o;
+            });
 
-        // Lấy đơn hàng source code từ bảng SourceCodeHistory (kèm thông tin source code)
-        $sourceCodeOrders = SourceCodeHistory::where('uid', $user->id)
-            ->with('sourceCode') // Eager load relationship với SourceCode để tránh N+1 query
-            ->orderBy('id', 'desc')
-            ->get();
+        // Lấy đơn hàng Source code (kèm thông tin)
+        $sourceCodeOrders = Order::where('user_id', $user->id)->where('product_type', 'sourcecode')
+            ->orderBy('id', 'desc')->get()->map(function($o) {
+                $o->sourceCode = $o->product();
+                return $o;
+            });
 
         // Trả về view với tất cả dữ liệu đơn hàng
         return view('pages.manager', compact(

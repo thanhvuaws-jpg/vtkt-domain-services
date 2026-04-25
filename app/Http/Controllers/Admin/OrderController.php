@@ -2,15 +2,10 @@
 // Khai báo namespace cho Controller này - thuộc App\Http\Controllers\Admin
 namespace App\Http\Controllers\Admin;
 
-// Import Controller base class
 use App\Http\Controllers\Controller;
-// Import các Model cần thiết
-use App\Models\History; // Model lưu lịch sử mua domain
-use App\Models\HostingHistory; // Model lưu lịch sử mua hosting
-use App\Models\VPSHistory; // Model lưu lịch sử mua VPS
-use App\Models\SourceCodeHistory; // Model lưu lịch sử mua source code
-use App\Models\User; // Model quản lý người dùng
-use Illuminate\Http\Request; // Class xử lý HTTP request
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 /**
  * Class OrderController
@@ -27,87 +22,40 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // Lấy bộ lọc từ query string
-        $type = $request->get('type', 'all'); // Loại đơn hàng: all, domain, hosting, vps, sourcecode
-        $status = $request->get('status', 'all'); // Trạng thái: all, 0, 1, 2, 3, 4
+        $type = $request->get('type', 'all');
+        $status = $request->get('status', 'all');
         
-        // Khởi tạo mảng để lưu tất cả đơn hàng
-        $orders = [];
-        
-        // Lấy đơn hàng domain nếu type = 'all' hoặc 'domain'
-        if ($type === 'all' || $type === 'domain') {
-            // Tạo query với relationship user (eager load để tránh N+1 query)
-            $domainQuery = History::with('user')->orderBy('id', 'desc');
-            // Nếu có filter status, thêm điều kiện where
-            if ($status !== 'all') {
-                $domainQuery->where('status', $status);
-            }
-            // Lấy dữ liệu và thêm order_type = 'domain' vào mỗi đơn hàng
-            $domainOrders = $domainQuery->get()->map(function($order) {
-                $order->order_type = 'domain'; // Đánh dấu loại đơn hàng
-                return $order;
-            });
-            // Merge vào mảng orders
-            $orders = array_merge($orders, $domainOrders->toArray());
+        $query = Order::with('user')->orderBy('id', 'desc');
+
+        if ($type !== 'all') {
+            $query->where('product_type', $type);
         }
         
-        // Lấy đơn hàng hosting nếu type = 'all' hoặc 'hosting'
-        if ($type === 'all' || $type === 'hosting') {
-            // Tạo query với relationship user và hosting
-            $hostingQuery = HostingHistory::with(['user', 'hosting'])->orderBy('id', 'desc');
-            // Nếu có filter status, thêm điều kiện where
-            if ($status !== 'all') {
-                $hostingQuery->where('status', $status);
-            }
-            // Lấy dữ liệu và thêm order_type = 'hosting' vào mỗi đơn hàng
-            $hostingOrders = $hostingQuery->get()->map(function($order) {
-                $order->order_type = 'hosting'; // Đánh dấu loại đơn hàng
-                return $order;
-            });
-            // Merge vào mảng orders
-            $orders = array_merge($orders, $hostingOrders->toArray());
+        if ($status !== 'all') {
+            $query->where('status', $status);
         }
         
-        // Lấy đơn hàng VPS nếu type = 'all' hoặc 'vps'
-        if ($type === 'all' || $type === 'vps') {
-            // Tạo query với relationship user và vps
-            $vpsQuery = VPSHistory::with(['user', 'vps'])->orderBy('id', 'desc');
-            // Nếu có filter status, thêm điều kiện where
-            if ($status !== 'all') {
-                $vpsQuery->where('status', $status);
+        // Cần map thêm các tuỳ biến vào Array vì toArray() mặc định sẽ không gọi Magic Accessors
+        $orders = $query->get()->map(function($order) {
+            $arr = $order->toArray(); // Chứa thông tin gốc và user (do eager load)
+            $arr['order_type'] = $order->product_type;
+            
+            // Lôi Data từ cột JSON ra map cứng vào Top-Level Array cho Blade sử dụng
+            $arr['domain'] = $order->domain;
+            $arr['ns1'] = $order->ns1;
+            $arr['ns2'] = $order->ns2;
+            $arr['period'] = $order->period;
+            
+            // Xử lý các loại hàng có ID trỏ sang bảng khác
+            if (in_array($order->product_type, ['hosting', 'vps', 'sourcecode'])) {
+                $productKey = $order->product_type == 'sourcecode' ? 'source_code' : $order->product_type;
+                $product = $order->product();
+                $arr[$productKey] = $product ? $product->toArray() : [];
             }
-            // Lấy dữ liệu và thêm order_type = 'vps' vào mỗi đơn hàng
-            $vpsOrders = $vpsQuery->get()->map(function($order) {
-                $order->order_type = 'vps'; // Đánh dấu loại đơn hàng
-                return $order;
-            });
-            // Merge vào mảng orders
-            $orders = array_merge($orders, $vpsOrders->toArray());
-        }
+            
+            return $arr;
+        })->toArray();
         
-        // Lấy đơn hàng source code nếu type = 'all' hoặc 'sourcecode'
-        if ($type === 'all' || $type === 'sourcecode') {
-            // Tạo query với relationship user và sourceCode
-            $sourceCodeQuery = SourceCodeHistory::with(['user', 'sourceCode'])->orderBy('id', 'desc');
-            // Nếu có filter status, thêm điều kiện where
-            if ($status !== 'all') {
-                $sourceCodeQuery->where('status', $status);
-            }
-            // Lấy dữ liệu và thêm order_type = 'sourcecode' vào mỗi đơn hàng
-            $sourceCodeOrders = $sourceCodeQuery->get()->map(function($order) {
-                $order->order_type = 'sourcecode'; // Đánh dấu loại đơn hàng
-                return $order;
-            });
-            // Merge vào mảng orders
-            $orders = array_merge($orders, $sourceCodeOrders->toArray());
-        }
-        
-        // Sắp xếp tất cả đơn hàng theo ID giảm dần (mới nhất trước)
-        usort($orders, function($a, $b) {
-            return $b['id'] - $a['id'];
-        });
-        
-        // Trả về view với dữ liệu đơn hàng và bộ lọc
         return view('admin.orders.index', compact('orders', 'type', 'status'));
     }
 
@@ -120,33 +68,15 @@ class OrderController extends Controller
      */
     public function show($id, $type)
     {
-        // Khởi tạo biến để lưu đơn hàng
-        $order = null;
+        $order = Order::with('user')->findOrFail($id);
+        $order->order_type = $order->product_type; // Tương thích view cũ
         
-        // Tìm đơn hàng theo loại và ID
-        switch ($type) {
-            case 'domain':
-                // Tìm đơn hàng domain với relationship user
-                $order = History::with('user')->findOrFail($id);
-                break;
-            case 'hosting':
-                // Tìm đơn hàng hosting với relationship user và hosting
-                $order = HostingHistory::with(['user', 'hosting'])->findOrFail($id);
-                break;
-            case 'vps':
-                // Tìm đơn hàng VPS với relationship user và vps
-                $order = VPSHistory::with(['user', 'vps'])->findOrFail($id);
-                break;
-            case 'sourcecode':
-                // Tìm đơn hàng source code với relationship user và sourceCode
-                $order = SourceCodeHistory::with(['user', 'sourceCode'])->findOrFail($id);
-                break;
-            default:
-                abort(404);
+        // Bơm biến quan trệ sản phẩm phụ thuộc để view hiển thị thông số như $order->hosting->name
+        if (in_array($order->product_type, ['hosting', 'vps', 'sourcecode'])) {
+            $productKey = $order->product_type == 'sourcecode' ? 'sourceCode' : $order->product_type;
+            $order->{$productKey} = $order->product();
         }
-        
-        $order->order_type = $type;
-        
+
         return view('admin.orders.show', compact('order', 'type'));
     }
 
@@ -161,41 +91,12 @@ class OrderController extends Controller
     public function approve($id, $type)
     {
         try {
-            // Xử lý theo loại đơn hàng
-            switch ($type) {
-                case 'domain':
-                    // Tìm đơn hàng domain theo ID
-                    $order = History::findOrFail($id);
-                    $order->status = 1; // Trạng thái: 1 = Đã duyệt/Hoạt động
-                    $order->save(); // Lưu vào database
-                    break;
-                case 'hosting':
-                    // Tìm đơn hàng hosting theo ID
-                    $order = HostingHistory::findOrFail($id);
-                    $order->status = 1; // Trạng thái: 1 = Đã duyệt/Hoạt động
-                    $order->save(); // Lưu vào database
-                    break;
-                case 'vps':
-                    // Tìm đơn hàng VPS theo ID
-                    $order = VPSHistory::findOrFail($id);
-                    $order->status = 1; // Trạng thái: 1 = Đã duyệt/Hoạt động
-                    $order->save(); // Lưu vào database
-                    break;
-                case 'sourcecode':
-                    // Tìm đơn hàng source code theo ID
-                    $order = SourceCodeHistory::findOrFail($id);
-                    $order->status = 1; // Trạng thái: 1 = Đã duyệt/Hoạt động
-                    $order->save(); // Lưu vào database
-                    break;
-                default:
-                    // Nếu loại đơn hàng không hợp lệ, redirect về với thông báo lỗi
-                    return redirect()->back()->with('error', 'Invalid order type');
-            }
+            $order = Order::findOrFail($id);
+            $order->status = 1; // 1 = Đã duyệt
+            $order->save();
             
-            // Redirect về danh sách đơn hàng với thông báo thành công
             return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được duyệt thành công');
         } catch (\Exception $e) {
-            // Nếu có lỗi, redirect về với thông báo lỗi
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
@@ -212,100 +113,30 @@ class OrderController extends Controller
     public function reject(Request $request, $id, $type)
     {
         try {
-            // Khởi tạo biến để lưu đơn hàng và số tiền hoàn lại
-            $order = null;
-            $refundAmount = 0; // Số tiền hoàn lại (mặc định: 0)
+            $order = Order::with('user')->findOrFail($id);
+            $order->status = 4; // Từ chối
+            $order->save();
             
-            // Xử lý theo loại đơn hàng
-            switch ($type) {
-                case 'domain':
-                    // Tìm đơn hàng domain với relationship user
-                    $order = History::with('user')->findOrFail($id);
-                    $order->status = 4; // Trạng thái: 4 = Từ chối
-                    $order->save(); // Lưu vào database
-                    
-                    // Tính toán số tiền hoàn lại (giá domain)
-                    // Lấy đuôi domain từ tên domain (ví dụ: example.com → .com)
-                    if ($order->domain) {
-                        $domainParts = explode('.', $order->domain);
-                        if (count($domainParts) >= 2) {
-                            // Lấy đuôi domain (ví dụ: .com, .vn)
-                            $extension = '.' . end($domainParts);
-                            
-                            // Tìm giá domain từ bảng listdomain
-                            $domainType = \App\Models\Domain::where('duoi', $extension)->first();
-                            if ($domainType) {
-                                $refundAmount = (int)$domainType->price;
-                            }
-                        }
-                    }
-                    break;
-                    
-                case 'hosting':
-                    // Tìm đơn hàng hosting với relationship user và hosting
-                    $order = HostingHistory::with(['user', 'hosting'])->findOrFail($id);
-                    $order->status = 4; // Trạng thái: 4 = Từ chối
-                    $order->save(); // Lưu vào database
-                    
-                    // Tính toán số tiền hoàn lại dựa trên thời hạn (tháng hoặc năm)
-                    if ($order->hosting) {
-                        if ($order->period === 'month') {
-                            // Nếu là thuê theo tháng, hoàn lại giá tháng
-                            $refundAmount = $order->hosting->price_month;
-                        } else {
-                            // Nếu là thuê theo năm, hoàn lại giá năm
-                            $refundAmount = $order->hosting->price_year;
-                        }
-                    }
-                    break;
-                    
-                case 'vps':
-                    // Tìm đơn hàng VPS với relationship user và vps
-                    $order = VPSHistory::with(['user', 'vps'])->findOrFail($id);
-                    $order->status = 4; // Trạng thái: 4 = Từ chối
-                    $order->save(); // Lưu vào database
-                    
-                    // Tính toán số tiền hoàn lại dựa trên thời hạn (tháng hoặc năm)
-                    if ($order->vps) {
-                        if ($order->period === 'month') {
-                            // Nếu là thuê theo tháng, hoàn lại giá tháng
-                            $refundAmount = $order->vps->price_month;
-                        } else {
-                            // Nếu là thuê theo năm, hoàn lại giá năm
-                            $refundAmount = $order->vps->price_year;
-                        }
-                    }
-                    break;
-                    
-                case 'sourcecode':
-                    // Tìm đơn hàng source code với relationship user và sourceCode
-                    $order = SourceCodeHistory::with(['user', 'sourceCode'])->findOrFail($id);
-                    $order->status = 4; // Trạng thái: 4 = Từ chối
-                    $order->save(); // Lưu vào database
-                    
-                    // Tính toán số tiền hoàn lại (giá source code)
-                    if ($order->sourceCode) {
-                        $refundAmount = $order->sourceCode->price; // Hoàn lại giá source code
-                    }
-                    break;
-                    
-                default:
-                    // Nếu loại đơn hàng không hợp lệ, redirect về với thông báo lỗi
-                    return redirect()->back()->with('error', 'Invalid order type');
+            $refundAmount = $order->price;
+            
+            // Tương thích ngược: Nếu đơn hàng cũ (price=0), lấy giá từ sản phẩm gốc
+            if ($refundAmount == 0) {
+                try {
+                    // OOP: Uỷ quyền cho Factory và Strategy để tính giá (tương thích mọi class sau này)
+                    $strategy = \App\Services\OrderStrategyFactory::make($order->product_type);
+                    $refundAmount = $strategy->getPrice((int)$order->product_id, $order->options ?? []) ?? 0;
+                } catch (\Exception $e) {
+                    $refundAmount = 0; // Fallback an toàn nếu lỗi logic
+                }
             }
             
-            // Hoàn tiền cho user nếu số tiền hoàn lại > 0 và có đơn hàng và user
-            if ($refundAmount > 0 && $order && $order->user) {
-                // Lấy user từ đơn hàng
-                $user = $order->user;
-                // Cộng số tiền hoàn lại vào số dư user
-                $user->incrementBalance($refundAmount);
+            // Hoàn tiền cho user
+            if ($refundAmount > 0 && $order->user) {
+                $order->user->incrementBalance($refundAmount);
             }
             
-            // Redirect về danh sách đơn hàng với thông báo thành công
             return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã bị từ chối và hoàn tiền thành công');
         } catch (\Exception $e) {
-            // Nếu có lỗi, redirect về với thông báo lỗi
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }

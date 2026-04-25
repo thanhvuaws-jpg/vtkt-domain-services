@@ -6,8 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Settings; // Model quản lý cài đặt hệ thống
 use App\Models\Hosting; // Model quản lý gói hosting
 use App\Models\VPS; // Model quản lý gói VPS
-use App\Models\HostingHistory; // Model lưu lịch sử mua hosting
-use App\Models\VPSHistory; // Model lưu lịch sử mua VPS
+use App\Models\Order; // Model bảng orders chung
 use App\Models\User; // Model quản lý người dùng
 use Illuminate\Http\Request; // Class xử lý HTTP request
 
@@ -56,33 +55,13 @@ class ContactAdminController extends Controller
         ];
 
         // Khởi tạo biến để lưu thông tin đơn hàng và sản phẩm
-        $order = null; // Đơn hàng (HostingHistory hoặc VPSHistory)
-        $product = null; // Sản phẩm (Hosting hoặc VPS)
-        $productName = ''; // Tên sản phẩm
+        $order = Order::where('mgd', $mgd)->where('user_id', $user->id)->first();
+        $product = null;
+        $productName = '';
 
-        // Xử lý theo loại đơn hàng
-        if ($type === 'hosting') {
-            // Tìm đơn hàng hosting theo mã giao dịch và ID user
-            $order = HostingHistory::where('mgd', $mgd)
-                ->where('uid', $user->id)
-                ->first();
-            
-            // Nếu tìm thấy đơn hàng, lấy thông tin gói hosting
-            if ($order) {
-                $product = Hosting::find($order->hosting_id);
-                $productName = $product ? $product->name : '';
-            }
-        } elseif ($type === 'vps') {
-            // Tìm đơn hàng VPS theo mã giao dịch và ID user
-            $order = VPSHistory::where('mgd', $mgd)
-                ->where('uid', $user->id)
-                ->first();
-            
-            // Nếu tìm thấy đơn hàng, lấy thông tin gói VPS
-            if ($order) {
-                $product = VPS::find($order->vps_id);
-                $productName = $product ? $product->name : '';
-            }
+        if ($order) {
+            $product = $order->product();
+            $productName = $product ? $product->name : '';
         }
 
         // Nếu không tìm thấy đơn hàng hoặc sản phẩm, redirect về trang chủ với thông báo lỗi

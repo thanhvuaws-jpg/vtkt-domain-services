@@ -22,8 +22,9 @@
     <style>
         /* Prevent horizontal overflow */
         html, body {
-            overflow-x: hidden;
+            overflow: hidden; /* Chặn toàn bộ trang cuộn - chỉ phần content cuộn */
             max-width: 100%;
+            height: 100%;
         }
         
         /* Mobile First - Admin Responsive */
@@ -287,7 +288,7 @@
 </head>
 <!-- END: Head -->
 
-<body class="py-5">
+<body class="py-5" style="height: 100vh; overflow: hidden;">
     <!-- BEGIN: Mobile Menu -->
     <div class="mobile-menu md:hidden">
         <div class="mobile-menu-bar">
@@ -502,9 +503,9 @@
     </div>
     <!-- END: Mobile Menu -->
 
-    <div class="flex mt-[4.7rem] md:mt-0">
+    <div class="flex mt-[4.7rem] md:mt-0" style="height: calc(100vh - 0px); overflow: hidden;">
         <!-- BEGIN: Side Menu -->
-        <nav class="side-nav">
+        <nav class="side-nav" style="position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;">
             <a href="{{ route('admin.dashboard') }}" class="intro-x flex items-center pl-5 pt-4">
                 <img alt="Midone - HTML Admin Template" class="w-6" src="{{ asset('images/logo.jpg') }}">
                 <span class="hidden xl:block text-white text-lg ml-3">
@@ -652,6 +653,42 @@
                     </a>
                 </li>
                 
+                <li>
+                    <a href="javascript:;" class="side-menu {{ request()->routeIs('admin.vouchers.*') || request()->routeIs('admin.loyalty.*') ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon">
+                            <i data-lucide="gift"></i>
+                        </div>
+                        <div class="side-menu__title">
+                            Quản Lý Ưu Đãi
+                            <div class="side-menu__sub-icon">
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="{{ request()->routeIs('admin.vouchers.*') || request()->routeIs('admin.loyalty.*') ? 'side-menu__sub-open' : '' }}">
+                        <li>
+                            <a href="{{ route('admin.vouchers.index') }}" class="side-menu {{ request()->routeIs('admin.vouchers.index') ? 'side-menu--active' : '' }}">
+                                <div class="side-menu__icon">
+                                    <i data-lucide="ticket"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Quản Lý Voucher
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.loyalty.index') }}" class="side-menu {{ request()->routeIs('admin.loyalty.index') ? 'side-menu--active' : '' }}">
+                                <div class="side-menu__icon">
+                                    <i data-lucide="award"></i>
+                                </div>
+                                <div class="side-menu__title">
+                                    Thưởng & Top Spender
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
                 <li class="side-nav__devider my-6"></li>
                 <li>
                     <a href="javascript:;" class="side-menu">
@@ -716,9 +753,9 @@
         <!-- END: Side Menu -->
         
         <!-- BEGIN: Content -->
-        <div class="content">
+        <div class="content" style="flex: 1; overflow-y: auto; height: 100vh;">
             <!-- BEGIN: Top Bar -->
-            <div class="top-bar">
+            <div class="top-bar" style="position: sticky; top: 0; z-index: 100; background: inherit;">
                 <!-- BEGIN: Breadcrumb -->
                 <nav aria-label="breadcrumb" class="-intro-x mr-auto hidden sm:flex">
                     <ol class="breadcrumb">

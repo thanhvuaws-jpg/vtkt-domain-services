@@ -17,8 +17,7 @@ class OrderConfirmationMail extends Mailable
     // Sử dụng các trait để hỗ trợ queue và serialize models
     use Queueable, SerializesModels;
 
-    // Thuộc tính công khai để truy cập từ view email
-    public $order; // Đơn hàng (History, HostingHistory, VPSHistory, hoặc SourceCodeHistory)
+    public $order; // Đơn hàng (Instance bảng Order duy nhất)
     public $orderType; // Loại đơn hàng: 'domain', 'hosting', 'vps', 'sourcecode'
     public $user; // Thông tin user đã mua hàng
     public $orderDetails; // Chi tiết đơn hàng (mảng chứa các thông tin bổ sung)
@@ -26,7 +25,7 @@ class OrderConfirmationMail extends Mailable
     /**
      * Hàm khởi tạo (Constructor)
      * 
-     * @param mixed $order - Đơn hàng (History, HostingHistory, VPSHistory, hoặc SourceCodeHistory)
+     * @param mixed $order - Đơn hàng (Instance bảng Order duy nhất)
      * @param string $orderType - Loại đơn hàng: 'domain', 'hosting', 'vps', 'sourcecode'
      * @param mixed $user - Thông tin user (User model)
      * @param array $orderDetails - Chi tiết đơn hàng (mặc định: mảng rỗng)

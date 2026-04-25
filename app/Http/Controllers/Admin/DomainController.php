@@ -1,20 +1,16 @@
 <?php
-// Khai báo namespace cho Controller này - thuộc App\Http\Controllers\Admin
+
 namespace App\Http\Controllers\Admin;
 
-// Import Controller base class
 use App\Http\Controllers\Controller;
-// Import các Model và Facade cần thiết
-use App\Models\Domain; // Model quản lý thông tin domain
-use Illuminate\Http\Request; // Class xử lý HTTP request
-use Illuminate\Support\Facades\File; // Facade để thao tác với file (không dùng trong code này)
+use App\Models\Domain;
+use App\Traits\HasAvailableImages;
+use Illuminate\Http\Request;
 
-/**
- * Class DomainController
- * Controller xử lý quản lý domain trong admin panel
- */
 class DomainController extends Controller
 {
+    use HasAvailableImages;
+
     /**
      * Hiển thị danh sách domain
      * Lấy tất cả loại domain và hiển thị trên trang admin
@@ -37,25 +33,7 @@ class DomainController extends Controller
      */
     public function create()
     {
-        // Đường dẫn đến thư mục images trong public
-        $imagesPath = public_path('images');
-        // Mảng để lưu danh sách ảnh có sẵn
-        $availableImages = [];
-        
-        // Kiểm tra thư mục images có tồn tại không
-        if (is_dir($imagesPath)) {
-            // Quét tất cả file trong thư mục
-            $files = scandir($imagesPath);
-            // Duyệt qua từng file
-            foreach ($files as $file) {
-                // Bỏ qua các file đặc biệt (. và ..) và chỉ lấy file ảnh
-                if ($file != '.' && $file != '..' && preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $file)) {
-                    $availableImages[] = $file; // Thêm vào danh sách
-                }
-            }
-        }
-        
-        // Trả về view với danh sách ảnh có sẵn
+        $availableImages = $this->getAvailableImages('domain');
         return view('admin.domain.create', compact('availableImages'));
     }
 
@@ -101,28 +79,8 @@ class DomainController extends Controller
      */
     public function edit($id)
     {
-        // Tìm domain theo ID, nếu không tìm thấy thì throw 404
-        $domain = Domain::findOrFail($id);
-        
-        // Đường dẫn đến thư mục images trong public
-        $imagesPath = public_path('images');
-        // Mảng để lưu danh sách ảnh có sẵn
-        $availableImages = [];
-        
-        // Kiểm tra thư mục images có tồn tại không
-        if (is_dir($imagesPath)) {
-            // Quét tất cả file trong thư mục
-            $files = scandir($imagesPath);
-            // Duyệt qua từng file
-            foreach ($files as $file) {
-                // Bỏ qua các file đặc biệt (. và ..) và chỉ lấy file ảnh
-                if ($file != '.' && $file != '..' && preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $file)) {
-                    $availableImages[] = $file; // Thêm vào danh sách
-                }
-            }
-        }
-        
-        // Trả về view với dữ liệu domain và danh sách ảnh
+        $domain          = Domain::findOrFail($id);
+        $availableImages = $this->getAvailableImages('domain');
         return view('admin.domain.edit', compact('domain', 'availableImages'));
     }
 

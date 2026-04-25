@@ -43,6 +43,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class, // Chia sẻ errors từ session với views
             \App\Http\Middleware\VerifyCsrfToken::class, // Verify CSRF token
             \Illuminate\Routing\Middleware\SubstituteBindings::class, // Thay thế route model bindings
+            \App\Http\Middleware\AffiliateMiddleware::class, // Tự động ghi nhận người giới thiệu
         ],
 
         // Nhóm middleware 'api' - cho các API routes

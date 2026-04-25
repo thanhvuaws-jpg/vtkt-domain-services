@@ -17,6 +17,8 @@
 
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!-- Tích hợp Lớp CSS Ghi đè (Premium Redesign) -->
+    <link href="/premium-theme.css?v={{ time() * rand(200, 999) }}" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -107,6 +109,9 @@
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FS8GGP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     
+    <!-- Lớp lưới màu nền chuyển động (Animated Background Grid) -->
+    <div class="bg-dynamic-mesh"></div>
+
     <!-- App -->
     <div class="d-flex flex-column flex-root app-root" id="kt_app_root" style="min-height: 100vh;">
         <!-- Page -->
@@ -131,5 +136,27 @@
     <script src="/assets/js/scripts.bundle.js"></script>
     
     @stack('scripts')
+
+    <!-- n8n Chatbot AI (Tích hợp động từ Admin) -->
+    @if(isset($settings->n8n_chatbot_url) && !empty($settings->n8n_chatbot_url))
+        <script type="module">
+            import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+            createChat({
+                webhookUrl: '{{ $settings->n8n_chatbot_url }}',
+                mode: 'window',
+                showWelcomeMessage: true,
+                welcomeMessage: 'Xin chào! Tôi là trợ lý AI của {{ strtoupper($_SERVER['SERVER_NAME']) }}. Tôi có thể giúp gì cho bạn?',
+                title: 'Hỗ trợ AI',
+                subtitle: 'Phản hồi ngay lập tức',
+                footer: 'Powered by n8n & Gemini',
+                theme: {
+                    button: {
+                        backgroundColor: '#ff1f1f',
+                    }
+                }
+            });
+        </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" />
+    @endif
 </body>
 </html>

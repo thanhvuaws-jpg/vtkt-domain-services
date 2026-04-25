@@ -278,6 +278,22 @@ class TelegramWebhookController extends Controller
         
         // Nếu là admin, kiểm tra các lệnh đặc biệt
         if ($chatId == $adminChatId) {
+            // Xử lý các nút bấm từ Reply Keyboard
+            switch ($text) {
+                case '📊 Thống kê':
+                    $this->handleUserStats($chatId, null, []);
+                    return;
+                case '📦 Đơn hàng':
+                    $this->handleNewOrders($chatId, null, []);
+                    return;
+                case '🎁 Voucher':
+                    $this->handleVoucherManagement($chatId);
+                    return;
+                case '🛠️ Cài đặt':
+                    $this->handleSettingsMenu($chatId);
+                    return;
+            }
+
             // Xử lý lệnh cộng tiền: congtien:username:amount
             if (preg_match('/^congtien:([^:]+):(\d+)$/i', $text, $matches)) {
                 $this->processAddBalance($chatId, $matches[1], $matches[2]);
@@ -295,6 +311,20 @@ class TelegramWebhookController extends Controller
                 $feedbackId = $matches[1];
                 $replyText = $matches[2];
                 $this->processReplyFeedback($chatId, $feedbackId, $replyText);
+                return;
+            }
+
+            // Xử lý lệnh cập nhật thông báo toàn trang: broadcast:nội dung
+            if (preg_match('/^broadcast:(.+)$/is', $text, $matches)) {
+                $this->processUpdateBroadcast($chatId, $matches[1]);
+                return;
+            }
+
+            // Xử lý lệnh duyệt đơn: duyệt:id | hủy:id
+            if (preg_match('/^(duyệt|huy|hủy):(\d+)$/i', $text, $matches)) {
+                $action = strtolower($matches[1]);
+                $orderId = $matches[2];
+                $this->processOrderAction($chatId, $orderId, ($action == 'duyệt' ? 1 : 2));
                 return;
             }
         }
@@ -322,39 +352,33 @@ class TelegramWebhookController extends Controller
         // Nếu là admin, hiển thị menu chính
         if ($chatId == $adminChatId) {
             $message = "👋 <b>CHÀO MỪNG ADMIN!</b>\n\n" .
-                       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" .
-                       "📱 <b>MENU QUẢN LÝ</b>\n" .
-                       "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" .
-                       "Chọn chức năng bạn muốn sử dụng:";
+                       "Hệ thống đã sẵn sàng điều khiển. Sếp có thể dùng bàn phím bên dưới để quản lý nhanh hoặc chọn menu chi tiết:";
             
-            // Tạo menu với inline keyboard - nút to hơn, đẹp hơn
-            $menuKeyboard = [
+            // 1. Reply Keyboard (Bàn phím chính cố định)
+            $replyKeyboard = [
+                'keyboard' => [
+                    [['text' => '📊 Thống kê'], ['text' => '📦 Đơn hàng']],
+                    [['text' => '🎁 Voucher'], ['text' => '🛠️ Cài đặt']]
+                ],
+                'resize_keyboard' => true,
+                'one_time_keyboard' => false
+            ];
+            
+            // 2. Inline Keyboard (Menu chi tiết)
+            $inlineKeyboard = [
                 'inline_keyboard' => [
-                    [
-                        ['text' => '📋 FEEDBACK CHỜ XỬ LÝ', 'callback_data' => 'menu_pending_feedback']
-                    ],
-                    [
-                        ['text' => '✅ FEEDBACK ĐÃ XỬ LÝ', 'callback_data' => 'menu_processed_feedback']
-                    ],
-                    [
-                        ['text' => '📊 THỐNG KÊ TÀI KHOẢN', 'callback_data' => 'menu_user_stats']
-                    ],
-                    [
-                        ['text' => '💰 CỘNG TIỀN CHO TK', 'callback_data' => 'menu_add_balance']
-                    ],
-                    [
-                        ['text' => '🌐 CẬP NHẬT DNS', 'callback_data' => 'menu_update_dns']
-                    ],
-                    [
-                        ['text' => '📦 ĐƠN HÀNG MỚI', 'callback_data' => 'menu_new_orders']
-                    ],
-                    [
-                        ['text' => 'ℹ️ TRỢ GIÚP', 'callback_data' => 'menu_help']
-                    ]
+                    [['text' => '💬 Feedback chờ xử lý', 'callback_data' => 'menu_pending_feedback']],
+                    [['text' => '🌐 Cửa hàng (Landing)', 'url' => config('app.url')]]
                 ]
             ];
             
-            $this->telegramService->sendMessage($chatId, $message, 'HTML', $menuKeyboard);
+            // Gửi tin nhắn kèm cả 2 loại bàn phím
+            // Lưu ý: Telegram chỉ hỗ trợ 1 cái chính (thường là Inline hoặc Reply gộp vào reply_markup)
+            // Ở đây ta gửi tin có reply_keyboard trước để kích hoạt bàn phím chính
+            $this->telegramService->sendMessage($chatId, $message, 'HTML', $replyKeyboard);
+            
+            // Sau đó gửi menu inline
+            $this->telegramService->sendMessage($chatId, "🛠️ <b>Bảng điều khiển chi tiết:</b>", 'HTML', $inlineKeyboard);
             return;
         } else {
             // Nếu không phải admin, thông báo bot chỉ dùng để admin nhận thông báo
@@ -367,9 +391,6 @@ class TelegramWebhookController extends Controller
             $this->telegramService->sendMessage($chatId, $message);
             return;
         }
-
-        // Gửi tin nhắn qua TelegramService
-        $this->telegramService->sendMessage($chatId, $message);
     }
 
     /**
@@ -614,6 +635,23 @@ class TelegramWebhookController extends Controller
             $this->showLoading($callbackQueryId, '⏳ Đang tải hướng dẫn...');
             $this->handleHelpCommand($chatId);
             $this->showSuccess($callbackQueryId, 'Đã hiển thị hướng dẫn');
+            return;
+        } elseif ($data === 'menu_voucher_stats') {
+            $this->showLoading($callbackQueryId, '⏳ Đang tải thống kê Voucher...');
+            $this->handleVoucherManagement($chatId);
+            $this->showSuccess($callbackQueryId, 'Đã cập nhật thống kê');
+            return;
+        } elseif ($data === 'menu_settings') {
+            $this->showLoading($callbackQueryId, '⏳ Đang tải cài đặt...');
+            $this->handleSettingsMenu($chatId);
+            return;
+        } elseif ($data === 'toggle_maintenance') {
+            $this->showLoading($callbackQueryId, '⏳ Đang thay đổi trạng thái...');
+            $this->handleToggleMaintenance($chatId, $callbackQueryId, $message);
+            return;
+        } elseif ($data === 'edit_broadcast') {
+            $this->showLoading($callbackQueryId, '📢 Nhập thông báo...');
+            $this->handleEditBroadcast($chatId);
             return;
         } elseif ($data === 'menu_back') {
             // Quay về menu chính
@@ -1141,7 +1179,7 @@ class TelegramWebhookController extends Controller
             // Xử lý từ chối yêu cầu DNS
             if (strpos($data, 'reject_dns_') === 0) {
                 $domainId = str_replace('reject_dns_', '', $data);
-                $history = \App\Models\History::find($domainId);
+                $history = \App\Models\Order::find($domainId);
                 if (!$history) {
                     $this->showError($callbackQueryId, 'Không tìm thấy domain', true);
                     return;
@@ -1189,7 +1227,7 @@ class TelegramWebhookController extends Controller
                     $ns1 = urldecode($parts[3]);
                     $ns2 = urldecode($parts[4]);
                     
-                    $history = \App\Models\History::find($domainId);
+                    $history = \App\Models\Order::find($domainId);
                     if (!$history) {
                         $this->showError($callbackQueryId, 'Không tìm thấy domain', true);
                         return;
@@ -1242,7 +1280,7 @@ class TelegramWebhookController extends Controller
             // Nếu click "Nhập tay"
             if (strpos($data, 'dns_manual_') === 0) {
                 $domainId = str_replace('dns_manual_', '', $data);
-                $history = \App\Models\History::find($domainId);
+                $history = \App\Models\Order::find($domainId);
                 if (!$history) {
                     $this->showError($callbackQueryId, 'Không tìm thấy domain', true);
                     return;
@@ -1275,7 +1313,7 @@ class TelegramWebhookController extends Controller
             // Nếu click vào domain cụ thể để cập nhật
             if (strpos($data, 'update_dns_') === 0) {
                 $domainId = str_replace('update_dns_', '', $data);
-                $history = \App\Models\History::find($domainId);
+                $history = \App\Models\Order::find($domainId);
                 if (!$history) {
                     $this->showError($callbackQueryId, 'Không tìm thấy domain', true);
                     return;
@@ -1324,7 +1362,8 @@ class TelegramWebhookController extends Controller
             }
 
             // Hiển thị danh sách domain đang yêu cầu cập nhật DNS (ahihi = 1)
-            $domains = \App\Models\History::where('ahihi', '1')
+            $domains = \App\Models\Order::where('product_type', 'domain')
+                ->where('options->ahihi', '1')
                 ->orderBy('id', 'desc')
                 ->limit(20)
                 ->get();
@@ -1389,13 +1428,13 @@ class TelegramWebhookController extends Controller
     {
         try {
             // Đơn hàng mới (status = 0 - Chờ xử lý)
-            $newOrders = \App\Models\History::where('status', 0)
+            $newOrders = \App\Models\Order::where('status', 0)
                 ->orderBy('id', 'desc')
                 ->limit(10)
                 ->get();
 
             // Đơn hàng đã duyệt (status = 1)
-            $approvedOrders = \App\Models\History::where('status', 1)
+            $approvedOrders = \App\Models\Order::where('status', 1)
                 ->orderBy('id', 'desc')
                 ->limit(5)
                 ->get();
@@ -1404,9 +1443,9 @@ class TelegramWebhookController extends Controller
             $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
 
             // Thống kê
-            $totalNew = \App\Models\History::where('status', 0)->count();
-            $totalApproved = \App\Models\History::where('status', 1)->count();
-            $totalCancelled = \App\Models\History::where('status', 2)->count();
+            $totalNew = \App\Models\Order::where('status', 0)->count();
+            $totalApproved = \App\Models\Order::where('status', 1)->count();
+            $totalCancelled = \App\Models\Order::where('status', 2)->count();
 
             $text .= "📊 <b>THỐNG KÊ</b>\n";
             $text .= "⏳ Chờ xử lý: <b>{$totalNew}</b>\n";
@@ -1509,7 +1548,7 @@ class TelegramWebhookController extends Controller
     protected function processUpdateDNS(string $chatId, string $domain, string $ns1, string $ns2): void
     {
         try {
-            $history = \App\Models\History::where('domain', $domain)->first();
+            $history = \App\Models\Order::where('product_type', 'domain')->where('options->domain', $domain)->first();
             if (!$history) {
                 $this->telegramService->sendMessage($chatId, "❌ Không tìm thấy domain: <code>{$domain}</code>", 'HTML');
                 return;
@@ -1683,6 +1722,164 @@ class TelegramWebhookController extends Controller
     {
         if ($callbackQueryId) {
             $this->telegramService->answerCallbackQuery($callbackQueryId, '✅ ' . $successMessage, $showAlert);
+        }
+    }
+    /**
+     * Quản lý Voucher từ Telegram
+     */
+    protected function handleVoucherManagement(string $chatId): void
+    {
+        try {
+            $total = \App\Models\Voucher::count();
+            $used  = \App\Models\Voucher::where('is_used', 1)->count();
+            $unused = $total - $used;
+
+            $text = "🎁 <b>QUẢN LÝ VOUCHER</b>\n";
+            $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+            $text .= "📊 Tổng số mã: <b>{$total}</b>\n";
+            $text .= "✅ Đã sử dụng: <b>{$used}</b>\n";
+            $text .= "⏳ Chưa sử dụng: <b>{$unused}</b>\n\n";
+            $text .= "Sếp có thể tạo mã mới hoặc xem danh sách trên Web.";
+
+            $keyboard = [
+                'inline_keyboard' => [
+                    [['text' => '🔄 Làm mới', 'callback_data' => 'menu_voucher_stats']],
+                    [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+                ]
+            ];
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Menu Cài đặt hệ thống
+     */
+    protected function handleSettingsMenu(string $chatId): void
+    {
+        try {
+            $settings = \App\Models\Settings::getOne();
+            $mMode = ($settings->maintenance_mode ?? 0) == 1 ? "🔴 ĐANG BẢO TRÌ" : "🟢 HOẠT ĐỘNG";
+
+            $text = "🛠️ <b>CÀI ĐẶT HỆ THỐNG</b>\n";
+            $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+            $text .= "🛡️ Trạng thái: <b>{$mMode}</b>\n";
+            $text .= "📢 Thông báo: <code>" . ($settings->thongbao ?? 'Trống') . "</code>\n";
+            $text .= "🤖 n8n Chatbot: " . ($settings->n8n_chatbot_url ? "✅" : "❌") . "\n";
+            $text .= "🤖 n8n Security: " . ($settings->n8n_security_url ? "✅" : "❌") . "\n\n";
+            $text .= "Sếp muốn thực hiện thao tác nào?";
+
+            $keyboard = [
+                'inline_keyboard' => [
+                    [
+                        ['text' => ($settings->maintenance_mode ? '🔓 Mở Web' : '🔒 Đóng Web (Bảo trì)'), 'callback_data' => 'toggle_maintenance']
+                    ],
+                    [
+                        ['text' => '📢 Cập nhật thông báo', 'callback_data' => 'edit_broadcast']
+                    ],
+                    [
+                        ['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']
+                    ]
+                ]
+            ];
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi: " . $e->getMessage());
+        }
+    }
+    /**
+     * Xử lý Bật/Tắt chế độ bảo trì
+     */
+    protected function handleToggleMaintenance(string $chatId, ?string $callbackQueryId, array $message): void
+    {
+        try {
+            $settings = \App\Models\Settings::getOne();
+            $settings->maintenance_mode = ($settings->maintenance_mode == 1 ? 0 : 1);
+            $settings->save();
+
+            $status = $settings->maintenance_mode == 1 ? "🔴 ĐÃ BẬT BẢO TRÌ" : "🟢 ĐÃ TẮT BẢO TRÌ (WEB HOẠT ĐỘNG)";
+            $this->showSuccess($callbackQueryId, $status, true);
+
+            // Cập nhập lại menu settings
+            $this->handleSettingsMenu($chatId);
+        } catch (\Exception $e) {
+            $this->showError($callbackQueryId, 'Lỗi: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Hướng dẫn cập nhật thông báo
+     */
+    protected function handleEditBroadcast(string $chatId): void
+    {
+        $text = "📢 <b>CẬP NHẬT THÔNG BÁO HỆ THỐNG</b>\n";
+        $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $text .= "Sếp vui lòng nhập nội dung theo cú pháp:\n";
+        $text .= "<code>broadcast:Nội dung thông báo mới</code>\n\n";
+        $text .= "Ví dụ:\n";
+        $text .= "<code>broadcast:Chào mừng bạn đến với VTKT. Chúc bạn một ngày tốt lành!</code>";
+
+        $this->telegramService->sendMessage($chatId, $text, 'HTML', [
+            'inline_keyboard' => [[['text' => '⬅️ Quay lại', 'callback_data' => 'menu_settings']]]
+        ]);
+    }
+
+    /**
+     * Thực hiện cập nhật thông báo vào DB
+     */
+    protected function processUpdateBroadcast(string $chatId, string $content): void
+    {
+        try {
+            $settings = \App\Models\Settings::getOne();
+            $settings->thongbao = trim($content);
+            $settings->save();
+
+            $this->telegramService->sendMessage($chatId, "✅ <b>Cập nhật thông báo thành công!</b>\n\n📝 Nội dung: <i>{$content}</i>", 'HTML', [
+                'inline_keyboard' => [[['text' => '🏠 Về Menu', 'callback_data' => 'menu_back']]]
+            ]);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Xử lý Duyệt/Hủy đơn hàng trực tiếp
+     */
+    protected function processOrderAction(string $chatId, int $orderId, int $status): void
+    {
+        try {
+            $order = \App\Models\Order::find($orderId);
+            if (!$order) {
+                $this->telegramService->sendMessage($chatId, "❌ Không tìm thấy đơn hàng ID: #{$orderId}");
+                return;
+            }
+
+            if ($order->status != 0 && $order->status != 4) { // Chờ duyệt hoặc đang xử lý
+                $this->telegramService->sendMessage($chatId, "⚠️ Đơn hàng này đã được xử lý trước đó (Status: {$order->status})");
+                return;
+            }
+
+            $order->status = $status;
+            $order->save();
+
+            $statusText = ($status == 1 ? "✅ ĐÃ DUYỆT" : "❌ ĐÃ HỦY");
+            $text = "{$statusText} <b>ĐƠN HÀNG #{$orderId}</b>\n";
+            $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+            $text .= "👤 Khách: <code>" . ($order->user->taikhoan ?? 'Unknow') . "</code>\n";
+            $text .= "📦 Loại: <b>" . strtoupper($order->product_type) . "</b>\n";
+            $text .= "🔖 Mã GD: <code>{$order->mgd}</code>\n";
+            $text .= "⏰ Xử lý: " . date('H:i:s d/m/Y');
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', [
+                'inline_keyboard' => [[['text' => '📦 Xem đơn khác', 'callback_data' => 'menu_new_orders']]]
+            ]);
+
+            Log::info("Order #{$orderId} processed via Telegram by Admin", ['status' => $status]);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi khi xử lý đơn: " . $e->getMessage());
         }
     }
 }

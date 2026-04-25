@@ -1,20 +1,17 @@
 <?php
-// Khai báo namespace cho Controller này - thuộc App\Http\Controllers\Admin
+
 namespace App\Http\Controllers\Admin;
 
-// Import Controller base class
 use App\Http\Controllers\Controller;
-// Import các Model và Facade cần thiết
-use App\Models\SourceCode; // Model quản lý source code
-use Illuminate\Http\Request; // Class xử lý HTTP request
-use Illuminate\Support\Facades\Storage; // Facade để thao tác với file storage
+use App\Models\SourceCode;
+use App\Traits\HasAvailableImages;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-/**
- * Class SourceCodeController
- * Controller xử lý quản lý source code trong admin panel
- */
 class SourceCodeController extends Controller
 {
+    use HasAvailableImages;
+
     /**
      * Hiển thị danh sách source code
      * Lấy tất cả source code và hiển thị trên trang admin
@@ -37,9 +34,7 @@ class SourceCodeController extends Controller
      */
     public function create()
     {
-        // Lấy danh sách ảnh có sẵn từ phương thức getAvailableImages()
-        $availableImages = $this->getAvailableImages();
-        // Trả về view với danh sách ảnh
+        $availableImages = $this->getAvailableImages('sourcecode');
         return view('admin.sourcecode.create', compact('availableImages'));
     }
 
@@ -111,11 +106,8 @@ class SourceCodeController extends Controller
      */
     public function edit($id)
     {
-        // Tìm source code theo ID, nếu không tìm thấy thì throw 404
-        $sourceCode = SourceCode::findOrFail($id);
-        // Lấy danh sách ảnh có sẵn từ phương thức getAvailableImages()
-        $availableImages = $this->getAvailableImages();
-        // Trả về view với dữ liệu source code và danh sách ảnh
+        $sourceCode      = SourceCode::findOrFail($id);
+        $availableImages = $this->getAvailableImages('sourcecode');
         return view('admin.sourcecode.edit', compact('sourceCode', 'availableImages'));
     }
 
@@ -212,38 +204,4 @@ class SourceCodeController extends Controller
             ->with('success', 'Source code đã được xóa thành công!');
     }
 
-    /**
-     * Lấy danh sách hình ảnh có sẵn trong thư mục images/sourcecode
-     * Private method - chỉ được gọi từ trong class này
-     * 
-     * @return array - Mảng chứa tên các file ảnh
-     */
-    private function getAvailableImages()
-    {
-        // Đường dẫn đến thư mục images/sourcecode trong public
-        $imagesPath = public_path('images/sourcecode');
-        // Mảng để lưu danh sách ảnh có sẵn
-        $availableImages = [];
-        
-        // Tạo folder nếu chưa có (quyền 0755, tạo recursive)
-        if (!is_dir($imagesPath)) {
-            mkdir($imagesPath, 0755, true);
-        }
-        
-        // Kiểm tra thư mục images/sourcecode có tồn tại không
-        if (is_dir($imagesPath)) {
-            // Quét tất cả file trong thư mục
-            $files = scandir($imagesPath);
-            // Duyệt qua từng file
-            foreach ($files as $file) {
-                // Bỏ qua các file đặc biệt (. và ..) và chỉ lấy file ảnh
-                if ($file != '.' && $file != '..' && preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $file)) {
-                    $availableImages[] = $file; // Thêm vào danh sách
-                }
-            }
-        }
-        
-        // Trả về danh sách ảnh
-        return $availableImages;
-    }
 }

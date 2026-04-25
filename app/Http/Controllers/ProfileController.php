@@ -2,12 +2,11 @@
 // Khai báo namespace cho Controller này - thuộc App\Http\Controllers
 namespace App\Http\Controllers;
 
-// Import các Model và Facade cần thiết
-use App\Models\User; // Model quản lý người dùng
-use App\Models\History; // Model lưu lịch sử mua domain
-use Illuminate\Http\Request; // Class xử lý HTTP request
-use Illuminate\Support\Facades\Session; // Facade để làm việc với session
-use Illuminate\Support\Facades\Validator; // Facade để validate dữ liệu
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class ProfileController
@@ -39,21 +38,23 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
 
-        // Lấy thống kê đơn hàng của user
+        // Lấy thống kê đơn hàng của user (tổng hợp 4 loại sản phẩm)
         $userId = $user->id;
+
         // Đếm số đơn hàng đang chờ xử lý (status = 0)
-        $waitingOrders = History::where('uid', $userId)->where('status', 0)->count();
-        // Đếm số đơn hàng đã hoàn thành (status = 1)
-        $completedOrders = History::where('uid', $userId)->where('status', 1)->count();
-        
-        // Lấy 5 đơn hàng gần đây nhất
-        $recentOrders = History::where('uid', $userId)
-            ->orderBy('id', 'desc') // Sắp xếp theo ID giảm dần (mới nhất trước)
-            ->limit(5) // Chỉ lấy 5 đơn hàng đầu tiên
+        $waitingOrders = Order::where('user_id', $userId)->where('status', 0)->count();
+
+        // Đếm số đơn hàng đã duyệt (status = 1)
+        $completedOrders = Order::where('user_id', $userId)->where('status', 1)->count();
+
+        // Lấy 5 đơn hàng gần đây nhất (tất cả các dịch vụ: Domain, Hosting, VPS, Source Code)
+        $recentOrders = Order::where('user_id', $userId)
+            ->orderBy('id', 'desc')
+            ->limit(5)
             ->get();
 
-        // Trả về view với dữ liệu user, thống kê và đơn hàng gần đây
         return view('pages.profile', compact('user', 'waitingOrders', 'completedOrders', 'recentOrders'));
+
     }
 
     /**

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB; // Facade để thao tác database
 use Illuminate\Support\Facades\Hash; // Facade để hash mật khẩu
 use Illuminate\Support\Str; // Helper class để tạo chuỗi ngẫu nhiên
 
+use App\Http\Controllers\Controller;
+use App\Services\AISecurityService;
+
 /**
  * Class AuthController
  * Controller xử lý các thao tác xác thực: đăng nhập, đăng ký, quên mật khẩu
@@ -61,6 +64,12 @@ class AuthController extends Controller
                 // Đảm bảo session được lưu ngay lập tức (quan trọng cho AJAX requests)
                 session()->save();
                 
+                // AI Security Observer: Login Event
+                (new \App\Services\AISecurityService())->observe('LOGIN_SUCCESS', [
+                    'username' => $user->taikhoan,
+                    'user_id' => $user->id
+                ]);
+
                 // Ghi log để debug - theo dõi quá trình đăng nhập
                 \Illuminate\Support\Facades\Log::info('User login - Session saved', [
                     'username' => $user->taikhoan, // Username đã đăng nhập
@@ -182,10 +191,19 @@ class AuthController extends Controller
             'email' => $request->email, // Email
             'tien' => 0, // Số dư ban đầu = 0
             'chucvu' => 0, // Chức vụ: 0 = User thường, 1 = Admin
-            'time' => $time // Thời gian đăng ký
+            'time' => $time, // Thời gian đăng ký
+            'registration_ip' => $request->ip(), // Lưu IP đăng ký
+            'referrer_id' => session('referrer_id') // Lưu ID người giới thiệu nếu có
         ]);
 
         // Tự động đăng nhập sau khi đăng ký thành công
+        // AI Security Observer: Register Event
+        (new \App\Services\AISecurityService())->observe('REGISTER_SUCCESS', [
+            'username' => $user->taikhoan,
+            'email' => $user->email,
+            'referrer_id' => $user->referrer_id
+        ]);
+
         // Lưu username vào session với key 'users'
         session(['users' => $user->taikhoan]);
         // Lưu user ID vào session với key 'user_id'

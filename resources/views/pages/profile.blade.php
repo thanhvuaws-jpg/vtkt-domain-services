@@ -126,7 +126,7 @@
                                         <div class="d-flex align-items-center">
                                             <span class="fs-2hx fw-bold text-gray-800 me-2 lh-1 ls-n2">{{ $waitingOrders + $completedOrders }}</span>
                                         </div>
-                                        <span class="text-gray-400 pt-1 fw-semibold fs-6">Tổng tên miền</span>
+                                        <span class="text-gray-400 pt-1 fw-semibold fs-6">Tổng đơn hàng</span>
                                     </div>
                                 </div>
                                 <div class="card-body pt-2">
@@ -153,15 +153,60 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
 
-                    <!-- Recent Orders -->
+                    <!-- Affiliate Dashboard -->
+                    <div class="card mb-5 mb-xl-10 border border-primary border-dashed bg-light-primary shadow-sm" style="border-radius: 15px;">
+                        <div class="card-body p-10">
+                            <div class="d-flex flex-column flex-md-row align-items-center">
+                                <div class="mb-5 mb-md-0 me-md-10 text-center text-md-start flex-grow-1">
+                                    <h2 class="text-dark fw-bolder mb-2">Chương trình Cộng Tác Viên 🤝</h2>
+                                    <p class="text-gray-600 fs-6 mb-0">Giới thiệu bạn bè và nhận ngay <b class="text-primary">5% hoa hồng</b> trên mỗi đơn hàng thành công.</p>
+                                </div>
+                                <div class="w-100 w-md-400px">
+                                    <div class="input-group input-group-solid">
+                                        <input type="text" class="form-control fw-bold text-primary" id="ref_link" readonly value="{{ url('/?ref=' . $user->id) }}">
+                                        <button class="btn btn-primary" onclick="copyRefLink()">
+                                            <i class="fas fa-copy me-2"></i> Sao chép
+                                        </button>
+                                    </div>
+                                    <div class="mt-3 text-primary fs-7 fw-bold text-center text-md-start">
+                                        <i class="fas fa-info-circle me-1"></i> Gửi link này cho bạn bè để bắt đầu kiếm tiền!
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="separator separator-dashed my-8"></div>
+                            
+                            <div class="row g-5">
+                                <div class="col-md-4">
+                                    <div class="bg-white rounded p-5 shadow-sm border border-gray-200">
+                                        <div class="text-gray-500 fw-bold fs-7 mb-1 text-uppercase">Cấp dưới trực tiếp</div>
+                                        <div class="fs-2 fw-bolder text-dark">{{ \App\Models\User::where('referrer_id', $user->id)->count() }} người</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-white rounded p-5 shadow-sm border border-gray-200">
+                                        <div class="text-gray-500 fw-bold fs-7 mb-1 text-uppercase">Trạng thái Affiliate</div>
+                                        <div class="d-flex align-items-center mt-1">
+                                            <span class="badge badge-success fw-bolder fs-7 px-3 py-2">ĐANG HOẠT ĐỘNG</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-white rounded p-5 shadow-sm border border-gray-200">
+                                        <div class="text-gray-500 fw-bold fs-7 mb-1 text-uppercase">Tỷ lệ hoa hồng</div>
+                                        <div class="fs-2 fw-bolder text-primary">5%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card mb-5 mb-xl-10">
                         <div class="card-header border-0 pt-5">
                             <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bold text-gray-800">Tên miền gần đây</span>
-                                <span class="text-gray-400 mt-1 fw-semibold fs-6">Danh sách tên miền bạn đã mua</span>
+                                <span class="card-label fw-bold text-gray-800">Giao dịch gần đây</span>
+                                <span class="text-gray-400 mt-1 fw-semibold fs-6">Danh sách các dịch vụ bạn đã mua</span>
                             </h3>
                             <div class="card-toolbar">
                                 <a href="{{ route('manager.index') }}" class="btn btn-sm btn-light-primary">Xem tất cả</a>
@@ -173,7 +218,7 @@
                                     <table class="table table-row-dashed align-middle gs-0 gy-4 my-0">
                                         <thead>
                                             <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                                <th class="p-0 pb-3 min-w-175px text-start">Tên miền</th>
+                                                <th class="p-0 pb-3 min-w-175px text-start">Sản phẩm / Dịch vụ</th>
                                                 <th class="p-0 pb-3 min-w-100px text-start">MGD</th>
                                                 <th class="p-0 pb-3 w-125px text-start pe-7">Trạng thái</th>
                                                 <th class="p-0 pb-3 min-w-175px text-start">Thời gian</th>
@@ -186,7 +231,19 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <div class="d-flex justify-content-start flex-column">
-                                                                <span class="text-gray-800 fw-bold text-hover-primary fs-6">{{ $order->domain }}</span>
+                                                                <span class="text-gray-800 fw-bold text-hover-primary fs-6">
+                                                                    @if($order->product_type === 'domain')
+                                                                        {{ $order->domain ?? 'N/A' }}
+                                                                    @elseif($order->product_type === 'hosting' && $order->product())
+                                                                        {{ $order->product()->name }} (Hosting)
+                                                                    @elseif($order->product_type === 'vps' && $order->product())
+                                                                        {{ $order->product()->name }} (VPS)
+                                                                    @elseif($order->product_type === 'sourcecode' && $order->product())
+                                                                        {{ $order->product()->name }}
+                                                                    @else
+                                                                        Không xác định
+                                                                    @endif
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -240,8 +297,8 @@
                                 </div>
                             @else
                                 <div class="text-center py-10">
-                                    <div class="text-gray-400 fs-6 mb-5">Chưa có tên miền nào</div>
-                                    <a href="{{ route('home') }}" class="btn btn-primary">Mua tên miền ngay</a>
+                                    <div class="text-gray-400 fs-6 mb-5">Chưa có giao dịch nào</div>
+                                    <a href="{{ route('home') }}" class="btn btn-primary">Mua dịch vụ ngay</a>
                                 </div>
                             @endif
                         </div>
@@ -314,8 +371,8 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <h4 class="text-gray-800 fw-bold">Mua tên miền</h4>
-                                                        <div class="text-gray-400 fs-7">Đặt mua tên miền mới</div>
+                                                        <h4 class="text-gray-800 fw-bold">Mua dịch vụ</h4>
+                                                        <div class="text-gray-400 fs-7">Khám phá các dịch vụ mới</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -385,6 +442,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    function copyRefLink() {
+        var copyText = document.getElementById("ref_link");
+        if (copyText) {
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            toastr.success("Đã sao chép link giới thiệu!", "Thành công");
+        }
+    }
+</script>
 
 @if(session('success'))
 <script>

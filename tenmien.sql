@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Jan 31, 2026 at 08:13 AM
+-- Generation Time: Apr 25, 2026 at 12:36 AM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.26
 
@@ -40,22 +40,26 @@ CREATE TABLE `caidatchung` (
   `webgach` varchar(2565) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `apikey` varchar(2555) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `callback` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cardvip_partner_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner ID',
-  `cardvip_partner_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner Key',
-  `cardvip_api_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP API URL',
-  `cardvip_callback` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Callback URL',
+  `cardvip_partner_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner ID',
+  `cardvip_partner_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Partner Key',
+  `cardvip_api_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP API URL',
+  `cardvip_callback` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'CardVIP Callback URL',
   `facebook_link` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `zalo_phone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `telegram_bot_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Bot Token',
-  `telegram_admin_chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Admin Chat ID'
+  `telegram_admin_chat_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Telegram Admin Chat ID',
+  `thongbao` text COLLATE utf8mb4_unicode_ci,
+  `maintenance_mode` tinyint DEFAULT '0',
+  `n8n_chatbot_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `n8n_security_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `caidatchung`
 --
 
-INSERT INTO `caidatchung` (`id`, `tieude`, `theme`, `keywords`, `mota`, `imagebanner`, `sodienthoai`, `banner`, `logo`, `webgach`, `apikey`, `callback`, `cardvip_partner_id`, `cardvip_partner_key`, `cardvip_api_url`, `cardvip_callback`, `facebook_link`, `zalo_phone`, `telegram_bot_token`, `telegram_admin_chat_id`) VALUES
-(1, 'THANHVU.NET V4 UY TÍN TIỆN LỢI', '2', 'WEB BÁN DOMAIN NỘI ĐỊA UY TÍN', 'DỊCH VỤ DOMAIN UY TÍN CHẤT LƯỢNG', '', '0856761038', '4b455JDIvR8', '', 'cardvip.vn', '15626594-8251-4D4A-90E4-16F55C855D90', '/Packages/Callback.php', '32009175419', '422206536bdf5fce97e80c8e14d481eb', 'http://api.cardvip.vn/chargingws/v2', 'https://vtkt.online/callback', 'https://www.facebook.com/thanh.vu.826734', '0856761038', '8546022568:AAHq8cNiXZRa34pODa2Cfigx_fqbu9Wtalk', '7358984141');
+INSERT INTO `caidatchung` (`id`, `tieude`, `theme`, `keywords`, `mota`, `imagebanner`, `sodienthoai`, `banner`, `logo`, `webgach`, `apikey`, `callback`, `cardvip_partner_id`, `cardvip_partner_key`, `cardvip_api_url`, `cardvip_callback`, `facebook_link`, `zalo_phone`, `telegram_bot_token`, `telegram_admin_chat_id`, `thongbao`, `maintenance_mode`, `n8n_chatbot_url`, `n8n_security_url`) VALUES
+(1, 'THANHVU.NET V4 UY TÍN TIỆN LỢI', '2', 'WEB BÁN DOMAIN NỘI ĐỊA UY TÍN', 'DỊCH VỤ DOMAIN UY TÍN CHẤT LƯỢNG', '', '0856761038', '4b455JDIvR8', '', 'cardvip.vn', '15626594-8251-4D4A-90E4-16F55C855D90', '/Packages/Callback.php', '32009175419', '422206536bdf5fce97e80c8e14d481eb', 'http://api.cardvip.vn/chargingws/v2', 'https://vtkt.online/callback', 'https://www.facebook.com/thanh.vu.826734', '0856761038', '8546022568:AAHq8cNiXZRa34pODa2Cfigx_fqbu9Wtalk', '7358984141', NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -76,6 +80,37 @@ CREATE TABLE `cards` (
   `time2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `time3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cards`
+--
+
+INSERT INTO `cards` (`id`, `uid`, `pin`, `serial`, `type`, `amount`, `requestid`, `status`, `time`, `time2`, `time3`) VALUES
+(1, 12, '123456789012', 'VT012345678901', 'VIETTEL', '100000', '17682161000001', 1, '2026-04-22 08:10:00', '22/04/2026', '04/2026'),
+(2, 12, '234567890123', 'VT023456789012', 'VIETTEL', '200000', '17682162000002', 1, '2026-04-22 10:15:00', '22/04/2026', '04/2026'),
+(3, 12, '345678901234', 'MB034567890123', 'MOBIFONE', '100000', '17682163000003', 2, '2026-04-22 13:20:00', '22/04/2026', NULL),
+(4, 24, '456789012345', 'VN045678901234', 'VINAPHONE', '500000', '17682967000004', 1, '2026-04-22 15:35:00', '22/04/2026', '04/2026'),
+(5, 24, '567890123456', 'VT056789012345', 'VIETTEL', '500000', '17682968000005', 1, '2026-04-22 20:40:00', '22/04/2026', '04/2026'),
+(6, 26, '678901234567', 'MB067890123456', 'MOBIFONE', '50000', '17694108000006', 1, '2026-04-23 08:05:00', '23/04/2026', '04/2026'),
+(7, 8, '789012345678', 'VT078901234567', 'VIETTEL', '500000', '17684007000007', 1, '2026-04-23 09:20:00', '23/04/2026', '04/2026'),
+(8, 8, '890123456789', 'VN089012345678', 'VINAPHONE', '200000', '17684008000008', 2, '2026-04-23 10:25:00', '23/04/2026', NULL),
+(9, 12, '901234567890', 'VT090123456789', 'VIETTEL', '100000', '17694706000009', 0, '2026-04-23 11:35:00', NULL, NULL),
+(10, 13, '012345678901', 'MB001234567890', 'MOBIFONE', '50000', '17672981000010', 0, '2026-04-23 14:00:00', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deposits`
+--
+
+CREATE TABLE `deposits` (
+  `id` int NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `amount` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  `status` tinyint DEFAULT '0' COMMENT '0: Pending, 1: Success, 2: Error',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -119,78 +154,6 @@ INSERT INTO `feedback` (`id`, `uid`, `username`, `email`, `message`, `admin_repl
 (16, 12, 'vu123', 'thanhvuaws@gmail.com', 'allo côde ngon nha', NULL, 1, NULL, '24/01/2026 - 10:40:33', '24/01/2026 - 10:40:41'),
 (17, 12, 'vu123', 'thanhvuaws@gmail.com', 'hayyy qta  quá ta', 'Cảm ơn bạn đã phản nhắn cút đi', 2, NULL, '24/01/2026 - 10:41:40', '24/01/2026 - 10:42:10'),
 (18, 26, 'anhky206', 'wkzum2006@gmail.com', 'hello tester here', 'CAMON BẠN NHE', 2, NULL, '26/01/2026 - 14:02:55', '26/01/2026 - 14:03:25');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `history`
---
-
-CREATE TABLE `history` (
-  `id` int NOT NULL,
-  `uid` int DEFAULT NULL,
-  `domain` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ns1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ns2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `hsd` int DEFAULT NULL,
-  `status` int DEFAULT NULL,
-  `mgd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `timedns` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ahihi` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `history`
---
-
-INSERT INTO `history` (`id`, `uid`, `domain`, `ns1`, `ns2`, `hsd`, `status`, `mgd`, `time`, `timedns`, `ahihi`) VALUES
-(13, 8, 'thnhs.com', 'hieuthu2.net', 'hieu2thu.net', 1, 1, '245972390', '09/10/2025 - 23:22:37', '0', 0),
-(14, 8, 'chatgpt.store', 'hieu2thu', 'netthanhvu', 1, 1, '853435910', '10/10/2025 - 01:11:40', '0', 0),
-(15, 8, 'cucudfsdf.com', '11111222', 'hieu2thu.net', 1, 1, '247305497', '11/10/2025 - 18:53:57', '0', NULL),
-(16, 9, 'cucubububububuu.com', 'hieuthu2.neter', 'netthanhvu', 1, 1, '952109907', '15/10/2025 - 20:40:42', '0', 0),
-(17, 11, 'systemadmin.info', 'sdfgsdgs234', 'sdfgsdgs', 1, 1, '958190992', '27/10/2025 - 01:53:43', '42/10/2025', 0),
-(18, 11, 'awss12.org', 'awsfcj.org1', 'olderaws.org1', 1, 1, '131638644', '27/10/2025 - 16:08:37', '0', 0),
-(19, 11, 'uqwojf.com', 'awsfcj.org1', 'olderaws.org', 1, 1, '300107175', '29/10/2025 - 01:37:30', '0', 0),
-(20, 11, 'h.com', '1111122', 'olderaws.org', 1, 1, '787763391', '02/11/2025 - 21:19:22', '0', 0),
-(21, 11, 'bv.com', 'hieuthu2.ne', 'olderaws.org', 1, 1, '130347298', '02/11/2025 - 21:23:02', '0', 0),
-(22, 11, 'tst.com', 'q123', 'q', 1, 4, '200912899', '12/11/2025 - 16:56:44', '27/11/2025', 0),
-(23, 11, 'minhnghia.info', 'minhnghia.sexy.inf', 'minhnghia.vn.info', 1, 1, '771515495', '19/11/2025 - 01:06:32', '17/12/2025', 0),
-(24, 11, 'cucu.com', '111112', 'hieu2thu.net', 1, 1, '810047792', '02/12/2025 - 00:11:43', '0', NULL),
-(25, 13, 'bvc.com', 'QQQQQQQQQQQQo', 'WWWWWWWWWWW', 1, 1, '17672981885201', '2026-01-02 03:09:48', '02/01/2026', 0),
-(26, 12, 'sourceappnote.com', 'EEEEEEEEEE', 'RRRRRRRRRR', 1, 0, '17673290209962', '2026-01-02 11:43:40', '0', NULL),
-(27, 12, 'trong.com', 'TTTTTTTTTT', 'RRR', 1, 0, '17673293771292', '2026-01-02 11:49:37', '0', NULL),
-(28, 12, 'qw.com', 'E', 'R', 1, 0, '17673296325598', '2026-01-02 11:53:52', '0', NULL),
-(29, 12, 'cho123nm.com', 'Uuuu', 'Qqqq', 1, 0, '17682161389556', '2026-01-12 18:08:58', '0', NULL),
-(30, 12, 'abc.com', 'abc.info.com', 'abc.net.com', 1, 4, '17682178557852', '2026-01-12 18:37:35', '17/01/2026', 0),
-(31, 24, 'vtktonline.net', 'wtf', 'wth', 1, 1, '17682967031568', '2026-01-13 16:31:43', '0', NULL),
-(32, 12, 'manhmanh.tech', '123', '321', 1, 1, '17690114716176', '2026-01-21 23:04:31', '21/01/2026', 0),
-(33, 26, 'vlua.info', 'vlua1', 'vlua2', 1, 1, '17694108876808', '2026-01-26 14:01:27', '0', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `hostinghistory`
---
-
-CREATE TABLE `hostinghistory` (
-  `id` int NOT NULL,
-  `uid` int NOT NULL,
-  `hosting_id` int NOT NULL,
-  `period` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `hostinghistory`
---
-
-INSERT INTO `hostinghistory` (`id`, `uid`, `hosting_id`, `period`, `mgd`, `time`, `status`) VALUES
-(1, 12, 8, 'month', '17682160987055', '2026-01-12 18:08:18', 1),
-(2, 12, 9, 'month', '17682193058763', '2026-01-12 19:01:45', 1),
-(3, 8, 9, 'year', '17684008088007', '2026-01-14 21:26:48', 1);
 
 -- --------------------------------------------------------
 
@@ -341,6 +304,72 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `product_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL DEFAULT '0',
+  `mgd` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint NOT NULL DEFAULT '0',
+  `price` int NOT NULL DEFAULT '0',
+  `options` json DEFAULT NULL,
+  `time` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `auto_renew` tinyint DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `product_type`, `product_id`, `mgd`, `status`, `price`, `options`, `time`, `created_at`, `updated_at`, `auto_renew`) VALUES
+(1, 8, 'domain', 0, '245972390', 1, 0, '{\"hsd\": 1, \"ns1\": \"hieuthu2.net\", \"ns2\": \"hieu2thu.net\", \"ahihi\": 0, \"domain\": \"thnhs.com\", \"timedns\": \"0\"}', '09/10/2025 - 23:22:37', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(2, 8, 'domain', 0, '853435910', 1, 0, '{\"hsd\": 1, \"ns1\": \"hieu2thu\", \"ns2\": \"netthanhvu\", \"ahihi\": 0, \"domain\": \"chatgpt.store\", \"timedns\": \"0\"}', '10/10/2025 - 01:11:40', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(3, 8, 'domain', 0, '247305497', 1, 0, '{\"hsd\": 1, \"ns1\": \"11111222\", \"ns2\": \"hieu2thu.net\", \"ahihi\": null, \"domain\": \"cucudfsdf.com\", \"timedns\": \"0\"}', '11/10/2025 - 18:53:57', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(4, 9, 'domain', 0, '952109907', 1, 0, '{\"hsd\": 1, \"ns1\": \"hieuthu2.neter\", \"ns2\": \"netthanhvu\", \"ahihi\": 0, \"domain\": \"cucubububububuu.com\", \"timedns\": \"0\"}', '15/10/2025 - 20:40:42', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(5, 11, 'domain', 0, '958190992', 1, 0, '{\"hsd\": 1, \"ns1\": \"sdfgsdgs234\", \"ns2\": \"sdfgsdgs\", \"ahihi\": 0, \"domain\": \"systemadmin.info\", \"timedns\": \"42/10/2025\"}', '27/10/2025 - 01:53:43', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(6, 11, 'domain', 0, '131638644', 1, 0, '{\"hsd\": 1, \"ns1\": \"awsfcj.org1\", \"ns2\": \"olderaws.org1\", \"ahihi\": 0, \"domain\": \"awss12.org\", \"timedns\": \"0\"}', '27/10/2025 - 16:08:37', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(7, 11, 'domain', 0, '300107175', 1, 0, '{\"hsd\": 1, \"ns1\": \"awsfcj.org1\", \"ns2\": \"olderaws.org\", \"ahihi\": 0, \"domain\": \"uqwojf.com\", \"timedns\": \"0\"}', '29/10/2025 - 01:37:30', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(8, 11, 'domain', 0, '787763391', 1, 0, '{\"hsd\": 1, \"ns1\": \"1111122\", \"ns2\": \"olderaws.org\", \"ahihi\": 0, \"domain\": \"h.com\", \"timedns\": \"0\"}', '02/11/2025 - 21:19:22', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(9, 11, 'domain', 0, '130347298', 1, 0, '{\"hsd\": 1, \"ns1\": \"hieuthu2.ne\", \"ns2\": \"olderaws.org\", \"ahihi\": 0, \"domain\": \"bv.com\", \"timedns\": \"0\"}', '02/11/2025 - 21:23:02', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(10, 11, 'domain', 0, '200912899', 4, 0, '{\"hsd\": 1, \"ns1\": \"q123\", \"ns2\": \"q\", \"ahihi\": 0, \"domain\": \"tst.com\", \"timedns\": \"27/11/2025\"}', '12/11/2025 - 16:56:44', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(11, 11, 'domain', 0, '771515495', 1, 0, '{\"hsd\": 1, \"ns1\": \"minhnghia.sexy.inf\", \"ns2\": \"minhnghia.vn.info\", \"ahihi\": 0, \"domain\": \"minhnghia.info\", \"timedns\": \"17/12/2025\"}', '19/11/2025 - 01:06:32', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(12, 11, 'domain', 0, '810047792', 1, 0, '{\"hsd\": 1, \"ns1\": \"111112\", \"ns2\": \"hieu2thu.net\", \"ahihi\": null, \"domain\": \"cucu.com\", \"timedns\": \"0\"}', '02/12/2025 - 00:11:43', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(13, 13, 'domain', 0, '17672981885201', 1, 0, '{\"hsd\": 1, \"ns1\": \"QQQQQQQQQQQQo\", \"ns2\": \"WWWWWWWWWWW\", \"ahihi\": 0, \"domain\": \"bvc.com\", \"timedns\": \"02/01/2026\"}', '2026-01-02 03:09:48', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(14, 12, 'domain', 0, '17673290209962', 0, 0, '{\"hsd\": 1, \"ns1\": \"EEEEEEEEEE\", \"ns2\": \"RRRRRRRRRR\", \"ahihi\": null, \"domain\": \"sourceappnote.com\", \"timedns\": \"0\"}', '2026-01-02 11:43:40', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(15, 12, 'domain', 0, '17673293771292', 0, 0, '{\"hsd\": 1, \"ns1\": \"TTTTTTTTTT\", \"ns2\": \"RRR\", \"ahihi\": null, \"domain\": \"trong.com\", \"timedns\": \"0\"}', '2026-01-02 11:49:37', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(16, 12, 'domain', 0, '17673296325598', 0, 0, '{\"hsd\": 1, \"ns1\": \"E\", \"ns2\": \"R\", \"ahihi\": null, \"domain\": \"qw.com\", \"timedns\": \"0\"}', '2026-01-02 11:53:52', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(17, 12, 'domain', 0, '17682161389556', 0, 0, '{\"hsd\": 1, \"ns1\": \"Uuuu\", \"ns2\": \"Qqqq\", \"ahihi\": null, \"domain\": \"cho123nm.com\", \"timedns\": \"0\"}', '2026-01-12 18:08:58', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(18, 12, 'domain', 0, '17682178557852', 4, 0, '{\"hsd\": 1, \"ns1\": \"abc.info.com\", \"ns2\": \"abc.net.com\", \"ahihi\": 0, \"domain\": \"abc.com\", \"timedns\": \"17/01/2026\"}', '2026-01-12 18:37:35', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(19, 24, 'domain', 0, '17682967031568', 1, 0, '{\"hsd\": 1, \"ns1\": \"wtf\", \"ns2\": \"wth\", \"ahihi\": null, \"domain\": \"vtktonline.net\", \"timedns\": \"0\"}', '2026-01-13 16:31:43', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(20, 12, 'domain', 0, '17690114716176', 1, 0, '{\"hsd\": 1, \"ns1\": \"123\", \"ns2\": \"321\", \"ahihi\": 0, \"domain\": \"manhmanh.tech\", \"timedns\": \"21/01/2026\"}', '2026-01-21 23:04:31', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(21, 26, 'domain', 0, '17694108876808', 1, 0, '{\"hsd\": 1, \"ns1\": \"vlua1\", \"ns2\": \"vlua2\", \"ahihi\": null, \"domain\": \"vlua.info\", \"timedns\": \"0\"}', '2026-01-26 14:01:27', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(22, 12, 'hosting', 8, '17682160987055', 1, 0, '{\"period\": \"month\"}', '2026-01-12 18:08:18', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(23, 12, 'hosting', 9, '17682193058763', 1, 0, '{\"period\": \"month\"}', '2026-01-12 19:01:45', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(24, 8, 'hosting', 9, '17684008088007', 1, 0, '{\"period\": \"year\"}', '2026-01-14 21:26:48', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(25, 12, 'vps', 8, '17673673119500', 1, 0, '{\"period\": \"year\"}', '2026-01-02 22:21:52', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(26, 12, 'vps', 5, '17673692775136', 1, 0, '{\"period\": \"month\"}', '2026-01-02 22:54:38', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(27, 8, 'vps', 8, '17684007342502', 1, 0, '{\"period\": \"month\"}', '2026-01-14 21:25:34', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(28, 12, 'sourcecode', 14, '17692258993570', 1, 0, '[]', '2026-01-24 10:38:19', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(29, 12, 'sourcecode', 15, '17694104158712', 1, 0, '[]', '2026-01-26 13:53:35', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(30, 26, 'sourcecode', 15, '17694112034384', 1, 0, '[]', '2026-01-26 14:06:43', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(31, 12, 'sourcecode', 14, '17694706818103', 1, 0, '[]', '2026-01-27 06:38:01', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(32, 12, 'sourcecode', 13, '17695610172846', 1, 0, '[]', '2026-01-28 07:43:37', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(33, 12, 'sourcecode', 11, '17695612197981', 1, 0, '[]', '2026-01-28 07:46:59', '2026-04-23 10:01:05', '2026-04-23 10:01:05', 0),
+(34, 12, 'hosting', 2, 'MGD17769409167563', 0, 49000, '{\"period\": \"month\"}', '2026-04-23 17:41:56', '2026-04-23 17:41:57', '2026-04-23 17:41:57', 0),
+(35, 12, 'hosting', 8, 'MGD17769450043124', 1, 300000, '{\"ip\": \"103.33.123.45\", \"period\": \"month\", \"password\": \"pp9qRzcLdW\", \"username\": \"host_ohhmx\"}', '2026-04-23 18:50:04', '2026-04-23 18:50:04', '2026-04-23 18:53:33', 0),
+(36, 12, 'vps', 8, 'MGD17769454766771', 0, 1200000, '{\"ip\": \"103.192.156.19\", \"period\": \"month\", \"password\": \"s5rjbrp1CM\", \"username\": \"vps_n7hm1\"}', '2026-04-23 18:57:56', '2026-04-23 18:57:56', '2026-04-23 18:57:56', 0),
+(37, 12, 'hosting', 8, 'MGD17770546061792', 0, 3000000, '{\"ip\": \"103.56.242.38\", \"period\": \"year\", \"password\": \"ERUuoLfgPU\", \"username\": \"host_603js\"}', '2026-04-25 01:16:46', '2026-04-25 01:16:46', '2026-04-25 01:16:46', 0),
+(38, 12, 'sourcecode', 14, 'MGD17770740354491', 1, 8000000, '[]', '2026-04-25 06:40:35', '2026-04-25 06:40:35', '2026-04-25 06:40:35', 0),
+(39, 12, 'vps', 8, 'MGD17770749483056', 0, 1180000, '{\"ip\": \"103.18.54.197\", \"period\": \"month\", \"password\": \"6KALF2pgt7\", \"username\": \"vps_t0qcu\"}', '2026-04-25 06:55:48', '2026-04-25 06:55:48', '2026-04-25 06:55:48', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_resets`
 --
 
@@ -360,52 +389,6 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personal_access_tokens`
---
-
-CREATE TABLE `personal_access_tokens` (
-  `id` bigint UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `last_used_at` timestamp NULL DEFAULT NULL,
-  `expires_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sourcecodehistory`
---
-
-CREATE TABLE `sourcecodehistory` (
-  `id` int NOT NULL,
-  `uid` int NOT NULL,
-  `source_code_id` int NOT NULL,
-  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `sourcecodehistory`
---
-
-INSERT INTO `sourcecodehistory` (`id`, `uid`, `source_code_id`, `mgd`, `time`, `status`) VALUES
-(14, 12, 14, '17692258993570', '2026-01-24 10:38:19', 1),
-(15, 12, 15, '17694104158712', '2026-01-26 13:53:35', 1),
-(16, 26, 15, '17694112034384', '2026-01-26 14:06:43', 1),
-(17, 12, 14, '17694706818103', '2026-01-27 06:38:01', 1),
-(18, 12, 13, '17695610172846', '2026-01-28 07:43:37', 1),
-(19, 12, 11, '17695612197981', '2026-01-28 07:46:59', 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -416,59 +399,77 @@ CREATE TABLE `users` (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tien` int DEFAULT '0',
   `chucvu` int DEFAULT '0',
-  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `registration_ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `device_fingerprint` text COLLATE utf8mb4_unicode_ci,
+  `lucky_draw_played` tinyint DEFAULT '0',
+  `referrer_id` int DEFAULT NULL,
+  `security_status` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'safe'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `taikhoan`, `matkhau`, `email`, `tien`, `chucvu`, `time`) VALUES
-(7, 'cuto', '1bbd886460827015e5d605ed44252251', 'chuml@gmail.com', 99999, 0, '09/10/2025 - 18:12:05'),
-(8, 'thanhvu1', 'a3229bee41455f57b53a1e305d0b0037', 'cuto123@gmail.com', 888767999, 0, '09/10/2025 - 23:20:31'),
-(9, 'cho123nm123', '069951877d52417a5e5375deca971622', 'chumli@gmail.com', 999933999, 0, '15/10/2025 - 18:05:32'),
-(10, 'thanhvu2', '24e460f92c036c0a7928905bb84eba0a', 'toiiulaptrinh@gmail.com', 0, 0, '15/10/2025 - 23:44:12'),
-(11, 'adminvu', 'c9279a3f6c684f5c7d5d7060fc4ac3b7', 'adc@gmail.com', 2146986247, 0, '16/10/2025 - 01:26:11'),
-(12, 'vu123', '6e88c25d3c7c5fb51d3005deb663611c', 'thanhvuaws@gmail.com', 55120200, 1, '01/01/2026 - 20:52:15'),
-(13, 'heo', 'fdd7a8526ca90079c6a6c446dcbbcfda', 'qưeqwaw@gmail.com', 32800, 0, '02/01/2026 - 02:57:15'),
-(14, 'mun', '24e460f92c036c0a7928905bb84eba0a', 'hihihaha@gmail.com', 0, 0, '12/01/2026 - 02:34:03'),
-(15, 'Bucu', '6828763a6c565d5fd15ea5ddbc04ec31', 'bubu@gmail.com', 500000, 0, '12/01/2026 - 03:09:42'),
-(16, 'thuhoang', 'd23aeaa4304428811f3b38c03449bddb', 'hoang@gmail.com', 0, 0, '12/01/2026 - 17:41:57'),
-(17, 'nammo123', 'f1859c5f746061d33730444b97a7a8e3', 'ahiham@gmail.com', 0, 0, '12/01/2026 - 18:20:20'),
-(18, 'Vaa123', 'f1859c5f746061d33730444b97a7a8e3', '2431540219@vaa.edu.vn', 0, 0, '12/01/2026 - 18:22:58'),
-(19, 'Nghialead123', 'd6b0ab7f1c8ab8f514db9a6d85de160a', 'nl473278@gmail.com', 0, 0, '12/01/2026 - 18:31:18'),
-(20, 'HAHA', 'a2f41da47310013db5f6ae22c3288c3d', 'truongngoctien28082006@gmail.com', 0, 0, '12/01/2026 - 18:55:02'),
-(21, 'thuytien', 'fd723056939a8c81ed44a84c82abdd19', 'h.ttieen06@gmail.com', 0, 0, '12/01/2026 - 21:49:01'),
-(22, 'caonggiac123', '8afa4d901b1e02364cc60ea49a87636b', 'caonggiac@gmail.com', 0, 0, '12/01/2026 - 22:08:27'),
-(23, 'ngua1', 'ac2647b79608c1ac868ad801045a01d9', 'ngua3@gmail.com', 0, 0, '12/01/2026 - 22:46:38'),
-(24, 'Topaz', 'b5cac38130366f0e9b24cfe8f8385ef0', 'chaunhutkha47@gmail.com', 299943800, 0, '13/01/2026 - 16:27:47'),
-(25, 'tien123', '047265ca4444f031cdf8ab851ba36cf5', 'thuytien@gmail.com', 0, 0, '26/01/2026 - 13:57:47'),
-(26, 'anhky206', 'a4d213fc44651c6a610c180107e5ab23', 'wkzum2006@gmail.com', 5645000, 0, '26/01/2026 - 13:58:56');
+INSERT INTO `users` (`id`, `taikhoan`, `matkhau`, `email`, `tien`, `chucvu`, `time`, `registration_ip`, `device_fingerprint`, `lucky_draw_played`, `referrer_id`, `security_status`) VALUES
+(7, 'cuto', '1bbd886460827015e5d605ed44252251', 'chuml@gmail.com', 99999, 0, '09/10/2025 - 18:12:05', NULL, NULL, 0, NULL, 'safe'),
+(8, 'thanhvu1', 'a3229bee41455f57b53a1e305d0b0037', 'cuto123@gmail.com', 888767999, 0, '09/10/2025 - 23:20:31', NULL, NULL, 0, NULL, 'safe'),
+(9, 'cho123nm123', '069951877d52417a5e5375deca971622', 'chumli@gmail.com', 999933999, 0, '15/10/2025 - 18:05:32', NULL, NULL, 0, NULL, 'safe'),
+(10, 'thanhvu2', '24e460f92c036c0a7928905bb84eba0a', 'toiiulaptrinh@gmail.com', 0, 0, '15/10/2025 - 23:44:12', NULL, NULL, 0, NULL, 'safe'),
+(11, 'adminvu', 'c9279a3f6c684f5c7d5d7060fc4ac3b7', 'adc@gmail.com', 2146986247, 0, '16/10/2025 - 01:26:11', NULL, NULL, 0, NULL, 'safe'),
+(12, 'vu123', '6e88c25d3c7c5fb51d3005deb663611c', 'thanhvuaws@gmail.com', 41491200, 1, '01/01/2026 - 20:52:15', '172.18.0.1', NULL, 1, NULL, 'safe'),
+(13, 'heo', 'fdd7a8526ca90079c6a6c446dcbbcfda', 'qưeqwaw@gmail.com', 32800, 0, '02/01/2026 - 02:57:15', NULL, NULL, 0, NULL, 'safe'),
+(14, 'mun', '24e460f92c036c0a7928905bb84eba0a', 'hihihaha@gmail.com', 0, 0, '12/01/2026 - 02:34:03', NULL, NULL, 0, NULL, 'safe'),
+(15, 'Bucu', '6828763a6c565d5fd15ea5ddbc04ec31', 'bubu@gmail.com', 500000, 0, '12/01/2026 - 03:09:42', NULL, NULL, 0, NULL, 'safe'),
+(16, 'thuhoang', 'd23aeaa4304428811f3b38c03449bddb', 'hoang@gmail.com', 0, 0, '12/01/2026 - 17:41:57', NULL, NULL, 0, NULL, 'safe'),
+(17, 'nammo123', 'f1859c5f746061d33730444b97a7a8e3', 'ahiham@gmail.com', 0, 0, '12/01/2026 - 18:20:20', NULL, NULL, 0, NULL, 'safe'),
+(18, 'Vaa123', 'f1859c5f746061d33730444b97a7a8e3', '2431540219@vaa.edu.vn', 0, 0, '12/01/2026 - 18:22:58', NULL, NULL, 0, NULL, 'safe'),
+(19, 'Nghialead123', 'd6b0ab7f1c8ab8f514db9a6d85de160a', 'nl473278@gmail.com', 0, 0, '12/01/2026 - 18:31:18', NULL, NULL, 0, NULL, 'safe'),
+(20, 'HAHA', 'a2f41da47310013db5f6ae22c3288c3d', 'truongngoctien28082006@gmail.com', 0, 0, '12/01/2026 - 18:55:02', NULL, NULL, 0, NULL, 'safe'),
+(21, 'thuytien', 'fd723056939a8c81ed44a84c82abdd19', 'h.ttieen06@gmail.com', 0, 0, '12/01/2026 - 21:49:01', NULL, NULL, 0, NULL, 'safe'),
+(22, 'caonggiac123', '8afa4d901b1e02364cc60ea49a87636b', 'caonggiac@gmail.com', 0, 0, '12/01/2026 - 22:08:27', NULL, NULL, 0, NULL, 'safe'),
+(23, 'ngua1', 'ac2647b79608c1ac868ad801045a01d9', 'ngua3@gmail.com', 0, 0, '12/01/2026 - 22:46:38', NULL, NULL, 0, NULL, 'safe'),
+(24, 'Topaz', 'b5cac38130366f0e9b24cfe8f8385ef0', 'chaunhutkha47@gmail.com', 299943800, 0, '13/01/2026 - 16:27:47', NULL, NULL, 0, NULL, 'safe'),
+(25, 'tien123', '047265ca4444f031cdf8ab851ba36cf5', 'thuytien@gmail.com', 0, 0, '26/01/2026 - 13:57:47', NULL, NULL, 0, NULL, 'safe'),
+(26, 'anhky206', 'a4d213fc44651c6a610c180107e5ab23', 'wkzum2006@gmail.com', 5645000, 0, '26/01/2026 - 13:58:56', NULL, NULL, 0, NULL, 'safe'),
+(29, 'testuser123', '2c103f2c4ed1e59c0b4e2e01821770fa', 'testuser123@gmail.com', 0, 0, '25/04/2026 - 06:21:44', '172.18.0.1', NULL, 0, NULL, 'safe');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vpshistory`
+-- Table structure for table `vouchers`
 --
 
-CREATE TABLE `vpshistory` (
+CREATE TABLE `vouchers` (
   `id` int NOT NULL,
-  `uid` int NOT NULL,
-  `vps_id` int NOT NULL,
-  `period` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mgd` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `time` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` int DEFAULT '0'
+  `code` varchar(50) NOT NULL,
+  `value` bigint NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `is_used` tinyint DEFAULT '0',
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `vouchers`
+--
+
+INSERT INTO `vouchers` (`id`, `code`, `value`, `user_id`, `is_used`, `expires_at`, `created_at`, `updated_at`) VALUES
+(1, 'VTKT_CLJUILGNLW', 20000, 12, 1, '2026-05-02 06:33:11', '2026-04-25 06:33:11', '2026-04-25 06:55:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `voucher_usages`
+--
+
+CREATE TABLE `voucher_usages` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `voucher_id` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `vpshistory`
---
-
-INSERT INTO `vpshistory` (`id`, `uid`, `vps_id`, `period`, `mgd`, `time`, `status`) VALUES
-(1, 12, 8, 'year', '17673673119500', '2026-01-02 22:21:52', 1),
-(2, 12, 5, 'month', '17673692775136', '2026-01-02 22:54:38', 1),
-(3, 8, 8, 'month', '17684007342502', '2026-01-14 21:25:34', 1);
 
 --
 -- Indexes for dumped tables
@@ -491,31 +492,19 @@ ALTER TABLE `cards`
   ADD KEY `idx_requestid` (`requestid`);
 
 --
+-- Indexes for table `deposits`
+--
+ALTER TABLE `deposits`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_uid` (`uid`),
   ADD KEY `idx_status` (`status`);
-
---
--- Indexes for table `history`
---
-ALTER TABLE `history`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_uid` (`uid`),
-  ADD KEY `idx_domain` (`domain`),
-  ADD KEY `idx_status` (`status`),
-  ADD KEY `idx_mgd` (`mgd`);
-
---
--- Indexes for table `hostinghistory`
---
-ALTER TABLE `hostinghistory`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `uid` (`uid`),
-  ADD KEY `hosting_id` (`hosting_id`),
-  ADD KEY `mgd` (`mgd`);
 
 --
 -- Indexes for table `listdomain`
@@ -549,27 +538,19 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `orders_mgd_unique` (`mgd`),
+  ADD KEY `orders_user_id_index` (`user_id`),
+  ADD KEY `orders_product_type_product_id_index` (`product_type`,`product_id`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `email` (`email`);
-
---
--- Indexes for table `personal_access_tokens`
---
-ALTER TABLE `personal_access_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
-  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
-
---
--- Indexes for table `sourcecodehistory`
---
-ALTER TABLE `sourcecodehistory`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `uid` (`uid`),
-  ADD KEY `source_code_id` (`source_code_id`),
-  ADD KEY `mgd` (`mgd`);
 
 --
 -- Indexes for table `users`
@@ -581,13 +562,18 @@ ALTER TABLE `users`
   ADD KEY `idx_chucvu` (`chucvu`);
 
 --
--- Indexes for table `vpshistory`
+-- Indexes for table `vouchers`
 --
-ALTER TABLE `vpshistory`
+ALTER TABLE `vouchers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `uid` (`uid`),
-  ADD KEY `vps_id` (`vps_id`),
-  ADD KEY `mgd` (`mgd`);
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexes for table `voucher_usages`
+--
+ALTER TABLE `voucher_usages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_voucher_unique` (`user_id`,`voucher_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -603,25 +589,19 @@ ALTER TABLE `caidatchung`
 -- AUTO_INCREMENT for table `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `deposits`
+--
+ALTER TABLE `deposits`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT for table `history`
---
-ALTER TABLE `history`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
-
---
--- AUTO_INCREMENT for table `hostinghistory`
---
-ALTER TABLE `hostinghistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `listdomain`
@@ -654,28 +634,28 @@ ALTER TABLE `migrations`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `personal_access_tokens`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sourcecodehistory`
---
-ALTER TABLE `sourcecodehistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+ALTER TABLE `orders`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `vpshistory`
+-- AUTO_INCREMENT for table `vouchers`
 --
-ALTER TABLE `vpshistory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `vouchers`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `voucher_usages`
+--
+ALTER TABLE `voucher_usages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -692,33 +672,6 @@ ALTER TABLE `cards`
 --
 ALTER TABLE `feedback`
   ADD CONSTRAINT `fk_feedback_users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `history`
---
-ALTER TABLE `history`
-  ADD CONSTRAINT `fk_history_users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `hostinghistory`
---
-ALTER TABLE `hostinghistory`
-  ADD CONSTRAINT `fk_hostinghistory_hosting` FOREIGN KEY (`hosting_id`) REFERENCES `listhosting` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_hostinghistory_users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `sourcecodehistory`
---
-ALTER TABLE `sourcecodehistory`
-  ADD CONSTRAINT `fk_sourcecodehistory_sourcecode` FOREIGN KEY (`source_code_id`) REFERENCES `listsourcecode` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_sourcecodehistory_users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `vpshistory`
---
-ALTER TABLE `vpshistory`
-  ADD CONSTRAINT `fk_vpshistory_users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_vpshistory_vps` FOREIGN KEY (`vps_id`) REFERENCES `listvps` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

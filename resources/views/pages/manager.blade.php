@@ -5,277 +5,266 @@
     <div class="app-container container-xxl d-flex flex-row flex-column-fluid">
         <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
             <div class="d-flex flex-column flex-column-fluid">
-                <div id="kt_app_content" class="app-content flex-column-fluid">
+                <div id="kt_app_content" class="app-content flex-column-fluid py-6">
 
-                    <!-- Domain Orders -->
-                    <div class="card card-flush h-md-100 mb-5">
-                        <div class="card-header pt-7">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bold text-gray-800"> Quản Lý Tên Miền </span>
-                                <span class="text-gray-400 mt-1 fw-semibold fs-6"> Managers Domain </span>
-                            </h3>
-                            <div class="card-toolbar">
-                                <a href="{{ route('home') }}" class="btn btn-sm btn-light"> Đặt Đơn </a>
+                    {{-- ====== HEADER TỔNG QUAN ====== --}}
+                    <div class="d-flex align-items-center justify-content-between mb-6 flex-wrap gap-3">
+                        <div>
+                            <h2 class="fw-bold mb-1" style="font-size:1.5rem;">📦 Quản Lý Dịch Vụ</h2>
+                            <span class="text-muted fs-7">Tổng hợp toàn bộ đơn hàng của bạn</span>
+                        </div>
+                        <a href="{{ route('home') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i> Đặt Thêm Dịch Vụ
+                        </a>
+                    </div>
+
+                    {{-- ====== THỐNG KÊ NHANH ====== --}}
+                    <div class="row g-3 mb-6">
+                        <div class="col-6 col-md-3">
+                            <div class="card text-center py-4" style="border-left: 4px solid #6366f1;">
+                                <div class="fw-bold fs-2 text-primary">{{ $domainOrders->count() }}</div>
+                                <div class="text-muted fs-8 mt-1">🌐 Domain</div>
                             </div>
                         </div>
-                        <div class="card-body pt-6">
-                            <div class="table-responsive">
-                                <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-                                    <thead>
-                                        <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                            <th class="p-0 pb-3 min-w-175px text-start">MGD</th>
-                                            <th class="p-0 pb-3 min-w-100px text-start"> DOMAIN </th>
-                                            <th class="p-0 pb-3 w-125px text-start pe-7"> HẠN DÙNG </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> STATUS </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> TIME </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> QUẢN LÝ </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($domainOrders as $order)
-                                        <tr>
-                                            <td>
-                                                #{{ $order->mgd }}
-                                            </td>
-                                            <td>
-                                                {{ $order->domain }}
-                                            </td>
-                                            <td>
-                                                {{ $order->hsd }} Năm
-                                            </td>
-                                            <td>
-                                                @if($order->status == 0)
-                                                    <button class="btn btn-warning"> Pending </button>
-                                                @elseif($order->status == 1)
-                                                    <button class="btn btn-primary"> Active </button>
-                                                @elseif($order->status == 2)
-                                                    <button class="btn btn-danger"> Lock </button>
-                                                @elseif($order->status == 3)
-                                                    <button class="btn btn-warning"> Update DNS </button>
-                                                @elseif($order->status == 4)
-                                                    <button class="btn btn-danger"> Từ Chối Hỗ Trợ </button>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $order->time }}
-                                            </td>
-                                            <td class="text-start">
-                                                <a href="{{ route('manager.domain', $order->id) }}" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px">
-                                                    <span class="svg-icon svg-icon-5 svg-icon-gray-700">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M14.4 11H3C2.4 11 2 11.4 2 12C2 12.6 2.4 13 3 13H14.4V11Z" fill="currentColor"></path>
-                                                            <path opacity="0.3" d="M14.4 20V4L21.7 11.3C22.1 11.7 22.1 12.3 21.7 12.7L14.4 20Z" fill="currentColor"></path>
-                                                        </svg>
-                                                    </span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                        <div class="col-6 col-md-3">
+                            <div class="card text-center py-4" style="border-left: 4px solid #10b981;">
+                                <div class="fw-bold fs-2" style="color:#10b981;">{{ $hostingOrders->count() }}</div>
+                                <div class="text-muted fs-8 mt-1">🖥️ Hosting</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card text-center py-4" style="border-left: 4px solid #f59e0b;">
+                                <div class="fw-bold fs-2" style="color:#f59e0b;">{{ $vpsOrders->count() }}</div>
+                                <div class="text-muted fs-8 mt-1">⚡ VPS</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card text-center py-4" style="border-left: 4px solid #ec4899;">
+                                <div class="fw-bold fs-2" style="color:#ec4899;">{{ $sourceCodeOrders->count() }}</div>
+                                <div class="text-muted fs-8 mt-1">💻 Source Code</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Hosting Orders -->
-                    <div class="card card-flush h-md-100 mb-5">
-                        <div class="card-header pt-7">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bold text-gray-800"> Quản Lý Hosting </span>
-                                <span class="text-gray-400 mt-1 fw-semibold fs-6"> Managers Hosting </span>
-                            </h3>
-                            <div class="card-toolbar">
-                                <a href="{{ route('hosting.index') }}" class="btn btn-sm btn-light"> Đặt Đơn </a>
-                            </div>
+                    {{-- ====== HỆ THỐNG TAB ====== --}}
+                    <div class="card">
+                        <div class="card-header border-0 pt-5 pb-0">
+                            <ul class="nav nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fw-semibold fs-6" id="serviceTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-domain" role="tab">
+                                        🌐 <span>Domain</span>
+                                        <span class="badge badge-light-primary rounded-pill ms-1">{{ $domainOrders->count() }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-hosting" role="tab">
+                                        🖥️ <span>Hosting</span>
+                                        <span class="badge badge-light-success rounded-pill ms-1">{{ $hostingOrders->count() }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-vps" role="tab">
+                                        ⚡ <span>VPS</span>
+                                        <span class="badge badge-light-warning rounded-pill ms-1">{{ $vpsOrders->count() }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="tab" href="#tab-sourcecode" role="tab">
+                                        💻 <span class="d-none d-sm-inline">Source Code</span><span class="d-inline d-sm-none">Code</span>
+                                        <span class="badge badge-light-danger rounded-pill ms-1">{{ $sourceCodeOrders->count() }}</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="card-body pt-6">
-                            <div class="table-responsive">
-                                <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-                                    <thead>
-                                        <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                            <th class="p-0 pb-3 min-w-175px text-start">MGD</th>
-                                            <th class="p-0 pb-3 min-w-100px text-start"> PACKAGE </th>
-                                            <th class="p-0 pb-3 w-125px text-start pe-7"> PERIOD </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> STATUS </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> TIME </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($hostingOrders as $order)
-                                        <tr>
-                                            <td>
-                                                #{{ $order->mgd }}
-                                            </td>
-                                            <td>
-                                                {{ $order->hosting ? $order->hosting->name : 'N/A' }}
-                                            </td>
-                                            <td>
-                                                {{ $order->period }} Tháng
-                                            </td>
-                                            <td>
-                                                @if($order->status == 0)
-                                                    <button class="btn btn-warning"> Pending </button>
-                                                @elseif($order->status == 1)
-                                                    <button class="btn btn-primary"> Active </button>
-                                                @elseif($order->status == 2)
-                                                    <button class="btn btn-danger"> Rejected </button>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $order->time }}
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- VPS Orders -->
-                    <div class="card card-flush h-md-100 mb-5">
-                        <div class="card-header pt-7">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bold text-gray-800"> Quản Lý VPS </span>
-                                <span class="text-gray-400 mt-1 fw-semibold fs-6"> Managers VPS </span>
-                            </h3>
-                            <div class="card-toolbar">
-                                <a href="{{ route('vps.index') }}" class="btn btn-sm btn-light"> Đặt Đơn </a>
-                            </div>
-                        </div>
-                        <div class="card-body pt-6">
-                            <div class="table-responsive">
-                                <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-                                    <thead>
-                                        <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                            <th class="p-0 pb-3 min-w-175px text-start">MGD</th>
-                                            <th class="p-0 pb-3 min-w-100px text-start"> PACKAGE </th>
-                                            <th class="p-0 pb-3 w-125px text-start pe-7"> PERIOD </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> STATUS </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> TIME </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($vpsOrders as $order)
-                                        <tr>
-                                            <td>
-                                                #{{ $order->mgd }}
-                                            </td>
-                                            <td>
-                                                {{ $order->vps ? $order->vps->name : 'N/A' }}
-                                            </td>
-                                            <td>
-                                                {{ $order->period }} Tháng
-                                            </td>
-                                            <td>
-                                                @if($order->status == 0)
-                                                    <button class="btn btn-warning"> Pending </button>
-                                                @elseif($order->status == 1)
-                                                    <button class="btn btn-primary"> Active </button>
-                                                @elseif($order->status == 2)
-                                                    <button class="btn btn-danger"> Rejected </button>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $order->time }}
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                        <div class="card-body tab-content pt-4">
 
-                    <!-- Source Code Orders -->
-                    <div class="card card-flush h-md-100 mb-5">
-                        <div class="card-header pt-7">
-                            <h3 class="card-title align-items-start flex-column">
-                                <span class="card-label fw-bold text-gray-800"> Quản Lý Source Code </span>
-                                <span class="text-gray-400 mt-1 fw-semibold fs-6"> Managers Source Code </span>
-                            </h3>
-                            <div class="card-toolbar">
-                                <a href="{{ route('source-code.index') }}" class="btn btn-sm btn-light"> Đặt Đơn </a>
+                            {{-- ===== TAB DOMAIN ===== --}}
+                            <div class="tab-pane fade show active" id="tab-domain" role="tabpanel">
+                                @forelse($domainOrders as $order)
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 border-bottom">
+                                    {{-- Icon + Tên --}}
+                                    <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width:160px;">
+                                        <div class="symbol symbol-40px symbol-circle" style="background:rgba(99,102,241,0.1); display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%;">
+                                            <span style="font-size:1.2rem;">🌐</span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-gray-800 fs-6">{{ $order->domain }}</div>
+                                            <div class="text-muted fs-8">#{{ $order->mgd }} · {{ $order->hsd }} Năm</div>
+                                        </div>
+                                    </div>
+                                    {{-- Status --}}
+                                    <div>
+                                        @if($order->status == 0)
+                                            <span class="badge badge-light-warning px-3 py-2">⏳ Pending</span>
+                                        @elseif($order->status == 1)
+                                            <span class="badge badge-light-primary px-3 py-2">✅ Active</span>
+                                        @elseif($order->status == 2)
+                                            <span class="badge badge-light-danger px-3 py-2">🔒 Locked</span>
+                                        @elseif($order->status == 3)
+                                            <span class="badge badge-light-info px-3 py-2">🔄 Update DNS</span>
+                                        @elseif($order->status == 4)
+                                            <span class="badge badge-light-danger px-3 py-2">❌ Từ Chối</span>
+                                        @endif
+                                    </div>
+                                    {{-- Thời gian + Quản lý --}}
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="text-muted fs-8 d-none d-md-inline">{{ $order->time }}</span>
+                                        <a href="{{ route('manager.domain', $order->id) }}" class="btn btn-sm btn-icon btn-light-primary" title="Quản lý">
+                                            <i class="fas fa-arrow-right fs-7"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="text-center py-10">
+                                    <div style="font-size:3rem;">🌐</div>
+                                    <p class="text-muted mt-3">Chưa có đơn tên miền nào</p>
+                                    <a href="{{ route('home') }}" class="btn btn-primary btn-sm mt-2">Đặt Ngay</a>
+                                </div>
+                                @endforelse
                             </div>
-                        </div>
-                        <div class="card-body pt-6">
-                            <div class="table-responsive">
-                                <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-                                    <thead>
-                                        <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
-                                            <th class="p-0 pb-3 min-w-175px text-start">MGD</th>
-                                            <th class="p-0 pb-3 min-w-100px text-start"> PRODUCT </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> STATUS </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> TIME </th>
-                                            <th class="p-0 pb-3 min-w-175px text-start"> DOWNLOAD </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($sourceCodeOrders as $order)
-                                        <tr>
-                                            <td>
-                                                #{{ $order->mgd }}
-                                            </td>
-                                            <td>
-                                                {{ $order->sourceCode ? $order->sourceCode->name : 'N/A' }}
-                                            </td>
-                                            <td>
-                                                @if($order->status == 0)
-                                                    <button class="btn btn-warning"> Pending </button>
-                                                @elseif($order->status == 1)
-                                                    <button class="btn btn-primary"> Active </button>
-                                                @elseif($order->status == 2)
-                                                    <button class="btn btn-danger"> Rejected </button>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $order->time }}
-                                            </td>
-                                            <td>
-                                                @if($order->status == 1)
-                                                    @if($order->sourceCode && (!empty($order->sourceCode->file_path) || !empty($order->sourceCode->download_link)))
-                                                        @if(!empty($order->sourceCode->file_path))
-                                                            <a href="{{ route('download.file', $order->id) }}" class="btn btn-sm btn-success">
-                                                                <i class="fas fa-download"></i> Download
-                                                            </a>
-                                                        @elseif(!empty($order->sourceCode->download_link))
-                                                            <a href="{{ $order->sourceCode->download_link }}" class="btn btn-sm btn-success" target="_blank">
-                                                                <i class="fas fa-external-link-alt"></i> Download
-                                                            </a>
-                                                        @endif
-                                                    @else
-                                                        <button class="btn btn-sm btn-secondary" disabled>
-                                                            Liên hệ Admin
-                                                        </button>
-                                                        <small class="text-muted d-block mt-1">MGD: #{{ $order->mgd }}</small>
-                                                    @endif
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-gray-500">Chưa có đơn hàng nào</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+
+                            {{-- ===== TAB HOSTING ===== --}}
+                            <div class="tab-pane fade" id="tab-hosting" role="tabpanel">
+                                @forelse($hostingOrders as $order)
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 border-bottom">
+                                    <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width:160px;">
+                                        <div style="background:rgba(16,185,129,0.1); display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; flex-shrink:0;">
+                                            <span style="font-size:1.2rem;">🖥️</span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-gray-800 fs-6">{{ $order->hosting ? $order->hosting->name : 'N/A' }}</div>
+                                            <div class="text-muted fs-8">#{{ $order->mgd }} · {{ $order->period }} Tháng</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @if($order->status == 0)
+                                            <span class="badge badge-light-warning px-3 py-2">⏳ Pending</span>
+                                        @elseif($order->status == 1)
+                                            <span class="badge badge-light-primary px-3 py-2">✅ Active</span>
+                                        @elseif($order->status == 2)
+                                            <span class="badge badge-light-danger px-3 py-2">❌ Rejected</span>
+                                        @endif
+                                    </div>
+                                    <span class="text-muted fs-8 d-none d-md-inline">{{ $order->time }}</span>
+                                    
+                                    {{-- Info Panel cho Hosting --}}
+                                    @if(!empty($order->options['username']))
+                                    <div class="w-100 mt-2 p-3 bg-light rounded border border-secondary border-dashed" style="font-size:0.9rem;">
+                                        <div class="d-flex flex-wrap gap-4">
+                                            <div><span class="text-muted">Server:</span> <strong class="text-primary">{{ $order->options['ip'] ?? '---' }}</strong></div>
+                                            <div><span class="text-muted">User:</span> <strong>{{ $order->options['username'] }}</strong></div>
+                                            <div><span class="text-muted">Pass:</span> <span class="user-select-all bg-white px-2 py-1 rounded border">{{ $order->options['password'] }}</span></div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                                @empty
+                                <div class="text-center py-10">
+                                    <div style="font-size:3rem;">🖥️</div>
+                                    <p class="text-muted mt-3">Chưa có đơn hosting nào</p>
+                                    <a href="{{ route('hosting.index') }}" class="btn btn-primary btn-sm mt-2">Đặt Ngay</a>
+                                </div>
+                                @endforelse
                             </div>
-                        </div>
-                    </div>
+
+                            {{-- ===== TAB VPS ===== --}}
+                            <div class="tab-pane fade" id="tab-vps" role="tabpanel">
+                                @forelse($vpsOrders as $order)
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 border-bottom">
+                                    <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width:160px;">
+                                        <div style="background:rgba(245,158,11,0.1); display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; flex-shrink:0;">
+                                            <span style="font-size:1.2rem;">⚡</span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-gray-800 fs-6">{{ $order->vps ? $order->vps->name : 'N/A' }}</div>
+                                            <div class="text-muted fs-8">#{{ $order->mgd }} · {{ $order->period }} Tháng</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @if($order->status == 0)
+                                            <span class="badge badge-light-warning px-3 py-2">⏳ Pending</span>
+                                        @elseif($order->status == 1)
+                                            <span class="badge badge-light-primary px-3 py-2">✅ Active</span>
+                                        @elseif($order->status == 2)
+                                            <span class="badge badge-light-danger px-3 py-2">❌ Rejected</span>
+                                        @endif
+                                    </div>
+                                    <span class="text-muted fs-8 d-none d-md-inline">{{ $order->time }}</span>
+                                    
+                                    {{-- Info Panel cho VPS --}}
+                                    @if(!empty($order->options['username']))
+                                    <div class="w-100 mt-2 p-3 bg-light rounded border border-secondary border-dashed" style="font-size:0.9rem;">
+                                        <div class="d-flex flex-wrap gap-4">
+                                            <div><span class="text-muted">IP:</span> <strong class="text-primary">{{ $order->options['ip'] ?? '---' }}</strong></div>
+                                            <div><span class="text-muted">User:</span> <strong>{{ $order->options['username'] }}</strong></div>
+                                            <div><span class="text-muted">Pass:</span> <span class="user-select-all bg-white px-2 py-1 rounded border">{{ $order->options['password'] }}</span></div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                                @empty
+                                <div class="text-center py-10">
+                                    <div style="font-size:3rem;">⚡</div>
+                                    <p class="text-muted mt-3">Chưa có đơn VPS nào</p>
+                                    <a href="{{ route('vps.index') }}" class="btn btn-primary btn-sm mt-2">Đặt Ngay</a>
+                                </div>
+                                @endforelse
+                            </div>
+
+                            {{-- ===== TAB SOURCE CODE ===== --}}
+                            <div class="tab-pane fade" id="tab-sourcecode" role="tabpanel">
+                                @forelse($sourceCodeOrders as $order)
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 border-bottom">
+                                    <div class="d-flex align-items-center gap-3 flex-grow-1" style="min-width:160px;">
+                                        <div style="background:rgba(236,72,153,0.1); display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; flex-shrink:0;">
+                                            <span style="font-size:1.2rem;">💻</span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-gray-800 fs-6">{{ $order->sourceCode ? $order->sourceCode->name : 'N/A' }}</div>
+                                            <div class="text-muted fs-8">#{{ $order->mgd }}</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @if($order->status == 0)
+                                            <span class="badge badge-light-warning px-3 py-2">⏳ Pending</span>
+                                        @elseif($order->status == 1)
+                                            <span class="badge badge-light-primary px-3 py-2">✅ Active</span>
+                                        @elseif($order->status == 2)
+                                            <span class="badge badge-light-danger px-3 py-2">❌ Rejected</span>
+                                        @endif
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-muted fs-8 d-none d-md-inline">{{ $order->time }}</span>
+                                        @if($order->status == 1)
+                                            @if($order->sourceCode && (!empty($order->sourceCode->file_path) || !empty($order->sourceCode->download_link)))
+                                                @if(!empty($order->sourceCode->file_path))
+                                                    <a href="{{ route('download.file', $order->id) }}" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-download me-1"></i>Download
+                                                    </a>
+                                                @elseif(!empty($order->sourceCode->download_link))
+                                                    <a href="{{ $order->sourceCode->download_link }}" class="btn btn-sm btn-success" target="_blank">
+                                                        <i class="fas fa-external-link-alt me-1"></i>Download
+                                                    </a>
+                                                @endif
+                                            @else
+                                                <span class="btn btn-sm btn-secondary disabled">Liên hệ Admin</span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="text-center py-10">
+                                    <div style="font-size:3rem;">💻</div>
+                                    <p class="text-muted mt-3">Chưa có đơn Source Code nào</p>
+                                    <a href="{{ route('source-code.index') }}" class="btn btn-primary btn-sm mt-2">Đặt Ngay</a>
+                                </div>
+                                @endforelse
+                            </div>
+
+                        </div>{{-- end tab-content --}}
+                    </div>{{-- end card --}}
+
                 </div>
             </div>
         </div>

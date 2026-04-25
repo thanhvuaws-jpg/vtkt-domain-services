@@ -17,8 +17,8 @@
                                     <a href="#form-labels"></a> Quản Lý Tên Miền ({{ $domainHistory->domain }}) 
                                 </h1>
                                 <p> Thời Gian Cập Nhật Gần Đây : <code>
-                                    @if($domainHistory->timedns == '0')
-                                        Không Có Lần Cập Nhật Gần Đây
+                                    @if(empty($domainHistory->timedns) || $domainHistory->timedns == '0' || $domainHistory->timedns == 0)
+                                        Chưa có lần cập nhật nào
                                     @else
                                         {{ $domainHistory->timedns }}
                                     @endif

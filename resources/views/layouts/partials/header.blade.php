@@ -210,6 +210,14 @@
                         </a>
                     </div>
                     <div class="menu-item">
+                        <a class="menu-link py-3" href="{{ route('promotion.gift') }}">
+                            <span class="menu-title">
+                                <span class="menu-text text-danger"> 🧧 Nhận Quà </span>
+                                <span class="menu-desc"> Mini Game & Gift </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
                         <a class="menu-link py-3" href="{{ route('manager.index') }}">
                             <span class="menu-title">
                                 <span class="menu-text"> Quản Lý Dịch Vụ </span>

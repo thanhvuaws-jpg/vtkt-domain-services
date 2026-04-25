@@ -1,19 +1,16 @@
 <?php
-// Khai báo namespace cho Controller này - thuộc App\Http\Controllers\Admin
+
 namespace App\Http\Controllers\Admin;
 
-// Import Controller base class
 use App\Http\Controllers\Controller;
-// Import các Model cần thiết
-use App\Models\Hosting; // Model quản lý gói hosting
-use Illuminate\Http\Request; // Class xử lý HTTP request
+use App\Models\Hosting;
+use App\Traits\HasAvailableImages;
+use Illuminate\Http\Request;
 
-/**
- * Class HostingController
- * Controller xử lý quản lý gói hosting trong admin panel
- */
 class HostingController extends Controller
 {
+    use HasAvailableImages;
+
     /**
      * Hiển thị danh sách gói hosting
      * Lấy tất cả gói hosting và hiển thị trên trang admin
@@ -36,30 +33,7 @@ class HostingController extends Controller
      */
     public function create()
     {
-        // Đường dẫn đến thư mục images/hosting trong public
-        $imagesPath = public_path('images/hosting');
-        // Mảng để lưu danh sách ảnh có sẵn
-        $availableImages = [];
-        
-        // Tạo folder nếu chưa có (quyền 0755, tạo recursive)
-        if (!is_dir($imagesPath)) {
-            mkdir($imagesPath, 0755, true);
-        }
-        
-        // Kiểm tra thư mục images/hosting có tồn tại không
-        if (is_dir($imagesPath)) {
-            // Quét tất cả file trong thư mục
-            $files = scandir($imagesPath);
-            // Duyệt qua từng file
-            foreach ($files as $file) {
-                // Bỏ qua các file đặc biệt (. và ..) và chỉ lấy file ảnh
-                if ($file != '.' && $file != '..' && preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $file)) {
-                    $availableImages[] = $file; // Thêm vào danh sách
-                }
-            }
-        }
-        
-        // Trả về view với danh sách ảnh có sẵn
+        $availableImages = $this->getAvailableImages('hosting');
         return view('admin.hosting.create', compact('availableImages'));
     }
 
@@ -116,33 +90,8 @@ class HostingController extends Controller
      */
     public function edit($id)
     {
-        // Tìm gói hosting theo ID, nếu không tìm thấy thì throw 404
-        $hosting = Hosting::findOrFail($id);
-        
-        // Đường dẫn đến thư mục images/hosting trong public
-        $imagesPath = public_path('images/hosting');
-        // Mảng để lưu danh sách ảnh có sẵn
-        $availableImages = [];
-        
-        // Tạo folder nếu chưa có (quyền 0755, tạo recursive)
-        if (!is_dir($imagesPath)) {
-            mkdir($imagesPath, 0755, true);
-        }
-        
-        // Kiểm tra thư mục images/hosting có tồn tại không
-        if (is_dir($imagesPath)) {
-            // Quét tất cả file trong thư mục
-            $files = scandir($imagesPath);
-            // Duyệt qua từng file
-            foreach ($files as $file) {
-                // Bỏ qua các file đặc biệt (. và ..) và chỉ lấy file ảnh
-                if ($file != '.' && $file != '..' && preg_match('/\.(jpg|jpeg|png|gif|svg)$/i', $file)) {
-                    $availableImages[] = $file; // Thêm vào danh sách
-                }
-            }
-        }
-        
-        // Trả về view với dữ liệu hosting và danh sách ảnh
+        $hosting         = Hosting::findOrFail($id);
+        $availableImages = $this->getAvailableImages('hosting');
         return view('admin.hosting.edit', compact('hosting', 'availableImages'));
     }
 

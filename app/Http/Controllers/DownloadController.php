@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 // Import các Model cần thiết
 use App\Models\SourceCode; // Model quản lý source code
-use App\Models\SourceCodeHistory; // Model lưu lịch sử mua source code
+use App\Models\Order; // Model lưu lịch sử mua
 use App\Models\User; // Model quản lý người dùng
 use App\Models\Settings; // Model quản lý cài đặt hệ thống
 use Illuminate\Http\Request; // Class xử lý HTTP request
@@ -44,20 +44,20 @@ class DownloadController extends Controller
         
         // Nếu có mã giao dịch (mgd), lấy thông tin đơn hàng cụ thể
         if ($mgd) {
-            // Tìm đơn hàng theo mã giao dịch và ID user (đảm bảo user chỉ xem đơn hàng của mình)
-            $history = SourceCodeHistory::where('mgd', $mgd)
-                ->where('uid', $userId)
+            $history = Order::where('mgd', $mgd)
+                ->where('user_id', $userId)
+                ->where('product_type', 'sourcecode')
                 ->first();
             
-            // Nếu tìm thấy đơn hàng, lấy thông tin source code tương ứng
             if ($history) {
-                $sourceCode = SourceCode::find($history->source_code_id);
+                $sourceCode = $history->product();
             }
         }
         
         // Lấy tất cả các đơn hàng source code của user này
-        $purchases = SourceCodeHistory::where('uid', $userId)
-            ->orderBy('id', 'desc') // Sắp xếp theo ID giảm dần (mới nhất trước)
+        $purchases = Order::where('user_id', $userId)
+            ->where('product_type', 'sourcecode')
+            ->orderBy('id', 'desc')
             ->get();
         
         // Lấy thông tin cài đặt hệ thống (để hiển thị thông tin liên hệ admin)
@@ -87,8 +87,8 @@ class DownloadController extends Controller
         }
         
         // Tìm đơn hàng theo ID và ID user (đảm bảo user chỉ tải file của mình)
-        $history = SourceCodeHistory::where('id', $id)
-            ->where('uid', $user->id)
+        $history = Order::where('id', $id)
+            ->where('user_id', $user->id)
             ->first();
         
         // Nếu không tìm thấy đơn hàng, redirect với thông báo lỗi
@@ -97,7 +97,7 @@ class DownloadController extends Controller
         }
         
         // Lấy thông tin source code từ đơn hàng
-        $sourceCode = SourceCode::find($history->source_code_id);
+        $sourceCode = $history->product();
         
         // Nếu không tìm thấy source code, redirect với thông báo lỗi
         if (!$sourceCode) {

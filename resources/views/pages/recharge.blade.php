@@ -49,150 +49,137 @@
                                             <div class="tab-pane fade active show" id="kt_list_widget_10_tab_1">
                                                 <div class="row g-5 g-xl-8">
                                                     <div class="col-xl-6">
-                                                        <div class="card bg-light h-80">
+                                                        <div class="card bg-light-danger h-100 border border-danger border-dashed">
                                                             <div class="card-body">
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Momo : </div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-success fs-6"> 0856761038 </span>
-                                                                        </div>
+                                                                <div class="text-center mb-5">
+                                                                    <img src="https://static.mservice.io/img/logo-momo.png" class="w-50px mb-3" alt="Momo">
+                                                                    <h4 class="text-danger fw-bolder">Nạp Qua Ví Momo</h4>
+                                                                </div>
+                                                                
+                                                                <div class="form-group mb-5">
+                                                                    <label class="form-label fw-bold">Nhập số tiền muốn nạp:</label>
+                                                                    <div class="input-group input-group-solid">
+                                                                        <input type="number" id="momo_amount" class="form-control" placeholder="Tối thiểu 10,000" value="50000">
+                                                                        <button class="btn btn-danger btn-generate-qr" data-method="MOMO">Tạo Mã QR</button>
                                                                     </div>
                                                                 </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Chủ Tài Khoản :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-primary fs-6"> DAM THANH VU </span>
-                                                                        </div>
+
+                                                                <div id="momo_qr_container" class="text-center d-none">
+                                                                    <div class="separator separator-dashed my-5"></div>
+                                                                    <img id="momo_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 250px;">
+                                                                    <div class="alert bg-light-danger border border-danger p-3">
+                                                                        <p class="mb-1">Nội dung: <b class="text-danger fs-4" id="momo_qr_content">...</b></p>
+                                                                        <p class="mb-0 fs-7">Vui lòng quét QR và KHÔNG thay đổi nội dung chuyển khoản.</p>
                                                                     </div>
                                                                 </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Nội Dung Chuyển Khoản :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-danger fs-6"> Admin_VUDZ{{ $user->id }} </span>
-                                                                        </div>
+
+                                                                <div id="momo_info_static" class="mt-5">
+                                                                    <div class="d-flex align-items-center mb-3">
+                                                                        <span class="text-gray-600 fs-7 w-125px">Số Điện Thoại:</span>
+                                                                        <span class="fw-bolder text-dark fs-6">0856761038</span>
                                                                     </div>
-                                                                </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Lưu Ý :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-warning fs-6">Vui lòng ghi chính xác nội dung chuyển tiền.</span>
-                                                                        </div>
+                                                                    <div class="d-flex align-items-center mb-3">
+                                                                        <span class="text-gray-600 fs-7 w-125px">Chủ Tài Khoản:</span>
+                                                                        <span class="fw-bolder text-dark fs-6">DAM THANH VU</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <div class="alert bg-light-info border border-info border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-                                                            <span class="svg-icon svg-icon-2hx svg-icon-info me-4 mb-5 mb-sm-0">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                    <path opacity="0.3" d="M2 4V16C2 16.6 2.4 17 3 17H13L16.6 20.6C17.1 21.1 18 20.8 18 20V17H21C21.6 17 22 16.6 22 16V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4Z" fill="currentColor">
-                                                                    </path>
-                                                                    <path d="M18 9H6C5.4 9 5 8.6 5 8C5 7.4 5.4 7 6 7H18C18.6 7 19 7.4 19 8C19 8.6 18.6 9 18 9ZM16 12C16 11.4 15.6 11 15 11H6C5.4 11 5 11.4 5 12C5 12.6 5.4 13 6 13H15C15.6 13 16 12.6 16 12Z" fill="currentColor">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
+                                                        <div class="alert bg-light-info border border-info border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-8">
                                                             <div class="d-flex flex-column pe-0 pe-sm-10">
-                                                                <h4 class="mb-1">Lưu Ý</h4>
-                                                                <span>~ Hệ thống nạp tiền tự động 24/7, ghi đúng nội dung sẽ được cộng ngay lập tức.</span>
-                                                                <span>~ Nếu sau 15 phút chưa được cộng tiền vào tài khoản hãy ib admin.</span>
+                                                                <h4 class="text-info fw-bolder mb-3">🚀 Hướng Dẫn Nạp Auto</h4>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-info me-3">1</span>
+                                                                    <span>Nhập số tiền và nhấn <b>Tạo Mã QR</b></span>
+                                                                </div>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-info me-3">2</span>
+                                                                    <span>Mở App Momo và quét mã được tạo</span>
+                                                                </div>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-info me-3">3</span>
+                                                                    <span>Tiền sẽ được cộng tự động sau 10s - 1 phút</span>
+                                                                </div>
+                                                                <div class="separator separator-dashed my-4"></div>
+                                                                <p class="text-gray-600 fs-7 mb-0">~ Hệ thống hoạt động 24/7 kể cả ngày lễ.</p>
+                                                                <p class="text-gray-600 fs-7 mb-0">~ Vui lòng không thay đổi nội dung chuyển tiền.</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                             <!-- Bank Tab -->
                                             <div class="tab-pane fade" id="kt_list_widget_10_tab_2">
                                                 <div class="row g-5 g-xl-8">
                                                     <div class="col-xl-6">
-                                                        <div class="card bg-light h-80">
+                                                        <div class="card bg-light-primary h-100 border border-primary border-dashed">
                                                             <div class="card-body">
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Số Tài Khoản : </div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-success fs-6"> 6151099464 </span>
-                                                                        </div>
+                                                                <div class="text-center mb-5">
+                                                                    <i class="fas fa-university text-primary fs-3x mb-3"></i>
+                                                                    <h4 class="text-primary fw-bolder">Nạp Qua Ngân Hàng (VietQR)</h4>
+                                                                </div>
+                                                                
+                                                                <div class="form-group mb-5">
+                                                                    <label class="form-label fw-bold">Nhập số tiền muốn nạp:</label>
+                                                                    <div class="input-group input-group-solid">
+                                                                        <input type="number" id="bank_amount" class="form-control" placeholder="Tối thiểu 10,000" value="50000">
+                                                                        <button class="btn btn-primary btn-generate-qr" data-method="BANKING">Tạo Mã QR</button>
                                                                     </div>
                                                                 </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Chủ Tài Khoản :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-primary fs-6"> DAM THANH VU </span>
-                                                                        </div>
+
+                                                                <div id="banking_qr_container" class="text-center d-none">
+                                                                    <div class="separator separator-dashed my-5"></div>
+                                                                    <img id="banking_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 250px;">
+                                                                    <div class="alert bg-light-primary border border-primary p-3">
+                                                                        <p class="mb-1">Nội dung: <b class="text-primary fs-4" id="banking_qr_content">...</b></p>
+                                                                        <p class="mb-0 fs-7 text-dark">Quét VietQR để nạp tiền tự động (hỗ trợ mọi ngân hàng).</p>
                                                                     </div>
                                                                 </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Ngân Hàng :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-info fs-6"> BIDV </span>
-                                                                        </div>
+
+                                                                <div id="banking_info_static" class="mt-5">
+                                                                    <div class="d-flex flex-stack mb-2">
+                                                                        <span class="text-gray-600 fs-7">Ngân hàng:</span>
+                                                                        <span class="fw-bolder text-dark fs-6">{{ $settings->bank_id ?? 'BIDV' }}</span>
                                                                     </div>
-                                                                </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Nội Dung Chuyển Khoản :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-danger fs-6">Admin_VUDZ{{ $user->id }} </span>
-                                                                        </div>
+                                                                    <div class="d-flex flex-stack mb-2">
+                                                                        <span class="text-gray-600 fs-7">Số Tài Khoản:</span>
+                                                                        <span class="fw-bolder text-dark fs-6">{{ $settings->bank_account_no ?? '6151099464' }}</span>
                                                                     </div>
-                                                                </div>
-                                                                <div class="mb-6">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-4">
-                                                                            <div class="fw-bold text-gray-600 fs-7">Lưu Ý :</div>
-                                                                        </div>
-                                                                        <div class="col-lg-8">
-                                                                            <span class="fw-bolder text-warning fs-6">Vui lòng ghi chính xác nội dung chuyển tiền.</span>
-                                                                        </div>
+                                                                    <div class="d-flex flex-stack mb-2">
+                                                                        <span class="text-gray-600 fs-7">Chủ Tài Khoản:</span>
+                                                                        <span class="fw-bolder text-dark fs-6">{{ $settings->bank_account_name ?? 'DAM THANH VU' }}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <div class="alert bg-light-info border border-info border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-                                                            <span class="svg-icon svg-icon-2hx svg-icon-info me-4 mb-5 mb-sm-0">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                    <path opacity="0.3" d="M2 4V16C2 16.6 2.4 17 3 17H13L16.6 20.6C17.1 21.1 18 20.8 18 20V17H21C21.6 17 22 16.6 22 16V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4Z" fill="currentColor">
-                                                                    </path>
-                                                                    <path d="M18 9H6C5.4 9 5 8.6 5 8C5 7.4 5.4 7 6 7H18C18.6 7 19 7.4 19 8C19 8.6 18.6 9 18 9ZM16 12C16 11.4 15.6 11 15 11H6C5.4 11 5 11.4 5 12C5 12.6 5.4 13 6 13H15C15.6 13 16 12.6 16 12Z" fill="currentColor">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
+                                                        <div class="alert bg-light-primary border border-primary border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-8">
                                                             <div class="d-flex flex-column pe-0 pe-sm-10">
-                                                                <h4 class="mb-1">Lưu Ý</h4>
-                                                                <span>~ Hệ thống nạp tiền tự động 24/7, ghi đúng nội dung sẽ được cộng ngay lập tức.</span>
-                                                                <span>~ Nếu sau 15 phút chưa được cộng tiền vào tài khoản hãy ib admin.</span>
+                                                                <h4 class="text-primary fw-bolder mb-3">🏦 Nạp Tiền Qua VietQR</h4>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-primary me-3">1</span>
+                                                                    <span>Nhập số tiền và nhấn <b>Tạo Mã QR</b></span>
+                                                                </div>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-primary me-3">2</span>
+                                                                    <span>Sử dụng App Ngân hàng bất kỳ để quét mã</span>
+                                                                </div>
+                                                                <div class="d-flex align-items-center mb-2">
+                                                                    <span class="badge badge-circle badge-primary me-3">3</span>
+                                                                    <span>Tiền sẽ được cộng tự động trong vài giây</span>
+                                                                </div>
+                                                                <div class="separator separator-dashed my-4 border-primary"></div>
+                                                                <p class="text-gray-600 fs-7 mb-0">~ Hệ thống sử dụng công nghệ VietQR 2.0.</p>
+                                                                <p class="text-gray-600 fs-7 mb-0">~ Vui lòng giữ nguyên nội dung chuyển khoản để nạp Auto.</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- Card Tab -->
                                             <div class="tab-pane fade" id="kt_list_widget_10_tab_3">
                                                 <div class="row g-5 g-xl-8">
@@ -405,6 +392,57 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Xử lý tạo mã QR động cho Bank và Momo
+    $('.btn-generate-qr').on('click', function() {
+        var btn = $(this);
+        var method = btn.data('method');
+        var amount = (method === 'BANKING') ? $('#bank_amount').val() : $('#momo_amount').val();
+        var originalText = btn.text();
+        
+        if (amount < 10000) {
+            toastr.warning('Số tiền nạp tối thiểu là 10,000₫', 'Thông Báo');
+            return;
+        }
+
+        btn.prop('disabled', true).text('Đang tạo mã...');
+
+        $.ajax({
+            url: '{{ route("api.get-payment-details") }}',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                method: method,
+                amount: amount
+            },
+            success: function(response) {
+                btn.prop('disabled', false).text(originalText);
+                if (response.success) {
+                    var details = response.details;
+                    var containerId = (method === 'BANKING') ? '#banking_qr_container' : '#momo_qr_container';
+                    var imgId = (method === 'BANKING') ? '#banking_qr_img' : '#momo_qr_img';
+                    var contentId = (method === 'BANKING') ? '#banking_qr_content' : '#momo_qr_content';
+                    
+                    $(imgId).attr('src', details.qr_code);
+                    $(contentId).text(details.content);
+                    $(containerId).removeClass('d-none');
+                    
+                    toastr.success('Đã tạo mã QR thành công!', 'Thông Báo');
+                    
+                    // Cuộn xuống chỗ QR
+                    $('html, body').animate({
+                        scrollTop: $(containerId).offset().top - 100
+                    }, 500);
+                } else {
+                    toastr.error(response.message, 'Thông Báo');
+                }
+            },
+            error: function() {
+                btn.prop('disabled', false).text(originalText);
+                toastr.error('Có lỗi xảy ra khi tạo mã QR', 'Thông Báo');
+            }
+        });
+    });
+
     $('#napthe').on('click', function() {
         var btn = $(this);
         var originalText = btn.find('.indicator-label').text();

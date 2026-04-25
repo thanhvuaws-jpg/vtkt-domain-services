@@ -1,0 +1,130 @@
+/* =========================================================
+   PREMIUM THEME CSS - VTKT DOMAIN SERVICES (OPTIMIZED)
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --vtkt-font-family: 'Inter', sans-serif;
+    --vtkt-bg-color: #f8fafc;
+    --vtkt-card-bg: rgba(255, 255, 255, 0.85);
+    --vtkt-text-color: #1e293b;
+    --vtkt-text-muted: #64748b;
+    --vtkt-primary: #4f46e5;
+    --vtkt-primary-hover: #4338ca;
+    --vtkt-border: rgba(226, 232, 240, 0.8);
+    --vtkt-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    --vtkt-radius-md: 1rem;
+}
+
+[data-theme="dark"], [data-bs-theme="dark"] {
+    --vtkt-bg-color: #0f172a;
+    --vtkt-card-bg: rgba(30, 41, 59, 0.7);
+    --vtkt-text-color: #f1f5f9;
+    --vtkt-text-muted: #94a3b8;
+    --vtkt-primary: #6366f1;
+    --vtkt-primary-hover: #818cf8;
+    --vtkt-border: rgba(51, 65, 85, 0.6);
+    --vtkt-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+body, .app-default, #kt_app_root, #kt_app_page {
+    font-family: var(--vtkt-font-family) !important;
+    background-color: transparent !important;
+    color: var(--vtkt-text-color) !important;
+}
+
+.card, .header {
+    background-color: var(--vtkt-card-bg) !important;
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    border: 1px solid var(--vtkt-border) !important;
+    border-radius: var(--vtkt-radius-md) !important;
+    box-shadow: var(--vtkt-shadow) !important;
+    /* Optimize transition: Chỉ transition những thứ cần thiết */
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+#kt_app_header, .app-header {
+    z-index: 1050 !important;
+    position: sticky !important;
+    top: 0 !important;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
+    border-color: var(--vtkt-primary) !important;
+}
+
+[data-bs-theme="dark"] .card:hover {
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.2) !important;
+}
+
+.text-gray-800, .text-dark, h1, h2, h3, h4, h5, h6 { color: var(--vtkt-text-color) !important; }
+.text-gray-400, .text-muted { color: var(--vtkt-text-muted) !important; }
+
+.btn-primary {
+    background-color: var(--vtkt-primary) !important;
+    border-color: var(--vtkt-primary) !important;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--vtkt-primary-hover) !important;
+    box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+.bg-dynamic-mesh {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -9999;
+    overflow: hidden;
+    background: var(--vtkt-bg-color);
+}
+
+.bg-dynamic-mesh::before, .bg-dynamic-mesh::after {
+    content: '';
+    position: absolute;
+    width: 70vw; height: 70vw;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: -1;
+    opacity: 0.6;
+    animation: floatingMesh 25s ease-in-out infinite alternate;
+}
+
+[data-theme="dark"] .bg-dynamic-mesh::before, [data-bs-theme="dark"] .bg-dynamic-mesh::before {
+    background: radial-gradient(circle, rgba(99,102,241,0.5) 0%, rgba(0,0,0,0) 60%);
+}
+
+.bg-dynamic-mesh::before { top: -10vh; left: -5vw; }
+.bg-dynamic-mesh::after {
+    bottom: -10vh; right: -5vw;
+    animation-delay: -12s;
+    background: radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(0,0,0,0) 60%);
+}
+
+@keyframes floatingMesh {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(5vw, 10vh); }
+}
+
+.theme-switch-btn {
+    background: rgba(100, 100, 100, 0.1);
+    border: 1px solid var(--vtkt-border);
+    color: var(--vtkt-text-color);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.theme-switch-btn:hover {
+    background: var(--vtkt-primary);
+    color: white;
+}

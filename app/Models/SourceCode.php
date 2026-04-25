@@ -32,16 +32,12 @@ class SourceCode extends Model
     ];
 
     /**
-     * Relationship với SourceCodeHistory
-     * Một source code có thể có nhiều đơn hàng
-     * 
+     * Relationship với Orders
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function histories()
+    public function orders()
     {
-        // hasMany: một SourceCode có nhiều SourceCodeHistory (đơn hàng)
-        // 'source_code_id' là foreign key trong bảng SourceCodeHistory trỏ đến 'id' trong bảng SourceCode
-        return $this->hasMany(SourceCodeHistory::class, 'source_code_id');
+        return $this->hasMany(\App\Models\Order::class, 'product_id')->where('product_type', 'sourcecode');
     }
 }
-
