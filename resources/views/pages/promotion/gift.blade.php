@@ -183,7 +183,7 @@
                                 <div class="card-body pt-3">
                                     <div class="rank-list-container" style="max-height: 450px; overflow: hidden; position: relative;">
                                         <div class="rank-list-slider {{ count($topSpenders) > 5 ? 'animate-scroll' : '' }}" id="rank_slider">
-                                            @empty($topSpenders)
+                                            @if(empty($topSpenders))
                                                 <div class="text-center py-10">
                                                     <p class="text-gray-500">Chưa có dữ liệu tháng này</p>
                                                 </div>
@@ -231,7 +231,7 @@
                                                     </div>
                                                     @endforeach
                                                 @endif
-                                            @endempty
+                                            @endif
                                         </div>
                                     </div>
                                     

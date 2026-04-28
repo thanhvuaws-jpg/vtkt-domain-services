@@ -24,6 +24,9 @@ use App\Http\Controllers\PromotionController; // Controller xử lý quà tặng
 | Bao gồm: trang chủ, đăng nhập/đăng ký, quản lý domain, thanh toán, etc.
 */
 
+// Route cho file manifest của hệ thống ứng dụng di động tĩnh (PWA)
+Route::get('/manifest.json', [App\Http\Controllers\PwaController::class, 'manifest'])->name('manifest');
+
 // Route trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');

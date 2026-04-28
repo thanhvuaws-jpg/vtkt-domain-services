@@ -47,15 +47,31 @@ class Settings extends Model
     ];
 
     /**
+     * Bắt lấy các sự kiện lưu hoặc xóa model để xóa cache cũ
+     */
+    protected static function booted()
+    {
+        static::saved(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('caidatchung_db');
+        });
+
+        static::deleted(function ($model) {
+            \Illuminate\Support\Facades\Cache::forget('caidatchung_db');
+        });
+    }
+
+    /**
      * Lấy settings đầu tiên (thường chỉ có 1 record)
-     * Static method - có thể gọi trực tiếp từ class
+     * Static method - có thể gọi trực tiếp từ class. Đã được Cache vĩnh viễn.
      * 
      * @return self|null - Trả về Settings instance nếu tìm thấy, null nếu không
      */
     public static function getOne(): ?self
     {
-        // Lấy record đầu tiên trong bảng (thường chỉ có 1 record)
-        return self::first();
+        // Nhớ query vĩnh viễn trong Caching
+        return \Illuminate\Support\Facades\Cache::rememberForever('caidatchung_db', function () {
+            return self::first();
+        });
     }
 }
 

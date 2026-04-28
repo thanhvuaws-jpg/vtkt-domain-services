@@ -99,6 +99,9 @@
     })(window,document,'script','dataLayer','GTM-5FS8GGP');
     </script>
     <!-- End Google Tag Manager -->
+    
+    <!-- PWA Installation -->
+    @include('partials.pwa-head')
 </head>
 <body id="kt_body" data-kt-app-header-stacked="true" class="app-default">
     <!-- Theme mode setup on page load -->

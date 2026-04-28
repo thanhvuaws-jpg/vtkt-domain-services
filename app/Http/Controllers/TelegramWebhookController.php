@@ -8,6 +8,7 @@ use App\Models\Feedback; // Model quản lý feedback
 use App\Services\TelegramService; // Service gửi thông báo Telegram
 use Illuminate\Http\Request; // Class xử lý HTTP request
 use Illuminate\Support\Facades\Log; // Facade để ghi log
+use Illuminate\Support\Facades\DB; // Facade xử lý DB
 
 /**
  * Class TelegramWebhookController
@@ -283,20 +284,32 @@ class TelegramWebhookController extends Controller
                 case '📊 Thống kê':
                     $this->handleUserStats($chatId, null, []);
                     return;
-                case '📦 Đơn hàng':
-                    $this->handleNewOrders($chatId, null, []);
+                case '📦 Sản Phẩm':
+                    $this->handleProductManagementMenu($chatId);
                     return;
-                case '🎁 Voucher':
+                case '💳 Tài Chính':
+                    $this->handleFinanceManagementMenu($chatId);
+                    return;
+                case '🎁 Ưu Đãi':
                     $this->handleVoucherManagement($chatId);
                     return;
-                case '🛠️ Cài đặt':
-                    $this->handleSettingsMenu($chatId);
+                case '👥 Thành Viên':
+                    $this->handleUserManagementMenu($chatId);
+                    return;
+                case '🛠️ Hệ Thống':
+                    $this->handleSystemManagementMenu($chatId);
                     return;
             }
 
             // Xử lý lệnh cộng tiền: congtien:username:amount
             if (preg_match('/^congtien:([^:]+):(\d+)$/i', $text, $matches)) {
                 $this->processAddBalance($chatId, $matches[1], $matches[2]);
+                return;
+            }
+
+            // Xử lý lệnh tạo voucher: voucher:value:target (target là username hoặc 'all')
+            if (preg_match('/^voucher:(\d+):([^:]+)$/i', $text, $matches)) {
+                $this->processCreateVoucher($chatId, (int)$matches[1], $matches[2]);
                 return;
             }
             
@@ -357,8 +370,9 @@ class TelegramWebhookController extends Controller
             // 1. Reply Keyboard (Bàn phím chính cố định)
             $replyKeyboard = [
                 'keyboard' => [
-                    [['text' => '📊 Thống kê'], ['text' => '📦 Đơn hàng']],
-                    [['text' => '🎁 Voucher'], ['text' => '🛠️ Cài đặt']]
+                    [['text' => '📊 Thống kê'], ['text' => '📦 Sản Phẩm']],
+                    [['text' => '💳 Tài Chính'], ['text' => '🎁 Ưu Đãi']],
+                    [['text' => '👥 Thành Viên'], ['text' => '🛠️ Hệ Thống']]
                 ],
                 'resize_keyboard' => true,
                 'one_time_keyboard' => false
@@ -592,72 +606,58 @@ class TelegramWebhookController extends Controller
 
         // Xử lý các menu item
         if ($data === 'menu_pending_feedback' || strpos($data, 'feedback_reply_') === 0 || strpos($data, 'feedback_mark_') === 0) {
-            if ($data === 'menu_pending_feedback') {
-                $this->showLoading($callbackQueryId, '⏳ Đang tải feedback chờ xử lý...');
-            } elseif (strpos($data, 'feedback_reply_') === 0) {
-                $this->showLoading($callbackQueryId, '⏳ Đang tải form phản hồi...');
-            } else {
-                $this->showLoading($callbackQueryId, '⏳ Đang xử lý...');
-            }
             $this->handlePendingFeedback($chatId, $callbackQueryId, $message, $data);
             return;
         } elseif ($data === 'menu_processed_feedback') {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải feedback đã xử lý...');
             $this->handleProcessedFeedback($chatId, $callbackQueryId, $message);
             return;
         } elseif ($data === 'menu_user_stats' || strpos($data, 'user_stats_page_') === 0) {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải thống kê...');
             $this->handleUserStats($chatId, $callbackQueryId, $message);
             return;
         } elseif ($data === 'menu_add_balance' || strpos($data, 'add_balance_user_') === 0 || strpos($data, 'add_balance_amount_') === 0 || strpos($data, 'add_balance_page_') === 0) {
-            if (strpos($data, 'add_balance_amount_') === 0) {
-                $this->showLoading($callbackQueryId, '⏳ Đang cộng tiền...');
-            } else {
-                $this->showLoading($callbackQueryId, '⏳ Đang tải danh sách tài khoản...');
-            }
             $this->handleAddBalance($chatId, $callbackQueryId, $message, $data);
             return;
         } elseif ($data === 'menu_update_dns' || strpos($data, 'update_dns_') === 0 || strpos($data, 'reject_dns_') === 0 || strpos($data, 'dns_update_') === 0 || strpos($data, 'dns_manual_') === 0) {
-            if (strpos($data, 'reject_dns_') === 0) {
-                $this->showLoading($callbackQueryId, '⏳ Đang từ chối yêu cầu...');
-            } elseif (strpos($data, 'dns_update_') === 0) {
-                $this->showLoading($callbackQueryId, '⏳ Đang cập nhật DNS...');
-            } else {
-                $this->showLoading($callbackQueryId, '⏳ Đang tải danh sách DNS...');
-            }
             $this->handleUpdateDNS($chatId, $callbackQueryId, $message, $data);
             return;
         } elseif ($data === 'menu_new_orders') {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải đơn hàng...');
             $this->handleNewOrders($chatId, $callbackQueryId, $message);
             return;
         } elseif ($data === 'menu_help') {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải hướng dẫn...');
             $this->handleHelpCommand($chatId);
-            $this->showSuccess($callbackQueryId, 'Đã hiển thị hướng dẫn');
             return;
         } elseif ($data === 'menu_voucher_stats') {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải thống kê Voucher...');
             $this->handleVoucherManagement($chatId);
-            $this->showSuccess($callbackQueryId, 'Đã cập nhật thống kê');
             return;
         } elseif ($data === 'menu_settings') {
-            $this->showLoading($callbackQueryId, '⏳ Đang tải cài đặt...');
             $this->handleSettingsMenu($chatId);
             return;
+        } elseif ($data === 'menu_leaderboard') {
+            $this->handleLoyaltyLeaderboard($chatId);
+            return;
+        } elseif ($data === 'menu_products') {
+            $this->handleProductManagementMenu($chatId);
+            return;
+        } elseif ($data === 'menu_finance') {
+            $this->handleFinanceManagementMenu($chatId);
+            return;
+        } elseif ($data === 'menu_users') {
+            $this->handleUserManagementMenu($chatId);
+            return;
+        } elseif ($data === 'menu_system') {
+            $this->handleSystemManagementMenu($chatId);
+            return;
+        } elseif (strpos($data, 'menu_list_') === 0) {
+            $this->handleListItems($chatId, $callbackQueryId, $data);
+            return;
         } elseif ($data === 'toggle_maintenance') {
-            $this->showLoading($callbackQueryId, '⏳ Đang thay đổi trạng thái...');
             $this->handleToggleMaintenance($chatId, $callbackQueryId, $message);
             return;
         } elseif ($data === 'edit_broadcast') {
-            $this->showLoading($callbackQueryId, '📢 Nhập thông báo...');
             $this->handleEditBroadcast($chatId);
             return;
         } elseif ($data === 'menu_back') {
-            // Quay về menu chính
-            $this->showLoading($callbackQueryId, '⏳ Đang quay về menu...');
             $this->handleStartCommand($chatId);
-            $this->showSuccess($callbackQueryId, 'Đã quay về menu chính');
             return;
         }
         
@@ -1880,6 +1880,268 @@ class TelegramWebhookController extends Controller
             Log::info("Order #{$orderId} processed via Telegram by Admin", ['status' => $status]);
         } catch (\Exception $e) {
             $this->telegramService->sendMessage($chatId, "❌ Lỗi khi xử lý đơn: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Menu Quản lý Sản phẩm
+     */
+    protected function handleProductManagementMenu(string $chatId): void
+    {
+        $text = "📦 <b>QUẢN LÝ SẢN PHẨM & ĐƠN HÀNG</b>\n";
+        $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $text .= "Sếp muốn xem danh sách nào?";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [
+                    ['text' => '🌐 Domains', 'callback_data' => 'menu_list_domain'],
+                    ['text' => '🖥️ Hosting', 'callback_data' => 'menu_list_hosting']
+                ],
+                [
+                    ['text' => '💻 VPS', 'callback_data' => 'menu_list_vps'],
+                    ['text' => '📦 Source Code', 'callback_data' => 'menu_list_source']
+                ],
+                [
+                    ['text' => '⏳ Đơn Chờ Xử Lý', 'callback_data' => 'menu_new_orders']
+                ],
+                [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+            ]
+        ];
+
+        $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+    }
+
+    /**
+     * Menu Quản lý Tài chính
+     */
+    protected function handleFinanceManagementMenu(string $chatId): void
+    {
+        $text = "💳 <b>QUẢN LÝ TÀI CHÍNH</b>\n";
+        $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $text .= "Theo dõi các giao dịch nạp tiền:";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [['text' => '💰 Đơn Nạp Ví', 'callback_data' => 'menu_list_wallet']],
+                [['text' => '🎫 Đơn Gạch Thẻ', 'callback_data' => 'menu_list_card']],
+                [['text' => '➕ Cộng tiền nhanh', 'callback_data' => 'menu_add_balance']],
+                [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+            ]
+        ];
+
+        $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+    }
+
+    /**
+     * Menu Quản lý Thành viên
+     */
+    protected function handleUserManagementMenu(string $chatId): void
+    {
+        $totalUsers = \App\Models\User::count();
+        $newUsersToday = \App\Models\User::whereDate('created_at', today())->count();
+
+        $text = "👥 <b>QUẢN LÝ THÀNH VIÊN</b>\n";
+        $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $text .= "📊 Tổng thành viên: <b>{$totalUsers}</b>\n";
+        $text .= "📈 Mới hôm nay: <b>+{$newUsersToday}</b>\n\n";
+        $text .= "Sếp muốn thực hiện thao tác gì?";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [['text' => '📊 Thống kê User', 'callback_data' => 'menu_user_stats']],
+                [['text' => '💬 Phản hồi (Feedback)', 'callback_data' => 'menu_pending_feedback']],
+                [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+            ]
+        ];
+
+        $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+    }
+
+    /**
+     * Menu Hệ thống & DNS
+     */
+    protected function handleSystemManagementMenu(string $chatId): void
+    {
+        $pendingDns = \App\Models\Order::where('product_type', 'domain')->where('ahihi', 1)->count();
+
+        $text = "🛠️ <b>CÀI ĐẶT HỆ THỐNG</b>\n";
+        $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+        $text .= "🌐 DNS chờ cập nhật: <b>{$pendingDns}</b>\n\n";
+        $text .= "Sếp muốn cấu hình gì?";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [['text' => '🚀 Cập nhật DNS', 'callback_data' => 'menu_update_dns']],
+                [['text' => '⚙️ Cấu hình chung', 'callback_data' => 'menu_settings']],
+                [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+            ]
+        ];
+
+        $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+    }
+
+    /**
+     * Hiển thị Bảng xếp hạng Loyalty (Leaderboard)
+     */
+    protected function handleLoyaltyLeaderboard(string $chatId): void
+    {
+        try {
+            $topSpenders = \App\Models\Order::select('uid', DB::raw('SUM(price) as total_spent'))
+                ->where('status', 1)
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
+                ->groupBy('uid')
+                ->orderByDesc('total_spent')
+                ->limit(10)
+                ->with('user')
+                ->get();
+
+            $text = "🏆 <b>BẢNG VÀNG ĐẠI GIA THÁNG " . now()->month . "</b>\n";
+            $text .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+
+            if ($topSpenders->isEmpty()) {
+                $text .= "Chưa có dữ liệu chi tiêu tháng này.";
+            } else {
+                foreach ($topSpenders as $index => $rank) {
+                    $medal = ($index == 0) ? '🥇' : (($index == 1) ? '🥈' : (($index == 2) ? '🥉' : '🔹'));
+                    $username = $rank->user->taikhoan ?? 'Unknown';
+                    $spent = number_format($rank->total_spent, 0, ',', '.') . 'đ';
+                    $text .= "{$medal} <b>{$username}</b>: <code>{$spent}</code>\n";
+                }
+            }
+
+            $text .= "\n🎁 Quà Top 1: <b>Voucher 500k</b>";
+
+            $keyboard = [
+                'inline_keyboard' => [
+                    [['text' => '🏠 Menu chính', 'callback_data' => 'menu_back']]
+                ]
+            ];
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi BXH: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Lệnh tạo Voucher nhanh: voucher:value:target
+     */
+    protected function processCreateVoucher(string $chatId, int $value, string $target): void
+    {
+        try {
+            $code = 'TELE_' . strtoupper(bin2hex(random_bytes(3)));
+            $userId = null;
+
+            if ($target !== 'all') {
+                $user = \App\Models\User::findByUsername($target);
+                if (!$user) {
+                    $this->telegramService->sendMessage($chatId, "❌ Không tìm thấy User: <code>{$target}</code>", 'HTML');
+                    return;
+                }
+                $userId = $user->id;
+            }
+
+            $voucher = \App\Models\Voucher::create([
+                'code' => $code,
+                'value' => $value,
+                'user_id' => $userId,
+                'is_used' => false,
+                'expires_at' => now()->addDays(30)
+            ]);
+
+            $text = "✅ <b>TẠO VOUCHER THÀNH CÔNG</b>\n\n";
+            $text .= "🔖 Mã: <code>{$code}</code>\n";
+            $text .= "💰 Giá trị: <b>" . number_format($value) . "đ</b>\n";
+            $text .= "👤 Đối tượng: " . ($userId ? "<code>{$target}</code>" : "<b>Toàn sàn</b>") . "\n";
+            $text .= "⏰ Hạn dùng: 30 ngày";
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', [
+                'inline_keyboard' => [[['text' => '🏠 Menu', 'callback_data' => 'menu_back']]]
+            ]);
+
+            Log::info("Voucher created via Telegram by Admin", ['code' => $code, 'value' => $value]);
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi tạo Voucher: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Xử lý hiển thị danh sách các mục (Domain, Hosting, VPS, etc.)
+     */
+    protected function handleListItems(string $chatId, ?string $callbackQueryId, string $data): void
+    {
+        try {
+            $type = str_replace('menu_list_', '', $data);
+            $text = "";
+            $items = collect();
+
+            switch ($type) {
+                case 'domain':
+                    $items = DB::table('listdomain')->orderByDesc('id')->limit(5)->get();
+                    $text = "🌐 <b>BẢNG GIÁ DOMAIN (.ext)</b>\n\n";
+                    foreach ($items as $item) {
+                        $text .= "• <code>{$item->duoi}</code> (" . number_format($item->price) . "đ)\n";
+                    }
+                    break;
+                case 'hosting':
+                    $items = DB::table('listhosting')->orderByDesc('id')->limit(5)->get();
+                    $text = "🖥️ <b>DANH SÁCH HOSTING MỚI</b>\n\n";
+                    foreach ($items as $item) {
+                        $text .= "• <b>{$item->name}</b> (" . number_format($item->price_month) . "đ/tháng)\n";
+                    }
+                    break;
+                case 'vps':
+                    $items = DB::table('listvps')->orderByDesc('id')->limit(5)->get();
+                    $text = "💻 <b>DANH SÁCH VPS MỚI</b>\n\n";
+                    foreach ($items as $item) {
+                        $text .= "• <b>{$item->name}</b> (" . number_format($item->price_month) . "đ/tháng)\n";
+                    }
+                    break;
+                case 'source':
+                    $items = DB::table('listsourcecode')->orderByDesc('id')->limit(5)->get();
+                    $text = "📦 <b>DANH SÁCH SOURCE CODE MỚI</b>\n\n";
+                    foreach ($items as $item) {
+                        $text .= "• <b>{$item->name}</b> (" . number_format($item->price) . "đ)\n";
+                    }
+                    break;
+                case 'wallet':
+                    $items = DB::table('deposits')->orderByDesc('id')->limit(5)->get();
+                    $text = "💰 <b>ĐƠN NẠP VÍ GẦN ĐÂY (AUTO)</b>\n\n";
+                    foreach ($items as $item) {
+                        $user = \App\Models\User::find($item->user_id);
+                        $username = $user ? $user->taikhoan : 'Unknown';
+                        $status = $item->status == 1 ? '✅' : ($item->status == 2 ? '❌' : '⏳');
+                        $text .= "{$status} <code>{$username}</code>: +" . number_format($item->amount) . "đ\n";
+                    }
+                    break;
+                case 'card':
+                    $items = DB::table('cards')->orderByDesc('id')->limit(5)->get();
+                    $text = "🎫 <b>ĐƠN GẠCH THẺ GẦN ĐÂY</b>\n\n";
+                    foreach ($items as $item) {
+                        $user = \App\Models\User::find($item->uid);
+                        $username = $user ? $user->taikhoan : 'Unknown';
+                        $status = $item->status == 1 ? '✅' : ($item->status == 2 ? '❌' : '⏳');
+                        $text .= "{$status} <code>{$username}</code>: " . number_format($item->amount) . "đ ({$item->type})\n";
+                    }
+                    break;
+            }
+
+            if ($items->isEmpty()) {
+                $text .= "Chưa có dữ liệu nào được ghi nhận.";
+            }
+
+            $keyboard = [
+                'inline_keyboard' => [
+                    [['text' => '🏠 Về Menu chính', 'callback_data' => 'menu_back']]
+                ]
+            ];
+
+            $this->telegramService->sendMessage($chatId, $text, 'HTML', $keyboard);
+            $this->showSuccess($callbackQueryId, 'Đã cập nhật danh sách');
+        } catch (\Exception $e) {
+            $this->telegramService->sendMessage($chatId, "❌ Lỗi tải danh sách: " . $e->getMessage());
         }
     }
 }

@@ -83,7 +83,7 @@ class DomainController extends Controller
         
         // Thêm log để bắt voucher
         if ($request->filled('voucher')) {
-            \Log::info("Domain Purchase with Voucher Attempt: " . $request->input('voucher'));
+            Log::info("Domain Purchase with Voucher Attempt: " . $request->input('voucher'));
         }
 
         return response()->json([

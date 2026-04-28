@@ -66,9 +66,9 @@
 
                                                                 <div id="momo_qr_container" class="text-center d-none">
                                                                     <div class="separator separator-dashed my-5"></div>
-                                                                    <img id="momo_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 250px;">
+                                                                    <img id="momo_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 100%; width: 220px;">
                                                                     <div class="alert bg-light-danger border border-danger p-3">
-                                                                        <p class="mb-1">Nội dung: <b class="text-danger fs-4" id="momo_qr_content">...</b></p>
+                                                                        <p class="mb-1">Nội dung: <b class="text-danger fs-5" id="momo_qr_content" style="word-break: break-all;">...</b></p>
                                                                         <p class="mb-0 fs-7">Vui lòng quét QR và KHÔNG thay đổi nội dung chuyển khoản.</p>
                                                                     </div>
                                                                 </div>
@@ -131,9 +131,9 @@
 
                                                                 <div id="banking_qr_container" class="text-center d-none">
                                                                     <div class="separator separator-dashed my-5"></div>
-                                                                    <img id="banking_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 250px;">
+                                                                    <img id="banking_qr_img" src="" class="img-fluid rounded shadow-sm mb-3 border border-gray-300" style="max-width: 100%; width: 220px;">
                                                                     <div class="alert bg-light-primary border border-primary p-3">
-                                                                        <p class="mb-1">Nội dung: <b class="text-primary fs-4" id="banking_qr_content">...</b></p>
+                                                                        <p class="mb-1">Nội dung: <b class="text-primary fs-5" id="banking_qr_content" style="word-break: break-all;">...</b></p>
                                                                         <p class="mb-0 fs-7 text-dark">Quét VietQR để nạp tiền tự động (hỗ trợ mọi ngân hàng).</p>
                                                                     </div>
                                                                 </div>
