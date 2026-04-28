@@ -20,4 +20,46 @@
             });
         });
     }
+
+    // --- LOGIC HIỂN THỊ NÚT CÀI ĐẶT APP CHỦ ĐỘNG ---
+    let deferredPrompt;
+    
+    // Đón bắt sự kiện PWA sẵn sàng cài đặt (Chặn popup mặc định của trình duyệt)
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Hiện nút Cài đặt trên Header
+        const installBtnContainer = document.getElementById('installPwaBtnContainer');
+        if (installBtnContainer) {
+            installBtnContainer.classList.remove('d-none');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const installBtn = document.getElementById('installPwaBtn');
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Mở popup hệ thống để Cài Đặt
+                    deferredPrompt.prompt();
+                    // Chờ khách hàng phản hồi
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        // Ẩn nút đi nếu đã xác nhận cài
+                        const installBtnContainer = document.getElementById('installPwaBtnContainer');
+                        if (installBtnContainer) installBtnContainer.classList.add('d-none');
+                    }
+                    deferredPrompt = null;
+                }
+            });
+        }
+    });
+
+    // Ẩn nút mãi mãi nếu thiết bị báo là đã cài PWA rồi
+    window.addEventListener('appinstalled', () => {
+        const installBtnContainer = document.getElementById('installPwaBtnContainer');
+        if (installBtnContainer) installBtnContainer.classList.add('d-none');
+        deferredPrompt = null;
+    });
 </script>

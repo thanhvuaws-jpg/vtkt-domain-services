@@ -84,6 +84,20 @@
                 </div>
                 @endif
                 
+                <!-- Install App Button (PWA) -->
+                <div class="app-navbar-item me-2 d-none" id="installPwaBtnContainer">
+                    <button class="btn btn-sm btn-flex btn-light-primary fw-bolder align-items-center" id="installPwaBtn">
+                        <span class="svg-icon svg-icon-3 me-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.5" x="11" y="2" width="2" height="14" rx="1" fill="currentColor"/>
+                                <path d="M12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L7.29289 12.7071C6.90237 12.3166 6.90237 11.6834 7.29289 11.2929C7.68342 10.9024 8.31658 10.9024 8.70711 11.2929L12 14.5858L15.2929 11.2929C15.6834 10.9024 16.3166 10.9024 16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L12.7071 16.7071Z" fill="currentColor"/>
+                                <path d="M19 21C19.5523 21 20 20.5523 20 20V15C20 14.4477 19.5523 14 19 14C18.4477 14 18 14.4477 18 15V19H6V15C6 14.4477 5.55228 14 5 14C4.44772 14 4 14.4477 4 15V20C4 20.5523 4.44772 21 5 21H19Z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        Tải App
+                    </button>
+                </div>
+                
                 <!-- Theme mode -->
                 <div class="app-navbar-item">
                     <a href="#" class="btn btn-icon btn-color-white bg-hover-white bg-hover-opacity-10" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
